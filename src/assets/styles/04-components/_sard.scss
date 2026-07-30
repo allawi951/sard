@@ -1,0 +1,558 @@
+/* ═══ طبقة تصميم «سرد» — تُضاف فوق ثيم رائد ولا تستبدله ═══
+   الأصناف كلها ببادئة sard- فلا تتعارض مع أنماط الثيم الأساسي. */
+
+
+
+/* ═══════════════════════════════════════════════════════════════
+   Sard — نظام تصميم ثيم سلة
+   المتغيّرات (--sard-*) يضبطها master.twig من إعدادات الثيم في لوحة
+   التاجر، فتغيير اللون من اللوحة يسري بلا إعادة بناء.
+   ═══════════════════════════════════════════════════════════════ */
+
+:root {
+  --sard-serif: 'Cormorant Garamond', 'Amiri', Georgia, serif;
+  --sard-sans: 'Jost', 'Tajawal', system-ui, sans-serif;
+  --sard-ease: cubic-bezier(.22, 1, .36, 1);
+  --sard-nav-h: 76px;
+}
+
+html[dir='rtl'] {
+  --sard-serif: 'Amiri', 'Cormorant Garamond', Georgia, serif;
+  --sard-sans: 'Tajawal', 'Jost', system-ui, sans-serif;
+}
+
+/* لا نفرض خطًّا ولا خلفية على كل المتجر — ثيم رائد يتكفّل بالصفحات الداخلية.
+   أقسام سرد تحمل جلدها بنفسها. */
+.sard-hero, .sard-layers, .sard-coll, .sard-story, .sard-visit {
+  background: var(--sard-bg);
+  color: var(--sard-fg);
+  font-family: var(--sard-sans);
+  font-weight: 300;
+  line-height: 1.65;
+  transition: background-color .9s var(--sard-ease), color .9s var(--sard-ease);
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection { background: var(--sard-gold); color: var(--sard-ink); }
+:focus-visible { outline: 2px solid var(--sard-gold); outline-offset: 3px; border-radius: 2px; }
+
+.sard-noscript { background: var(--sard-gold); color: var(--sard-ink); text-align: center; padding: 1rem; }
+
+/* الجلد: أقسام فاتحة داخل ثيم داكن (صفحات المنتج والحساب) */
+.sard-skin--light {
+  --sard-bg: var(--sard-blush);
+  --sard-fg: var(--sard-ink);
+  --sard-muted: rgba(20, 19, 47, .62);
+  --sard-line: rgba(20, 19, 47, .16);
+  --sard-accent: #9C6F2A;
+  background: var(--sard-bg);
+  color: var(--sard-fg);
+}
+
+/* ── طبقة الحبيبات ── */
+body.theme-sard.has-grain::after {
+  content: '';
+  position: fixed; inset: -50%;
+  pointer-events: none; z-index: 9999;
+  opacity: .038;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation: sard-grain 7s steps(6) infinite;
+}
+@keyframes sard-grain {
+  0%, 100% { transform: translate(0, 0) }
+  20% { transform: translate(-3%, 2%) }
+  40% { transform: translate(2%, -3%) }
+  60% { transform: translate(-2%, -2%) }
+  80% { transform: translate(3%, 1%) }
+}
+
+/* ═══════════ أنماط نصية ═══════════ */
+.sard-eyebrow {
+  font-family: var(--sard-sans);
+  font-size: .72rem; font-weight: 400;
+  letter-spacing: .28em; text-transform: uppercase;
+  color: var(--sard-accent);
+  display: block;
+}
+html[dir='rtl'] .sard-eyebrow { letter-spacing: .1em; font-size: .86rem; text-transform: none; }
+
+.sard-display {
+  font-family: var(--sard-serif);
+  font-weight: 300; line-height: 1.08; letter-spacing: .01em;
+  font-size: clamp(2.2rem, 5.5vw, 4.4rem);
+}
+.sard-display--sm { font-size: clamp(1.8rem, 3.6vw, 2.9rem); }
+
+/* العربية تحتاج تباعد أسطر أوسع: التشكيل يتجاوز صندوق السطر */
+html[dir='rtl'] .sard-display,
+html[dir='rtl'] .sard-story__text h3,
+html[dir='rtl'] .sard-product__name,
+html[dir='rtl'] .sard-layers__step h3 { line-height: 1.45; }
+
+.sard-lede { color: var(--sard-muted); font-size: clamp(1rem, 1.5vw, 1.1rem); max-width: 52ch; }
+.sard-label { font-size: .72rem; letter-spacing: .14em; text-transform: uppercase; color: var(--sard-muted); }
+html[dir='rtl'] .sard-label { letter-spacing: 0; font-size: .86rem; text-transform: none; }
+
+/* ═══════════ الأزرار ═══════════ */
+.sard-btn {
+  position: relative; isolation: isolate;
+  display: inline-flex; align-items: center; justify-content: center; gap: .6em;
+  padding: 1em 2.2em;
+  font-size: .78rem; font-weight: 400;
+  letter-spacing: .18em; text-transform: uppercase;
+  border: 1px solid var(--sard-line); border-radius: 999px;
+  color: var(--sard-fg); overflow: hidden;
+  transition: color .5s var(--sard-ease), border-color .5s var(--sard-ease), transform .3s var(--sard-ease);
+  will-change: transform;
+}
+html[dir='rtl'] .sard-btn { letter-spacing: .02em; text-transform: none; font-size: .9rem; }
+
+.sard-btn::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: var(--sard-accent);
+  transform: scaleY(0); transform-origin: bottom;
+  transition: transform .55s var(--sard-ease);
+}
+.sard-btn:hover { color: var(--sard-bg); border-color: var(--sard-accent); }
+.sard-btn:hover::before { transform: scaleY(1); transform-origin: top; }
+.sard-btn:active { transform: scale(.97); }
+
+.sard-btn--solid { background: var(--sard-accent); color: var(--sard-ink); border-color: var(--sard-accent); }
+.sard-btn--solid::before { background: var(--sard-fg); }
+.sard-btn--ghost { backdrop-filter: blur(10px); background: color-mix(in srgb, var(--sard-bg) 55%, transparent); }
+
+.sard-icon-btn {
+  display: grid; place-items: center;
+  width: 44px; height: 44px; border-radius: 50%;
+  color: var(--sard-fg); font-size: 1.15rem;
+  transition: background-color .35s, transform .3s var(--sard-ease);
+  &:hover { background: color-mix(in srgb, var(--sard-fg) 10%, transparent); }
+  &:active { transform: scale(.92); }
+}
+
+.sard-chip {
+  display: inline-block; padding: .35em 1em;
+  border: 1px solid var(--sard-line); border-radius: 999px;
+  font-size: .8rem; color: var(--sard-muted);
+  transition: border-color .3s, color .3s;
+  &:hover { border-color: var(--sard-accent); color: var(--sard-accent); }
+}
+
+/* ═══════════ الشعار ═══════════ */
+.sard-mark { width: 100%; height: auto; display: block; color: currentColor; }
+.sard-mark--compact {
+  .sard-rules, .sard-wave { display: none; }
+}
+
+/* ═══════════ المؤشر المخصّص ═══════════ */
+.sard-cursor {
+  position: fixed; top: 0; left: 0;
+  width: 26px; height: 26px; margin: -13px 0 0 -13px;
+  border: 1px solid var(--sard-gold); border-radius: 50%;
+  pointer-events: none; z-index: 9998; opacity: 0;
+  mix-blend-mode: difference;
+  transition: width .35s var(--sard-ease), height .35s var(--sard-ease),
+              margin .35s var(--sard-ease), background-color .35s var(--sard-ease), opacity .3s;
+  &.is-on { opacity: 1; }
+  &.is-big { width: 62px; height: 62px; margin: -31px 0 0 -31px; background: rgba(201, 161, 90, .18); }
+}
+.sard-cursor-dot {
+  position: fixed; top: 0; left: 0;
+  width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
+  background: var(--sard-gold); border-radius: 50%;
+  pointer-events: none; z-index: 9998; opacity: 0;
+  &.is-on { opacity: 1; }
+}
+@media (hover: none), (pointer: coarse) {
+  .sard-cursor, .sard-cursor-dot { display: none; }
+}
+
+/* ═══════════ شريط التقدّم ═══════════ */
+.sard-progress {
+  position: fixed; inset-block-start: 0; inset-inline-start: 0; z-index: 101;
+  height: 2px; width: 100%;
+  transform: scaleX(0); transform-origin: left;
+  background: linear-gradient(90deg, var(--sard-gold), var(--sard-gold-soft));
+}
+html[dir='rtl'] .sard-progress { transform-origin: right; }
+
+/* ═══════════ الشريط العلوي ═══════════ */
+.sard-nav {
+  inset-inline: 0; top: 0; z-index: 100;
+  min-height: var(--sard-nav-h);
+  display: flex; align-items: center;
+  border-bottom: 1px solid transparent;
+  transition: background-color .5s var(--sard-ease), backdrop-filter .5s, border-color .5s;
+
+  &.is-fixed { position: fixed; }
+  &.is-stuck {
+    background: color-mix(in srgb, var(--sard-bg) 82%, transparent);
+    backdrop-filter: blur(16px) saturate(1.3);
+    border-bottom-color: var(--sard-line);
+  }
+}
+.sard-nav__in { display: flex; align-items: center; gap: 1.5rem; width: 100%; }
+.sard-nav__links { flex: 1; min-width: 0; }
+.sard-nav__tools { display: flex; align-items: center; gap: .25rem; margin-inline-start: auto; }
+
+/* min-height يضمن هدف لمس ≥44px على الجوال */
+.sard-brand { display: flex; align-items: center; gap: .7rem; color: var(--sard-fg); min-height: 44px; }
+.sard-brand .sard-mark { width: 46px; }
+.sard-brand__img { max-height: 46px; width: auto; }
+.sard-brand__name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.28rem; letter-spacing: .18em; font-weight: 400;
+}
+
+.sard-breadcrumb { display: block; padding-block: 1rem; }
+
+/* ═══════════ الفصل ٠ — الواجهة ═══════════ */
+.sard-hero {
+  position: relative; isolation: isolate;
+  min-height: 100svh;
+  display: grid; place-items: center; text-align: center;
+  overflow: hidden;
+  background: var(--sard-ink);
+  color: var(--sard-cream);
+}
+.sard-hero__bg {
+  position: absolute; inset: 0; z-index: -2;
+  img { width: 100%; height: 120%; object-fit: cover; opacity: .34; filter: saturate(.85) contrast(1.05); will-change: transform; }
+}
+.sard-hero__veil {
+  position: absolute; inset: 0; z-index: -1;
+  background:
+    radial-gradient(ellipse 62% 50% at 50% 46%, rgba(20, 19, 47, .55) 0%, rgba(20, 19, 47, .86) 62%, var(--sard-ink) 100%),
+    linear-gradient(to bottom, rgba(20, 19, 47, .7) 0%, transparent 26%, transparent 58%, var(--sard-ink) 100%);
+}
+.sard-hero__water {
+  position: absolute; inset-inline: 0; bottom: 0; z-index: -1;
+  width: 100%; height: 46%; opacity: .5;
+}
+.sard-hero__in { padding-block: calc(var(--sard-nav-h) + 3rem) 6rem; }
+.sard-hero__mark { width: min(360px, 62vw); margin-inline: auto; color: var(--sard-cream); }
+.sard-hero__mark path { stroke-width: 2.4; }
+/* شعار المتجر الحقيقي داخل الزخرفة — الزخرفة تؤطّره لا تحلّ محلّه */
+.sard-hero__logo {
+  max-width: min(280px, 48vw); max-height: 110px;
+  margin: -2.2rem auto 0; display: block; object-fit: contain;
+}
+
+.sard-hero__word {
+  margin-top: 1.1rem;
+  font-family: 'Cormorant Garamond', serif; font-weight: 300;
+  font-size: clamp(2.6rem, 11vw, 8rem);
+  letter-spacing: .1em; line-height: 1;
+  display: flex; justify-content: center; flex-wrap: wrap;
+  direction: ltr;
+  span { display: inline-block; }
+}
+.sard-hero__sub {
+  margin-top: 1.2rem;
+  font-size: .74rem; letter-spacing: .48em; text-transform: uppercase;
+  color: var(--sard-gold-soft);
+}
+html[dir='rtl'] .sard-hero__sub { letter-spacing: .2em; font-size: .9rem; text-transform: none; }
+.sard-hero__line { margin-top: 2rem; font-family: var(--sard-serif); font-size: clamp(1.1rem, 2.4vw, 1.6rem); color: var(--sard-muted); }
+
+.sard-hero__cue {
+  position: absolute; inset-inline: 0; bottom: 2.2rem;
+  display: grid; justify-items: center; gap: .8rem;
+  font-size: .68rem; letter-spacing: .3em; text-transform: uppercase; color: var(--sard-muted);
+  i {
+    width: 1px; height: 52px; display: block; transform-origin: top;
+    background: linear-gradient(var(--sard-gold), transparent);
+    animation: sard-cue 2.4s var(--sard-ease) infinite;
+  }
+}
+html[dir='rtl'] .sard-hero__cue { letter-spacing: .08em; font-size: .82rem; text-transform: none; }
+@keyframes sard-cue {
+  0% { transform: scaleY(0) }
+  45% { transform: scaleY(1) }
+  100% { transform: scaleY(0); transform-origin: bottom }
+}
+
+/* ═══════════ الفصل ١ — هرم الرائحة ═══════════ */
+.sard-layers__pin { min-height: 100svh; display: grid; align-items: center; padding-block: 6rem; }
+/* العنوان أولًا في الـ DOM ليظهر فوق الصورة على الجوال؛ وعلى سطح المكتب
+   يُعاد وضعه بالشبكة في العمود الثاني فوق الخطوات. */
+.sard-layers__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: auto auto;
+  column-gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+}
+.sard-layers__head  { grid-column: 1; grid-row: 1; margin-bottom: 2rem; }
+.sard-layers__media { grid-column: 2; grid-row: 1 / span 2; }
+.sard-layers__body  { grid-column: 1; grid-row: 2; }
+
+.sard-layers__media { width: min(100%, 440px); justify-self: center; }
+.sard-layers__frame { position: relative; aspect-ratio: 1; }
+.sard-layers__img {
+  position: absolute; inset: 0; margin: 0;
+  border-radius: 50%; overflow: hidden;
+  opacity: 0; transform: scale(1.12);
+  box-shadow: 0 40px 90px -30px rgba(0, 0, 0, .6);
+  transition: opacity .9s var(--sard-ease), transform 1.2s var(--sard-ease);
+  img { width: 100%; height: 100%; object-fit: cover; }
+  &.is-on { opacity: 1; transform: scale(1); }
+}
+.sard-layers__ring {
+  position: absolute; inset: -6%;
+  border: 1px solid var(--sard-line); border-radius: 50%; pointer-events: none;
+  &::after {
+    content: ''; position: absolute; inset: 6%;
+    border: 1px dashed color-mix(in srgb, var(--sard-accent) 40%, transparent);
+    border-radius: 50%; animation: sard-spin 60s linear infinite;
+  }
+}
+@keyframes sard-spin { to { transform: rotate(360deg) } }
+
+.sard-layers__steps { display: grid; gap: 1.2rem; }
+.sard-layers__step {
+  padding: 1.4rem 0; border-top: 1px solid var(--sard-line);
+  opacity: .3; transition: opacity .6s var(--sard-ease);
+  &.is-on { opacity: 1; }
+  h3 {
+    font-family: var(--sard-serif); font-weight: 400;
+    font-size: clamp(1.5rem, 3vw, 2.2rem);
+    display: flex; align-items: baseline; gap: .8rem;
+    b {
+      font-family: var(--sard-sans); font-size: .68rem; font-weight: 400;
+      letter-spacing: .24em; text-transform: uppercase; color: var(--sard-accent);
+    }
+  }
+  p { margin-top: .5rem; color: var(--sard-muted); max-width: 44ch; }
+}
+html[dir='rtl'] .sard-layers__step h3 b { letter-spacing: .06em; font-size: .82rem; text-transform: none; }
+
+.sard-layers__bar {
+  height: 2px; background: var(--sard-line); margin-top: 2rem; position: relative; overflow: hidden;
+  i { position: absolute; inset-block: 0; inset-inline-start: 0; width: 0; background: var(--sard-accent); }
+}
+
+/* ═══════════ الفصل ٢ — المجموعة ═══════════ */
+.sard-coll__head { padding-block: clamp(4rem, 9vw, 8rem) 2.5rem; }
+.sard-coll__head .sard-display { margin-top: .8rem; }
+.sard-coll__hint { margin-top: 1.2rem; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--sard-muted); }
+html[dir='rtl'] .sard-coll__hint { letter-spacing: .04em; font-size: .9rem; text-transform: none; }
+
+.sard-coll__pin { height: 100svh; display: flex; align-items: center; overflow: hidden; }
+/* الشريط يرث اتجاه المتجر عمدًا: في العربية يبدأ أول منتج من اليمين
+   ويمتد الفائض يسارًا، وتُصحَّح إشارة التحويل في home.js.
+   (تثبيت direction: ltr هنا كان يقلب ترتيب المنتجات ويجعل داخل البطاقة
+   لاتينيًّا في المتاجر العربية.) */
+.sard-coll__track {
+  display: flex; gap: clamp(1.5rem, 3vw, 3rem);
+  padding-inline: max(5vw, calc((100vw - 1280px) / 2));
+  will-change: transform;
+}
+
+.sard-card {
+  flex: 0 0 clamp(280px, 30vw, 400px);
+  position: relative;
+}
+.sard-card__media {
+  position: relative; display: block;
+  aspect-ratio: 4 / 5; border-radius: 3px; overflow: hidden;
+  background: color-mix(in srgb, var(--sard-fg) 6%, transparent);
+  img { width: 100%; height: 100%; object-fit: cover; transition: transform 1.1s var(--sard-ease); will-change: transform; }
+}
+.sard-card:hover .sard-card__media img { transform: scale(1.07); }
+
+.sard-card__badge {
+  position: absolute; inset-block-start: .8rem; inset-inline-start: .8rem;
+  background: var(--sard-accent); color: var(--sard-ink);
+  padding: .3em .9em; border-radius: 999px; font-size: .7rem; letter-spacing: .05em;
+}
+
+.sard-card__actions {
+  position: absolute; inset-inline: .9rem; bottom: .9rem;
+  display: flex; gap: .5rem; align-items: stretch;
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .5s var(--sard-ease), transform .5s var(--sard-ease);
+  > * { flex: 1; }
+}
+.sard-card:hover .sard-card__actions,
+.sard-card:focus-within .sard-card__actions { opacity: 1; transform: none; }
+.sard-card__actions .sard-btn { padding: .8em 1rem; font-size: .68rem; letter-spacing: .08em; }
+html[dir='rtl'] .sard-card__actions .sard-btn { font-size: .82rem; letter-spacing: 0; }
+
+.sard-card__body { padding-top: 1.1rem; display: flex; align-items: flex-start; gap: 1rem; }
+.sard-card__name { font-family: var(--sard-serif); font-size: 1.5rem; font-weight: 400; line-height: 1.25; }
+/* الرابط يملأ السطر ويرتفع إلى 44px: هدف لمس مريح بدل سطر نص رفيع */
+.sard-card__name a { display: block; padding-block: .32em; }
+.sard-card__tag { font-size: .82rem; color: var(--sard-muted); margin-top: .2rem; }
+.sard-card__price {
+  margin-inline-start: auto; font-family: var(--sard-serif); font-size: 1.3rem;
+  color: var(--sard-accent); white-space: nowrap; text-align: end;
+  del { display: block; font-size: .85rem; color: var(--sard-muted); }
+}
+
+/* ═══════════ الفصل ٣ — الحكاية ═══════════ */
+.sard-story { padding-block: clamp(4rem, 8vw, 7rem); }
+.sard-story__eyebrow { margin-bottom: 2rem; }
+.sard-story__row {
+  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem);
+  align-items: center; padding-block: clamp(1.6rem, 3.5vw, 3.2rem);
+  &.is-flipped .sard-story__media { order: 2; }
+}
+.sard-story__media {
+  position: relative; margin: 0; aspect-ratio: 7 / 5;
+  overflow: hidden; border-radius: 3px;
+  img { width: 100%; height: 112%; object-fit: cover; will-change: transform; }
+}
+.sard-story__text {
+  h3 { font-family: var(--sard-serif); font-weight: 300; font-size: clamp(1.8rem, 3.6vw, 3rem); line-height: 1.15; }
+  p { margin-top: 1.2rem; color: var(--sard-muted); max-width: 46ch; }
+}
+.sard-story__num {
+  font-family: var(--sard-serif); font-size: 3.2rem; line-height: 1;
+  color: var(--sard-accent); opacity: .32;
+  font-variant-numeric: lining-nums;  /* بدونه يرسم Cormorant أرقامًا قديمة تُقرأ "O3" */
+}
+
+/* ═══════════ الفصل ٤ — زورونا ═══════════ */
+.sard-visit {
+  position: relative; overflow: hidden; text-align: center;
+  padding-block: clamp(5rem, 10vw, 10rem);
+}
+.sard-visit__bg {
+  position: absolute; inset: 0; z-index: -1;
+  img { width: 100%; height: 118%; object-fit: cover; opacity: .22; will-change: transform; }
+  &::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at center, transparent 20%, var(--sard-bg) 78%); }
+}
+.sard-visit__in {
+  width: min(680px, 88vw); margin-inline: auto;
+  display: grid; gap: 1.4rem; justify-items: center;
+}
+.sard-visit__hours { font-size: .76rem; letter-spacing: .24em; text-transform: uppercase; color: var(--sard-muted); }
+html[dir='rtl'] .sard-visit__hours { letter-spacing: .04em; font-size: .92rem; text-transform: none; }
+.sard-visit__cta { display: flex; gap: .8rem; flex-wrap: wrap; justify-content: center; margin-top: 1rem; }
+
+/* ═══════════ الصفحات الداخلية ═══════════ */
+.sard-page { padding-block: clamp(3rem, 7vw, 6rem); min-height: 60svh; }
+.sard-page > .sard-display { margin-bottom: 2rem; }
+
+.sard-product {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 5vw, 4.5rem);
+  padding-block: clamp(2rem, 5vw, 4rem);
+}
+.sard-product__slide img { width: 100%; height: 100%; object-fit: cover; border-radius: 3px; }
+.sard-product__info { display: grid; align-content: start; gap: 1rem; }
+.sard-product__name { font-family: var(--sard-serif); font-weight: 300; font-size: clamp(2rem, 4vw, 3.2rem); line-height: 1.1; }
+.sard-product__sub { color: var(--sard-muted); }
+.sard-product__price {
+  font-family: var(--sard-serif); font-size: 1.8rem; color: var(--sard-accent);
+  display: flex; align-items: baseline; gap: .8rem; flex-wrap: wrap;
+  del { font-size: 1.1rem; color: var(--sard-muted); }
+}
+.sard-product__tax { font-family: var(--sard-sans); font-size: .78rem; color: var(--sard-muted); }
+.sard-product__form { display: grid; gap: 1.2rem; margin-top: .5rem; }
+.sard-product__qty { display: grid; gap: .4rem; }
+.sard-product__desc {
+  margin-top: 1rem; color: var(--sard-muted); line-height: 1.9;
+  p { margin-bottom: 1em; }
+}
+.sard-product__tags { display: flex; gap: .5rem; flex-wrap: wrap; }
+.sard-product__extra { padding-block: clamp(2rem, 5vw, 4rem); }
+
+.sard-listing { display: flex; gap: 2rem; align-items: flex-start; padding-bottom: 4rem; }
+.sard-listing__head { padding-block: clamp(3rem, 6vw, 5rem) 1.5rem; }
+.sard-listing__filters { flex: none; width: 18rem; position: sticky; top: calc(var(--sard-nav-h) + 1rem); }
+.sard-listing__grid { flex: 1; min-width: 0; }
+
+.sard-prose {
+  h2, h3 { font-family: var(--sard-serif); margin-block: 1.6em .5em; }
+  p, li { color: var(--sard-muted); line-height: 1.9; }
+  ul, ol { padding-inline-start: 1.4em; margin-bottom: 1em; }
+  a { color: var(--sard-accent); text-decoration: underline; text-underline-offset: 3px; }
+}
+
+.sard-thanks { text-align: center; display: grid; justify-items: center; gap: 2rem; }
+.sard-thanks__mark { width: 220px; color: var(--sard-accent); }
+.sard-account { min-height: 70svh; }
+
+/* ═══════════ الذيل ═══════════ */
+.sard-foot {
+  border-top: 1px solid var(--sard-line);
+  padding-block: 4rem 2.5rem;
+  background: var(--sard-ink); color: var(--sard-cream);
+  --sard-muted: rgba(248, 240, 233, .58);
+  --sard-line: rgba(248, 240, 233, .16);
+}
+.sard-foot__in { display: grid; justify-items: center; gap: 2rem; text-align: center; }
+.sard-foot__mark { width: 190px; opacity: .85; color: var(--sard-cream); }
+.sard-foot__slogan { font-family: var(--sard-serif); font-size: 1.2rem; color: var(--sard-muted); }
+.sard-foot__grid {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 2.5rem; width: 100%; text-align: start;
+}
+.sard-foot__h {
+  font-size: .74rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--sard-gold); margin-bottom: 1rem;
+}
+html[dir='rtl'] .sard-foot__h { letter-spacing: .04em; font-size: .9rem; text-transform: none; }
+.sard-foot__meta { font-size: .8rem; color: var(--sard-muted); display: grid; gap: .3rem; }
+
+/* ═══════════ الاستجابة ═══════════ */
+@media (max-width: 1024px) {
+  .sard-listing { flex-direction: column; }
+  .sard-listing__filters { width: 100%; position: static; }
+}
+
+@media (max-width: 900px) {
+  :root { --sard-nav-h: 66px; }
+  .sard-layers__grid,
+  .sard-story__row,
+  .sard-product { grid-template-columns: 1fr; }
+  .sard-story__row.is-flipped .sard-story__media { order: 0; }
+  /* الطبقات على الجوال: بلا تثبيت — الصورة تلتصق أعلى الشاشة والخطوات تمرّ تحتها.
+     التثبيت هنا يقصّ المحتوى لأن القسم أطول من شاشة الجوال. */
+  .sard-layers__pin { min-height: 0; padding-block: 4rem; display: block; }
+  .sard-layers__grid { display: block; }
+  .sard-layers__head { margin-bottom: 1.5rem; }
+  /* الشريط اللاصق يأخذ عرض الحاوية بخلفية صلبة: النص المارّ تحته يختفي تمامًا.
+     (استخدام 100vw هنا يُحدث تمريرًا أفقيًا — عرض الحاوية يكفي لأن النص داخلها.) */
+  .sard-layers__media {
+    position: sticky; top: var(--sard-nav-h); z-index: 2;
+    width: 100%; max-width: none; margin: 0 0 1.5rem;
+    background: var(--sard-bg); padding-block: 1rem 1.5rem;
+  }
+  .sard-layers__frame { width: 180px; margin-inline: auto; }
+  .sard-layers__step { min-height: 34svh; display: grid; align-content: center; padding-block: 1.5rem; }
+  .sard-foot__grid { grid-template-columns: 1fr; text-align: center; }
+  .sard-card__actions { opacity: 1; transform: none; }
+  .sard-coll__pin { height: auto; padding-block: 2rem; overflow-x: auto; }
+  .sard-coll__track { padding-inline: 5vw; }
+}
+
+@media (max-width: 560px) {
+  .sard-hero__word { font-size: 2.8rem; letter-spacing: .06em; }
+  .sard-btn { padding: .9em 1.5em; }
+}
+
+/* احترام تفضيل تقليل الحركة */
+@media (prefers-reduced-motion: reduce) {
+  body.theme-sard *,
+  body.theme-sard *::before,
+  body.theme-sard *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  body.has-grain::after { display: none; }
+}
+
+/* شعار SVG ألصقه التاجر: نضبط مقاسه ولونه ليتناسق مع الواجهة */
+.sard-hero__svglogo {
+  max-width: min(320px, 56vw);
+  margin: -1.5rem auto 0;
+  color: var(--sard-cream);
+
+  svg { width: 100%; height: auto; display: block; }
+  /* الشعار قد يأتي بألوان مثبّتة — نتركها كما هي إن وُجدت، ونرث لون الواجهة إن كانت currentColor */
+}

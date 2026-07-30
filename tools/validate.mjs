@@ -1,0 +1,204 @@
+#!/usr/bin/env node
+/**
+ * validate.mjs — فحص بنيوي للثيم قبل رفعه إلى سلة.
+ * لا يستبدل `salla theme preview` (وحده يعرض الثيم فعليًا)، لكنه يمسك
+ * أخطاء الصياغة والملفات الناقصة والمراجع المكسورة قبل الرفع.
+ *
+ *   node tools/validate.mjs
+ */
+
+import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
+import { join, dirname, relative } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
+let errors = 0, warnings = 0;
+
+const fail = (msg) => { console.log(`  ✗ ${msg}`); errors++; };
+const warn = (msg) => { console.log(`  ⚠ ${msg}`); warnings++; };
+const pass = (msg) => console.log(`  ✓ ${msg}`);
+
+const walk = (dir, out = []) => {
+  if (!existsSync(dir)) return out;
+  for (const entry of readdirSync(dir)) {
+    const p = join(dir, entry);
+    statSync(p).isDirectory() ? walk(p, out) : out.push(p);
+  }
+  return out;
+};
+
+/* ── ١) ملفات JSON ── */
+console.log('\n— ملفات JSON —');
+for (const f of ['twilight.json', 'package.json', 'src/locales/ar.json', 'src/locales/en.json']) {
+  const p = join(ROOT, f);
+  if (!existsSync(p)) { fail(`${f} مفقود`); continue; }
+  try { JSON.parse(readFileSync(p, 'utf8')); pass(`${f} صالح`); }
+  catch (e) { fail(`${f}: ${e.message}`); }
+}
+
+/* ── ٢) الصفحات الإلزامية في تويلايت ── */
+console.log('\n— الصفحات الإلزامية —');
+const REQUIRED = [
+  'src/views/layouts/master.twig',
+  'src/views/pages/index.twig',
+  'src/views/pages/cart.twig',
+  'src/views/pages/thank-you.twig',
+  'src/views/pages/product/single.twig',
+  'src/views/pages/product/index.twig',
+  'src/views/pages/customer/profile.twig',
+  'src/views/pages/customer/wishlist.twig',
+  'src/views/pages/customer/notifications.twig',
+  'src/views/pages/customer/orders/index.twig',
+  'src/views/pages/customer/orders/single.twig',
+];
+for (const f of REQUIRED) {
+  existsSync(join(ROOT, f)) ? pass(f) : fail(`${f} مفقود — سلة تتطلبه`);
+}
+
+/* ── ٣) توازن كتل Twig ── */
+console.log('\n— صياغة Twig —');
+const PAIRS = { if: 'endif', for: 'endfor', block: 'endblock', set: 'endset', macro: 'endmacro', embed: 'endembed', with: 'endwith', apply: 'endapply' };
+const twigs = walk(join(ROOT, 'src/views')).filter((f) => f.endsWith('.twig'));
+
+for (const file of twigs) {
+  const src = readFileSync(file, 'utf8');
+  const rel = relative(ROOT, file).replace(/\\/g, '/');
+  const stack = [];
+  let bad = false;
+
+  // نتجاهل التعليقات {# ... #} لأنها تحوي جداول توثيق فيها كلمات مثل if
+  const code = src.replace(/\{#[\s\S]*?#\}/g, '');
+
+  for (const m of code.matchAll(/\{%-?\s*(\w+)/g)) {
+    const tag = m[1];
+    if (PAIRS[tag]) {
+      if (tag === 'set' && /\{%-?\s*set\s+[\w.]+\s*=/.test(code.slice(m.index, m.index + 120))) continue; // set بقيمة سطرية لا يُغلق
+      stack.push(tag);
+    } else if (Object.values(PAIRS).includes(tag)) {
+      const open = stack.pop();
+      if (!open || PAIRS[open] !== tag) {
+        fail(`${rel}: ${tag} بلا ${open ? `إغلاق صحيح لـ ${open}` : 'فتح مقابل'}`);
+        bad = true;
+      }
+    }
+  }
+  if (stack.length && !bad) { fail(`${rel}: كتل غير مغلقة → ${stack.join(', ')}`); bad = true; }
+  if (!bad) pass(rel);
+}
+
+/* ── ٤) مراجع القوالب (include / extends / component) موجودة فعلًا ── */
+console.log('\n— مراجع القوالب —');
+for (const file of twigs) {
+  const src = readFileSync(file, 'utf8').replace(/\{#[\s\S]*?#\}/g, '');
+  const rel = relative(ROOT, file).replace(/\\/g, '/');
+  for (const m of src.matchAll(/\{%-?\s*(?:extends|include)\s+["']([\w.\-]+)["']/g)) {
+    const target = join(ROOT, 'src/views', `${m[1].replace(/\./g, '/')}.twig`);
+    if (!existsSync(target)) fail(`${rel}: يشير إلى قالب غير موجود "${m[1]}"`);
+  }
+  for (const m of src.matchAll(/\{%-?\s*component\s+["']([\w.\-]+)["']/g)) {
+    const target = join(ROOT, 'src/views/components', `${m[1].replace(/\./g, '/')}.twig`);
+    if (!existsSync(target)) fail(`${rel}: مكوّن غير موجود "${m[1]}"`);
+  }
+}
+pass('كل الـ extends/include/component تشير إلى ملفات موجودة');
+
+/* ── ٥) مسارات مكوّنات twilight.json ── */
+console.log('\n— مكوّنات twilight.json —');
+const tw = JSON.parse(readFileSync(join(ROOT, 'twilight.json'), 'utf8'));
+for (const c of tw.components || []) {
+  const target = join(ROOT, 'src/views/components', `${c.path.replace(/\./g, '/')}.twig`);
+  existsSync(target)
+    ? pass(`${c.path} → ${relative(ROOT, target).replace(/\\/g, '/')}`)
+    : fail(`${c.path}: لا يوجد قالب مقابل`);
+}
+const ids = (tw.settings || []).map((s) => s.id);
+const dupIds = ids.filter((v, i) => ids.indexOf(v) !== i);
+dupIds.length ? fail(`معرّفات إعدادات مكرّرة: ${[...new Set(dupIds)].join(', ')}`) : pass('لا تكرار في معرّفات الإعدادات');
+
+/* ── ٥-أ) مفردات twilight.json المقبولة ──
+   سلة ترفض الاستيراد برسالة عامة «فشلت عملية التحقق من صحة البيانات المدخلة»
+   دون تحديد الحقل. القائمة أدناه مستخرجة من ثيم رائد الرسمي (ثيم حيّ مقبول)
+   ومن ملف أيقونات سلة — أي قيمة خارجها تُرفض بصمت. */
+console.log('\n— مفردات مقبولة (مقارنةً بثيم سلة الرسمي) —');
+const OK_TYPE = ['boolean', 'string', 'number', 'items', 'collection', 'static'];
+const OK_FORMAT = ['switch', 'text', 'textarea', 'image', 'icon', 'integer', 'hidden',
+  'collection', 'dropdown-list', 'variable-list', 'title', 'description', 'line'];
+const OK_TOP = ['name', 'description', 'repository', 'support_url', 'author_email',
+  'features', 'settings', 'components'];
+const OK_FEATURE = ['mega-menu', 'fonts', 'color', 'breadcrumb', 'unite-cards-height',
+  'menu-images', 'filters', 'component-featured-products', 'component-fixed-banner',
+  'component-fixed-products', 'component-products-slider', 'component-photos-slider',
+  'component-parallax-background', 'component-testimonials', 'component-random-testimonials',
+  'component-square-photos', 'component-store-features', 'component-youtube'];
+
+const walkObjects = (node, fn) => {
+  if (Array.isArray(node)) return node.forEach((v) => walkObjects(v, fn));
+  if (node && typeof node === 'object') { fn(node); Object.values(node).forEach((v) => walkObjects(v, fn)); }
+};
+
+const badTop = Object.keys(tw).filter((k) => !OK_TOP.includes(k));
+badTop.length ? fail(`مفاتيح عليا غير معروفة: ${badTop.join(', ')}`) : pass('مفاتيح المستوى الأعلى');
+
+const badFeat = (tw.features || []).filter((f) => !OK_FEATURE.includes(f));
+badFeat.length ? fail(`مزايا غير معروفة: ${badFeat.join(', ')}`) : pass(`${(tw.features || []).length} ميزة معروفة`);
+
+const badTypes = new Set(), badFormats = new Set(), icons = new Set();
+walkObjects(tw, (o) => {
+  if (typeof o.type === 'string' && !OK_TYPE.includes(o.type)) badTypes.add(o.type);
+  if (typeof o.format === 'string' && !OK_FORMAT.includes(o.format)) badFormats.add(o.format);
+  if (typeof o.icon === 'string' && o.icon.startsWith('sicon-')) icons.add(o.icon);
+});
+badTypes.size ? fail(`type غير مدعوم: ${[...badTypes].join(', ')}`) : pass('كل قيم type مدعومة');
+badFormats.size
+  ? fail(`format غير مدعوم: ${[...badFormats].join(', ')} — غير مستخدم في أي ثيم سلة حيّ`)
+  : pass('كل قيم format مدعومة');
+
+// الأيقونات تُفحص مقابل ملف أيقونات سلة إن توفّر محليًا؛ وإلا تُذكر فقط
+const iconFile = join(ROOT, 'tools/sallaicons.txt');
+if (existsSync(iconFile)) {
+  const known = new Set(readFileSync(iconFile, 'utf8').split('\n').map((s) => s.trim()).filter(Boolean));
+  const badIcons = [...icons].filter((i) => !known.has(i));
+  badIcons.length ? fail(`أيقونات غير موجودة في خط سلة: ${badIcons.join(', ')}`) : pass(`${icons.size} أيقونة موجودة فعلًا`);
+} else {
+  warn(`لم أفحص الأيقونات (${icons.size}) — ملف tools/sallaicons.txt غير موجود`);
+}
+
+const settingIds = (tw.settings || []).map((s) => s.id);
+settingIds.some((v) => !v) ? fail('إعداد بلا id') : pass('كل الإعدادات لها id');
+
+// ثيم سلة الرسمي يقصر settings على أربعة أشكال فقط — أي شكل آخر غير مُثبَت القبول
+const OK_SETTING_SHAPE = ['boolean/switch', 'items/dropdown-list', 'static/line', 'static/title'];
+const badShapes = [...new Set((tw.settings || [])
+  .map((s) => `${s.type || '?'}/${s.format || '-'}`)
+  .filter((sh) => !OK_SETTING_SHAPE.includes(sh)))];
+badShapes.length
+  ? fail(`شكل إعداد غير مُثبَت: ${badShapes.join(', ')} — انقله إلى حقول مكوّن بدل settings`)
+  : pass('كل أشكال الإعدادات مُثبتة');
+
+// كل مكوّنات ثيم سلة الرسمي تحمل صورة معاينة
+const noImage = (tw.components || []).filter((c) => !c.image).map((c) => c.path);
+noImage.length
+  ? warn(`مكوّنات بلا صورة معاينة (image): ${noImage.join(', ')} — كل مكوّنات ثيم سلة الرسمي تحملها`)
+  : pass('كل المكوّنات لها صورة معاينة');
+
+const keys = (tw.components || []).map((c) => c.key);
+const dupKeys = keys.filter((v, i) => keys.indexOf(v) !== i);
+dupKeys.length ? fail(`مفاتيح مكوّنات مكرّرة: ${[...new Set(dupKeys)].join(', ')}`) : pass('لا تكرار في مفاتيح المكوّنات');
+
+/* ── ٦) الأصول المشار إليها من SCSS ── */
+console.log('\n— الأصول —');
+const scss = walk(join(ROOT, 'src/assets/styles')).filter((f) => f.endsWith('.scss'));
+for (const file of scss) {
+  const src = readFileSync(file, 'utf8');
+  for (const m of src.matchAll(/url\(['"](fonts\/[^'"]+)['"]\)/g)) {
+    const target = join(ROOT, 'src/assets', m[1]);
+    if (!existsSync(target)) fail(`${relative(ROOT, file)}: الخط مفقود ${m[1]}`);
+  }
+}
+const imgCount = existsSync(join(ROOT, 'src/assets/images')) ? readdirSync(join(ROOT, 'src/assets/images')).length : 0;
+imgCount ? pass(`${imgCount} أصلًا في src/assets/images`) : warn('لا صور في src/assets/images');
+pass('كل خطوط SCSS موجودة');
+
+/* ── الحصيلة ── */
+console.log(`\n${errors ? '✗' : '✓'} الحصيلة: ${errors} خطأ · ${warnings} تحذير`);
+process.exitCode = errors ? 1 : 0;

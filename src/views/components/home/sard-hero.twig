@@ -1,0 +1,69 @@
+{#
+| Variable              | Type    | Description                                              |
+|-----------------------|---------|----------------------------------------------------------|
+| component             | object  | إعدادات التاجر من قسم components في twilight.json        |
+| component.background  | ?string | صورة الخلفية                                             |
+| component.eyebrow     | ?string | سطر التعريف                                              |
+| component.wordmark    | ?string | اسم العلامة (يظهر حرفًا حرفًا) — يعود لاسم المتجر إن فرغ |
+| component.subtitle    | ?string |                                                          |
+| component.tagline     | ?string |                                                          |
+| component.scroll_hint | ?string |                                                          |
+| position              | int     | ترتيب العنصر في الصفحة                                   |
+#}
+{% set wordmark = component.wordmark|default('') ?: store.name %}
+
+<section class="sard-hero s-block" data-testid="store-home-hero" id="sard-hero-{{ position }}">
+
+  {% if component.background %}
+    <div class="sard-hero__bg">
+      <img src="{{ component.background|cdn(1920) }}" alt="" id="sardHeroImg"
+           fetchpriority="high" loading="eager" width="1920" height="1080">
+    </div>
+  {% endif %}
+  <div class="sard-hero__veil"></div>
+  <canvas id="sardWater" class="sard-hero__water" aria-hidden="true"></canvas>
+
+  <div class="sard-hero__in">
+    {% if component.eyebrow %}
+      <p class="sard-eyebrow" id="sardHeroEyebrow">{{ component.eyebrow }}</p>
+    {% endif %}
+
+    <div class="sard-hero__mark" id="sardHeroMark">
+      {% include 'components.parts.ornament' with { draw: true } only %}
+    </div>
+
+    {#
+      ثلاثة مسارات لعرض هوية المتجر، بالأولوية:
+      ١) شعار SVG ألصقه التاجر في إعدادات الثيم → رسم ذاتي حقيقي على شعاره نفسه
+      ٢) شعار المتجر (PNG/JPG) → كشف بقناع متدرّج يتبع اتجاه اللغة
+      ٣) لا شعار → اسم المتجر حرفًا حرفًا
+    #}
+    {% set logo_svg = component.logo_svg %}
+    {% if logo_svg %}
+      <div class="sard-hero__svglogo" id="sardHeroSvgLogo">{{ logo_svg|raw }}</div>
+    {% elseif store.logo %}
+      <img class="sard-hero__logo" id="sardHeroLogo" src="{{ store.logo|cdn(560) }}"
+           alt="{{ store.name }}" width="280" height="110" fetchpriority="high">
+    {% else %}
+      <p class="sard-hero__word" id="sardHeroWord" aria-label="{{ wordmark }}">
+        {%- for letter in wordmark|split('') -%}
+          <span>{{ letter == ' ' ? '&nbsp;'|raw : letter }}</span>
+        {%- endfor -%}
+      </p>
+    {% endif %}
+
+    {% if component.subtitle %}
+      <p class="sard-hero__sub" id="sardHeroSub">{{ component.subtitle }}</p>
+    {% endif %}
+
+    {% if component.tagline %}
+      <p class="sard-hero__line" id="sardHeroLine">{{ component.tagline }}</p>
+    {% endif %}
+  </div>
+
+  {% if component.scroll_hint %}
+    <div class="sard-hero__cue" id="sardHeroCue">
+      <i></i><span>{{ component.scroll_hint }}</span>
+    </div>
+  {% endif %}
+</section>

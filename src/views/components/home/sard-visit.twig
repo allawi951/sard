@@ -1,0 +1,42 @@
+{#
+| Variable               | Type    | Description                          |
+|------------------------|---------|--------------------------------------|
+| component.background   | ?string |                                      |
+| component.eyebrow      | ?string |                                      |
+| component.title        | ?string |                                      |
+| component.text         | ?string |                                      |
+| component.hours        | ?string |                                      |
+| component.cta_label    | ?string |                                      |
+| component.cta_url      | ?string | رابط يُحلّ من مصادر سلة              |
+| position               | int     |                                      |
+#}
+<section class="sard-visit s-block" data-testid="store-home-visit" id="sard-visit-{{ position }}">
+  {% if component.background %}
+    <div class="sard-visit__bg">
+      <img src="{{ component.background|cdn(1600) }}" alt="" loading="lazy"
+           width="1600" height="900" data-parallax>
+    </div>
+  {% endif %}
+
+  <div class="container sard-visit__in">
+    {% if component.eyebrow %}<p class="sard-eyebrow">{{ component.eyebrow }}</p>{% endif %}
+    {% if component.title %}<h2 class="sard-display">{{ component.title }}</h2>{% endif %}
+    {% if component.text %}<p class="sard-lede">{{ component.text }}</p>{% endif %}
+    {% if component.hours %}<p class="sard-visit__hours">{{ component.hours }}</p>{% endif %}
+
+    <div class="sard-visit__cta">
+      {% if component.cta_label %}
+        <a href="{{ component.cta_url|default(store.url) }}" class="sard-btn sard-btn--solid" data-magnetic>
+          {{ component.cta_label }}
+        </a>
+      {% endif %}
+
+      {% if store.contacts.whatsapp %}
+        <a href="https://wa.me/{{ store.contacts.whatsapp|replace({'+': '', ' ': ''}) }}"
+           class="sard-btn" target="_blank" rel="noopener" data-magnetic>
+          <i class="sicon-whatsapp"></i> {{ 'common.elements.whatsapp'|trans }}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>

@@ -1,0 +1,54 @@
+{#
+| Variable                | Type     | Description                                   |
+|-------------------------|----------|-----------------------------------------------|
+| component.eyebrow       | ?string  |                                               |
+| component.title         | ?string  |                                               |
+| component.layers        | object[] | طبقات العطر                                   |
+| component.layers[].key  | string   | اسم الطبقة (المقدمة/القلب/القاعدة)            |
+| component.layers[].title| ?string  |                                               |
+| component.layers[].text | ?string  |                                               |
+| component.layers[].image| ?string  |                                               |
+| position                | int      |                                               |
+#}
+<section class="sard-layers s-block" data-testid="store-home-scent-pyramid" id="sard-layers-{{ position }}">
+  <div class="sard-layers__pin" id="sardLayersPin">
+    <div class="container sard-layers__grid">
+
+      {# العنوان أولًا في الـ DOM ليظهر فوق الصورة على الجوال #}
+      <div class="sard-layers__head">
+        {% if component.eyebrow %}<p class="sard-eyebrow">{{ component.eyebrow }}</p>{% endif %}
+        {% if component.title %}<h2 class="sard-display sard-display--sm">{{ component.title }}</h2>{% endif %}
+      </div>
+
+      <div class="sard-layers__media">
+        <div class="sard-layers__frame">
+        <span class="sard-layers__ring" aria-hidden="true"></span>
+        {% for layer in component.layers %}
+          <figure class="sard-layers__img{{ loop.first ? ' is-on' : '' }}" data-layer="{{ loop.index0 }}">
+            {% if layer.image %}
+              <img src="{{ layer.image|cdn(900) }}" alt="{{ layer.title }}" loading="lazy" width="900" height="900">
+            {% endif %}
+          </figure>
+        {% endfor %}
+        </div>
+      </div>
+
+      <div class="sard-layers__body">
+        <div class="sard-layers__steps">
+          {% for layer in component.layers %}
+            <article class="sard-layers__step{{ loop.first ? ' is-on' : '' }}" data-layer-step="{{ loop.index0 }}">
+              <h3>
+                <span>{{ layer.title }}</span>
+                <b>{{ layer.key }}</b>
+              </h3>
+              <p>{{ layer.text }}</p>
+            </article>
+          {% endfor %}
+        </div>
+
+        <div class="sard-layers__bar"><i id="sardLayersBar"></i></div>
+      </div>
+
+    </div>
+  </div>
+</section>

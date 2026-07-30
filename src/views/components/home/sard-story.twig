@@ -1,0 +1,32 @@
+{#
+| Variable                     | Type     | Description |
+|------------------------------|----------|-------------|
+| component.eyebrow            | ?string  |             |
+| component.chapters           | object[] |             |
+| component.chapters[].image   | ?string  |             |
+| component.chapters[].title   | ?string  |             |
+| component.chapters[].text    | ?string  |             |
+| position                     | int      |             |
+#}
+<section class="sard-story s-block" data-testid="store-home-story" id="sard-story-{{ position }}">
+  {% if component.eyebrow %}
+    <div class="container"><p class="sard-eyebrow sard-story__eyebrow">{{ component.eyebrow }}</p></div>
+  {% endif %}
+
+  {% for chapter in component.chapters %}
+    <div class="container sard-story__row{{ loop.index is even ? ' is-flipped' : '' }}">
+      <figure class="sard-story__media">
+        {% if chapter.image %}
+          <img src="{{ chapter.image|cdn(1400) }}" alt="{{ chapter.title }}"
+               loading="lazy" width="1400" height="1000" data-parallax>
+        {% endif %}
+      </figure>
+
+      <div class="sard-story__text">
+        <p class="sard-story__num">{{ loop.index < 10 ? '0' ~ loop.index : loop.index }}</p>
+        <h3>{{ chapter.title }}</h3>
+        <p>{{ chapter.text }}</p>
+      </div>
+    </div>
+  {% endfor %}
+</section>

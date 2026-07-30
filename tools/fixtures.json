@@ -1,0 +1,224 @@
+{
+  "_comment": "بيانات وهمية للمعاينة المحلية فقط (tools/preview.mjs). لا علاقة لها بمتجر حقيقي.",
+  "page": {
+    "slug": "index",
+    "title": "الرئيسية"
+  },
+  "store": {
+    "id": 1,
+    "name": "متجر العيّنة",
+    "username": "sample",
+    "slogan": "متجر تجريبي لمعاينة ثيم سرد",
+    "logo": null,
+    "url": "#",
+    "scope": null,
+    "contacts": {
+      "whatsapp": "966500000000",
+      "email": "hello@example.com"
+    },
+    "social": {
+      "instagram": "#"
+    },
+    "settings": {
+      "is_multilingual": true,
+      "currencies_enabled": false,
+      "rating_enabled": true,
+      "tax": {
+        "number": "300000000000003",
+        "taxable_prices_enabled": true
+      },
+      "auth": {},
+      "cart": {},
+      "product": {},
+      "category": {}
+    }
+  },
+  "user": {
+    "can_access_wallet": false
+  },
+  "home": [
+    {
+      "path": "home.hero",
+      "data": {
+        "background": "./assets/images/hero-canal.jpg",
+        "eyebrow": "ثيم سرد · معاينة",
+        "wordmark": "SARD",
+        "subtitle": "أُو دو بارفان",
+        "tagline": "كل عطر رحلة على الماء",
+        "scroll_hint": "انزل للإبحار"
+      }
+    },
+    {
+      "path": "home.layers",
+      "data": {
+        "eyebrow": "هرم الرائحة",
+        "title": "الرائحة تُروى على ثلاث طبقات",
+        "layers": [
+          {
+            "key": "المقدمة",
+            "title": "اللقاء الأول",
+            "text": "أول عشر دقائق. حمضيات وندى — الانطباع الذي يجعل الرأس يلتفت.",
+            "image": "./assets/images/note-top.jpg"
+          },
+          {
+            "key": "القلب",
+            "title": "الحكاية",
+            "text": "بعد نصف ساعة يظهر جوهر العطر: زهور وتوابل تبقى ساعات.",
+            "image": "./assets/images/note-heart.jpg"
+          },
+          {
+            "key": "القاعدة",
+            "title": "الأثر",
+            "text": "ما يبقى على القماش بعد يوم كامل. أخشاب وعنبر ومسك — هذا ما يُذكر.",
+            "image": "./assets/images/note-base.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "path": "home.collection",
+      "data": {
+        "eyebrow": "المجموعة",
+        "title": "ستة عطور، ست حكايات",
+        "hint": "اسحب أو انزل للتنقل",
+        "products": [
+          {
+            "id": 1,
+            "name": "بيرلا",
+            "subtitle": "زهري · مسكي",
+            "url": "#",
+            "status": "sale",
+            "type": "product",
+            "price": 420,
+            "base_currency_price": 420,
+            "is_on_sale": false,
+            "add_to_cart_label": "أضف للسلة",
+            "image": {
+              "url": "./assets/images/p-perla.jpg",
+              "alt": "بيرلا"
+            }
+          },
+          {
+            "id": 2,
+            "name": "نوتّي فينيتسيانا",
+            "subtitle": "خشبي · عنبري",
+            "url": "#",
+            "status": "sale",
+            "type": "product",
+            "price": 560,
+            "base_currency_price": 560,
+            "is_on_sale": false,
+            "add_to_cart_label": "أضف للسلة",
+            "image": {
+              "url": "./assets/images/p-notte.jpg",
+              "alt": "نوتّي"
+            }
+          },
+          {
+            "id": 3,
+            "name": "روزا دورو",
+            "subtitle": "وردي · فاكهي",
+            "url": "#",
+            "status": "sale",
+            "type": "product",
+            "price": 490,
+            "sale_price": 440,
+            "regular_price": 490,
+            "base_currency_price": 440,
+            "is_on_sale": true,
+            "promotion_title": "عرض خاص",
+            "add_to_cart_label": "أضف للسلة",
+            "image": {
+              "url": "./assets/images/p-rosa.jpg",
+              "alt": "روزا"
+            }
+          },
+          {
+            "id": 4,
+            "name": "عود إمبريال",
+            "subtitle": "عودي · شرقي",
+            "url": "#",
+            "status": "sale",
+            "type": "product",
+            "price": 780,
+            "base_currency_price": 780,
+            "is_on_sale": false,
+            "add_to_cart_label": "أضف للسلة",
+            "image": {
+              "url": "./assets/images/p-oud.jpg",
+              "alt": "عود"
+            }
+          },
+          {
+            "id": 5,
+            "name": "سولي دي فينيتسيا",
+            "subtitle": "حمضي · عطري",
+            "url": "#",
+            "status": "sale",
+            "type": "product",
+            "price": 390,
+            "base_currency_price": 390,
+            "is_on_sale": false,
+            "add_to_cart_label": "أضف للسلة",
+            "image": {
+              "url": "./assets/images/p-sole.jpg",
+              "alt": "سولي"
+            }
+          },
+          {
+            "id": 6,
+            "name": "أمبرا نيرا",
+            "subtitle": "عنبري · حلو",
+            "url": "#",
+            "status": "sale",
+            "type": "product",
+            "price": 640,
+            "base_currency_price": 640,
+            "is_on_sale": false,
+            "add_to_cart_label": "أضف للسلة",
+            "image": {
+              "url": "./assets/images/p-ambra.jpg",
+              "alt": "أمبرا"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "path": "home.story",
+      "data": {
+        "eyebrow": "الحكاية",
+        "chapters": [
+          {
+            "title": "بدأت من جسر",
+            "text": "من جسر ريالتو حيث كان التجار يحملون الجوهر والعطر عبر القنوات. أخذنا من ذلك المشهد اسمنا وشعارنا: جسر، وغندول، ورحلة لا تُستعجل.",
+            "image": "./assets/images/mood-gondola.jpg"
+          },
+          {
+            "title": "تُركّب باليد",
+            "text": "كل تركيبة تمر على منضدة العطّار مرات قبل أن تُعتمد. لا دفعات ضخمة ولا اختصارات — الكمية محدودة لأن الجودة لا تُنتج بالجملة.",
+            "image": "./assets/images/story-atelier.jpg"
+          },
+          {
+            "title": "تُعبّأ لتبقى",
+            "text": "زجاج مضلّع سميك يحمي التركيبة من الضوء، وغطاء تاجي مصقول يدويًا. الزجاجة نفسها قطعة تُترك على الطاولة لا تُخبأ في الدرج.",
+            "image": "./assets/images/story-marble.jpg"
+          }
+        ]
+      }
+    },
+    {
+      "path": "home.visit",
+      "data": {
+        "background": "./assets/images/mood-silk.jpg",
+        "eyebrow": "زورونا",
+        "title": "الرائحة لا تُوصف، تُجرَّب",
+        "text": "تفضّل إلى المعرض لتجربة المجموعة كاملة على البشرة، مع استشارة مجانية لاختيار عطرك.",
+        "hours": "يوميًا · ٤ عصرًا — ١١ مساءً",
+        "cta_label": "تسوّق المجموعة",
+        "cta_url": "#"
+      }
+    }
+  ],
+  "_palette_note": "لتجربة لوحة أخرى: غيّر color_palette في preview.mjs أو أضفها هنا"
+}

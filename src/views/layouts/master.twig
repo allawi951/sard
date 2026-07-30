@@ -92,10 +92,45 @@
             --color-primary-reverse: {{ theme.color.reverse_text }};
         }
     </style>
+
+    {# ── لوحة ألوان «سرد» ── #}
+    {% set sard_palettes = {
+      'indigo':   { 'ink': '#14132F', 'light': '#EFD6C9', 'gold': '#C9A15A' },
+      'sand':     { 'ink': '#2A211B', 'light': '#F1E4D6', 'gold': '#B07A4B' },
+      'emerald':  { 'ink': '#0F2620', 'light': '#E4EDE6', 'gold': '#C2A25C' },
+      'charcoal': { 'ink': '#1A1A1D', 'light': '#ECEBEA', 'gold': '#A9A29B' }
+    } %}
+    {% set sard_pal = sard_palettes[theme.settings.get('color_palette', 'indigo')]|default(sard_palettes['indigo']) %}
+    <style>
+      :root {
+        --sard-ink: {{ sard_pal.ink }};
+        --sard-ink-soft: {{ theme.color.lighter(0.06, sard_pal.ink) }};
+        --sard-navy: {{ theme.color.lighter(0.14, sard_pal.ink) }};
+        --sard-blush: {{ sard_pal.light }};
+        --sard-cream: #F8F0E9;
+        --sard-gold: {{ sard_pal.gold }};
+        --sard-gold-soft: {{ theme.color.lighter(0.22, sard_pal.gold) }};
+        --sard-bg: var(--sard-ink);
+        --sard-fg: var(--sard-cream);
+        --sard-muted: rgba(248, 240, 233, .58);
+        --sard-line: rgba(248, 240, 233, .16);
+        --sard-accent: var(--sard-gold);
+      }
+    </style>
+    <script data-cfasync="false">
+      window.SARD_CFG = {
+        smoothScroll: {{ theme.settings.get('enable_smooth_scroll', true) | json_encode }},
+        logoDraw:     {{ theme.settings.get('enable_logo_draw', true) | json_encode }},
+        water:        {{ theme.settings.get('enable_water_canvas', true) | json_encode }},
+        cursor:       {{ theme.settings.get('enable_custom_cursor', true) | json_encode }},
+        stickyHeader: {{ theme.settings.get('header_is_sticky', true) | json_encode }}
+      };
+    </script>
+
     {# tracking services, custom css feature. #}
     {% hook 'head:end' %}
 </head>
-<body id="app" class="theme-raed overflow-x-hidden {% hook 'body:classes' %}
+<body id="app" class="theme-raed theme-sard overflow-x-hidden {% hook 'body:classes' %}
   {{ theme.settings.get('footer_is_dark') ? ' footer-is-dark' : ' footer-is-light' }}
   {{ theme.settings.get('topnav_is_dark') ? ' topnav-is-dark' : '' }}
   {{ theme.settings.get('sticky_add_to_cart') ? ' is-sticky-product-bar' : '' }}
@@ -105,6 +140,11 @@
     <a href="https://www.enable-javascript.com/" rel="noreferrer"
        target="_blank">To enable JavaScript on webpage</a>.
 </noscript>
+{% if is_page('index') %}
+  <div class="sard-progress" id="sardProgress"></div>
+  <div class="sard-cursor" id="sardCursor"></div>
+  <div class="sard-cursor-dot" id="sardCursorDot"></div>
+{% endif %}
 <div class="app-inner flex flex-col min-h-full">
     {% hook 'body:start' %}
     {% component 'header.header' %}

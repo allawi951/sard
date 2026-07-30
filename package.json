@@ -1,6 +1,6 @@
 {
-  "name": "theme-raed",
-  "version": "1.358.0",
+  "name": "sard",
+  "version": "1.0.0",
   "description": "Salla Theme",
   "license": "MIT",
   "repository": {
@@ -22,7 +22,9 @@
     "fslightbox": "^3.7.5",
     "lite-youtube-embed": "^0.3.4",
     "mmenu-light": "^3.2.2",
-    "sweetalert2": "^11.26.25"
+    "sweetalert2": "^11.26.25",
+    "gsap": "^3.12.5",
+    "lenis": "^1.1.18"
   },
   "devDependencies": {
     "@babel/core": "^8.0.1",

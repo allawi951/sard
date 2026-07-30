@@ -10,7 +10,7 @@ const public = file => path.resolve("public", file || '');
 module.exports = {
     entry  : {
         app     : [asset('styles/app.scss'), asset('js/wishlist.js'), asset('js/app.js'), asset('js/blog.js')],
-        home    : asset('js/home.js'),
+        home    : [asset('js/home.js'), asset('js/sard.js')],
         'product-card' : asset('js/partials/product-card.js'),
         'main-menu' : asset('js/partials/main-menu.js'),
         'wishlist-card': asset('js/partials/wishlist-card.js'),
@@ -60,7 +60,10 @@ module.exports = {
     plugins: [
         new ThemeWatcher(),
         new MiniCssExtractPlugin(),
-        new CopyPlugin({patterns: [{from: asset('images'), to: public('images')}]}),
+        new CopyPlugin({patterns: [
+            {from: asset('images'), to: public('images')},
+            {from: asset('fonts'), to: public('fonts')},
+        ]}),
     ],
     optimization: {
         minimizer: [

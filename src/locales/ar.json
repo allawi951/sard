@@ -18,6 +18,10 @@
       "days_since_added": "أيام من إضافته",
       "option_name": "الخيار",
       "option_content": "المحتوى"
+    },
+    "products": {
+      "collection_title": "مجموعتنا المختارة",
+      "collection_hint": "اسحب أو انزل للتنقل"
     }
   },
   "common": {

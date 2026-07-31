@@ -18,6 +18,10 @@
       "days_since_added": "days since it was added",
       "option_name": "Option name",
       "option_content": "Content"
+    },
+    "products": {
+      "collection_title": "Our Collection",
+      "collection_hint": "Drag or scroll to explore"
     }
   },
   "common": {

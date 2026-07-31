@@ -1,0 +1,130 @@
+/* ═══════════════════════════════════════════════════════════════
+   شريط «سرد» العلوي وذيله
+
+   لا نستبدل قالب الشريط — كل مكوّنات سلة فيه (سلة، بحث، حساب، قوائم،
+   فروع، تعدد لغات) تبقى كما هي وتعمل. نُعيد صياغة مظهره فقط:
+   شريط شفاف فوق الواجهة يتصلّب عند التمرير، وذيل داكن سردي.
+   ═══════════════════════════════════════════════════════════════ */
+
+body.theme-sard {
+
+  /* ── الشريط العلوي ── */
+  .store-header {
+    position: relative;
+    z-index: 60;
+
+    /* الشريط الأعلى الرفيع (البحث والتواصل) */
+    .top-navbar {
+      background: var(--sard-ink);
+      color: var(--sard-cream);
+      border-bottom: 1px solid rgba(248, 240, 233, .1);
+      font-size: .82rem;
+
+      a { color: rgba(248, 240, 233, .74); transition: color .3s; }
+      a:hover { color: var(--sard-gold); }
+    }
+
+    /* الشريط الرئيسي */
+    .main-nav-container {
+      background: var(--sard-page-bg) !important;
+      box-shadow: none !important;
+      border-bottom: 1px solid var(--sard-hairline);
+      transition: background-color .5s var(--sard-ease), border-color .5s var(--sard-ease);
+    }
+
+    .navbar-brand {
+      display: flex; align-items: center;
+      min-height: 56px;                 /* هدف لمس مريح على الجوال */
+
+      img { max-height: 54px; width: auto; object-fit: contain; }
+    }
+
+    /* روابط القائمة الرئيسية بنكهة سرد */
+    custom-main-menu a,
+    .mainMenu > li > a {
+      font-family: var(--sard-sans);
+      font-weight: 400;
+      letter-spacing: .02em;
+      position: relative;
+
+      &::after {
+        content: ''; position: absolute; inset-block-end: -2px; inset-inline-start: 0;
+        width: 100%; height: 1px; background: var(--sard-gold);
+        transform: scaleX(0); transform-origin: right;
+        transition: transform .4s var(--sard-ease);
+      }
+      &:hover::after { transform: scaleX(1); transform-origin: left; }
+    }
+  }
+
+  &[dir='rtl'] .store-header custom-main-menu a::after,
+  &[dir='rtl'] .store-header .mainMenu > li > a::after { transform-origin: left; }
+  &[dir='rtl'] .store-header custom-main-menu a:hover::after,
+  &[dir='rtl'] .store-header .mainMenu > li > a:hover::after { transform-origin: right; }
+
+  /* أيقونات الشريط: مقاس ثابت حتى لا تتضخّم لو تأخّر خط الأيقونات */
+  .store-header [class^='sicon-'],
+  .store-header [class*=' sicon-'] {
+    font-size: 1.35rem;
+    line-height: 1;
+    display: inline-block;
+  }
+
+  /* الشريط فوق الواجهة السردية: شفاف يتصلّب مع التمرير */
+  &.sard-home .store-header .main-nav-container {
+    background: color-mix(in srgb, var(--sard-ink) 88%, transparent) !important;
+    border-bottom-color: rgba(248, 240, 233, .12);
+    backdrop-filter: blur(14px) saturate(1.25);
+  }
+  &.sard-home .store-header .navbar-brand img { filter: brightness(0) invert(1); }
+  &.sard-home .store-header custom-main-menu a,
+  &.sard-home .store-header .mainMenu > li > a { color: rgba(248, 240, 233, .82); }
+  &.sard-home .store-header [class^='sicon-'],
+  &.sard-home .store-header [class*=' sicon-'] { color: var(--sard-cream); }
+
+  /* ── الذيل ── */
+  footer.store-footer,
+  .store-footer {
+    background: var(--sard-ink);
+    color: rgba(248, 240, 233, .72);
+    border-top: 1px solid rgba(248, 240, 233, .12);
+    padding-block: 3.5rem 2rem;
+
+    .footer-title,
+    h3, h4 {
+      font-family: var(--sard-serif);
+      font-weight: 400;
+      color: var(--sard-gold);
+      letter-spacing: .02em;
+      margin-bottom: .9rem;
+    }
+
+    a { color: rgba(248, 240, 233, .72); transition: color .3s; }
+    a:hover { color: var(--sard-gold); }
+
+    /* زخرفة سرد كتوقيع فوق حقوق النشر */
+    .copyrights,
+    .footer-copyrights {
+      border-top: 1px solid rgba(248, 240, 233, .12);
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      font-size: .8rem;
+      text-align: center;
+    }
+  }
+
+  /* وسائل الدفع والشارات: نطفئ الخلفية البيضاء لتنسجم مع الذيل الداكن */
+  .store-footer salla-payments::part(payment),
+  .store-footer salla-trust-badges img {
+    background: rgba(248, 240, 233, .06);
+    border-radius: 4px;
+  }
+}
+
+/* على الصفحة السردية تكون خلفية الجسم داكنة، فأي فراغ بين الأقسام
+   أو قبل الذيل يذوب في الجلد بدل أن يظهر شريطًا فاتحًا. */
+body.theme-sard.sard-home {
+  --sard-page-bg: var(--sard-ink);
+  --sard-page-fg: var(--sard-cream);
+  background-color: var(--sard-ink);
+}

@@ -10,7 +10,7 @@
 | component.cta_url      | ?string | رابط يُحلّ من مصادر سلة              |
 | position               | int     |                                      |
 #}
-<section class="sard-visit s-block" data-testid="store-home-visit" id="sard-visit-{{ position }}">
+<section class="sard-visit" data-testid="store-home-visit" id="sard-visit-{{ position }}">
   {% if component.background %}
     <div class="sard-visit__bg">
       <img src="{{ component.background|cdn(1600) }}" alt="" loading="lazy"

@@ -1,17 +1,36 @@
-/* خطوط الثيم — تُنسخ إلى public/fonts عبر CopyWebpackPlugin.
-   لا نداءات Google Fonts وقت التشغيل: أسرع، وبلا تتبّع خارجي. */
+/* خطوط «سرد» — ملف واحد لكل عائلة، محليًّا بلا نداء خارجي.
+   Cormorant و Jost خطوط متغيّرة: الملف نفسه يخدم كل الأوزان عبر مدى font-weight،
+   فلا داعي لملف لكل وزن (وفّر ذلك ٢٦٠KB من حزمة الثيم — حدّ سلة 1MB).
+   Amiri و Tajawal بوزن واحد ويُشتقّ العريض بصريًا عند الحاجة. */
 
-@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 300; font-display: swap; src: url('fonts/cormorant-garamond-300.woff2') format('woff2'); }
-@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/cormorant-garamond-400.woff2') format('woff2'); }
-@font-face { font-family: 'Cormorant Garamond'; font-style: normal; font-weight: 600; font-display: swap; src: url('fonts/cormorant-garamond-600.woff2') format('woff2'); }
+@font-face {
+  font-family: 'Cormorant Garamond';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('fonts/cormorant-garamond-400.woff2') format('woff2');
+}
 
-@font-face { font-family: 'Jost'; font-style: normal; font-weight: 300; font-display: swap; src: url('fonts/jost-300.woff2') format('woff2'); }
-@font-face { font-family: 'Jost'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/jost-400.woff2') format('woff2'); }
-@font-face { font-family: 'Jost'; font-style: normal; font-weight: 500; font-display: swap; src: url('fonts/jost-500.woff2') format('woff2'); }
+@font-face {
+  font-family: 'Jost';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('fonts/jost-400.woff2') format('woff2');
+}
 
-@font-face { font-family: 'Amiri'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/amiri-400.woff2') format('woff2'); }
-@font-face { font-family: 'Amiri'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/amiri-700.woff2') format('woff2'); }
+@font-face {
+  font-family: 'Amiri';
+  font-style: normal;
+  font-weight: 400 700;
+  font-display: swap;
+  src: url('fonts/amiri-400.woff2') format('woff2');
+}
 
-@font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 300; font-display: swap; src: url('fonts/tajawal-300.woff2') format('woff2'); }
-@font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 400; font-display: swap; src: url('fonts/tajawal-400.woff2') format('woff2'); }
-@font-face { font-family: 'Tajawal'; font-style: normal; font-weight: 700; font-display: swap; src: url('fonts/tajawal-700.woff2') format('woff2'); }
+@font-face {
+  font-family: 'Tajawal';
+  font-style: normal;
+  font-weight: 300 700;
+  font-display: swap;
+  src: url('fonts/tajawal-400.woff2') format('woff2');
+}

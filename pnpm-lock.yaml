@@ -12,8 +12,8 @@ importers:
         specifier: ^8.0.0
         version: 8.0.0
       animejs:
-        specifier: ^3.2.2
-        version: 3.2.2
+        specifier: ^4.5.0
+        version: 4.5.0
       fslightbox:
         specifier: ^3.7.5
         version: 3.7.5
@@ -1315,6 +1315,17 @@ packages:
 
   animejs@3.2.2:
     resolution: {integrity: sha512-Ao95qWLpDPXXM+WrmwcKbl6uNlC5tjnowlaRYtuVDHHoygjtIPfDUoK9NthrlZsQSKjZXlmji2TrBUAVbiH0LQ==}
+
+  animejs@4.5.0:
+    resolution: {integrity: sha512-NQimYX+lz8WaXonGS9zVVoviCIAjONeJayxacUditaivYLqyXgGjFKjuyl0aUUhFKm5MriX9ty1TGovNzoJQWA==}
+    peerDependencies:
+      '@types/three': '>=0.150.0'
+      three: '>=0.150.0'
+    peerDependenciesMeta:
+      '@types/three':
+        optional: true
+      three:
+        optional: true
 
   ansi-styles@4.3.0:
     resolution: {integrity: sha512-zbB9rCJAT1rbjiVDb2hqKFHNYLxgtk8NURxZ3IZwD3F6NtxbXZQCnnSi1Lkx+IDohdPlFp222wVALIheZJQSEg==}
@@ -4435,6 +4446,8 @@ snapshots:
       - '@types/dlv'
 
   animejs@3.2.2: {}
+
+  animejs@4.5.0: {}
 
   ansi-styles@4.3.0:
     dependencies:

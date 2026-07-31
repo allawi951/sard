@@ -1,0 +1,156 @@
+/* ═══════════════════════════════════════════════════════════════
+   جلد «سرد» العام — يحمل الهوية إلى كل صفحات الثيم لا الرئيسية فقط.
+
+   المبدأ: لا نعيد كتابة قوالب الثيم الأساسي. نُعيد تعريف رموز التصميم
+   (خط، لون، حواف، ظل) التي تبني عليها كل مكوّناته، فتتبدّل الهوية
+   في صفحة المنتج والسلة والحساب والمدونة دفعةً واحدة.
+
+   كل شيء مقصور على body.theme-sard فلا يتسرّب خارج الثيم.
+   ═══════════════════════════════════════════════════════════════ */
+
+body.theme-sard {
+
+  /* ── ١) الخطوط: العناوين بخط ذي تفاصيل، والمتن بخط واضح ── */
+  font-family: var(--sard-sans);
+  color: var(--sard-page-fg);
+  background-color: var(--sard-page-bg);
+
+  h1, h2, h3, h4,
+  .s-block__title,
+  .section-title,
+  .product__title,
+  salla-products-slider::part(title) {
+    font-family: var(--sard-serif);
+    font-weight: 400;
+    letter-spacing: .005em;
+  }
+
+  /* العربية تحتاج تباعد أسطر أوسع: التشكيل يتجاوز صندوق السطر */
+  &[dir='rtl'] h1,
+  &[dir='rtl'] h2,
+  &[dir='rtl'] h3 { line-height: 1.5; }
+
+  /* ── ٢) الأزرار: حواف دائرية كاملة وتباعد حروف هادئ ── */
+  .btn,
+  .s-button-element,
+  button.btn--primary,
+  salla-button::part(button),
+  salla-add-product-button::part(button) {
+    border-radius: 999px;
+    font-family: var(--sard-sans);
+    font-weight: 400;
+    letter-spacing: .04em;
+    transition: transform .25s var(--sard-ease), box-shadow .3s var(--sard-ease);
+  }
+  .btn:active,
+  .s-button-element:active { transform: scale(.98); }
+
+  /* ── ٣) البطاقات: حافّة رفيعة وزوايا هادئة بدل الظلال الثقيلة ── */
+  .s-product-card-entry,
+  salla-product-card::part(card),
+  .s-block--products .product-entry {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--sard-hairline);
+    box-shadow: none;
+    transition: border-color .4s var(--sard-ease), transform .4s var(--sard-ease);
+
+    &:hover {
+      border-color: color-mix(in srgb, var(--sard-gold) 55%, transparent);
+      transform: translateY(-3px);
+    }
+  }
+
+  .s-product-card-image img { transition: transform 1s var(--sard-ease); }
+  .s-product-card-entry:hover .s-product-card-image img { transform: scale(1.05); }
+
+  /* ── ٤) الأسعار بلون التمييز وخط العناوين ── */
+  .s-product-card-sale-price,
+  .total-price,
+  .product-price,
+  .s-price {
+    font-family: var(--sard-serif);
+    color: var(--sard-accent-ink);
+    font-weight: 500;
+  }
+
+  /* ── ٥) الحقول: خط رفيع بدل الإطار الممتلئ ── */
+  input:not([type='checkbox']):not([type='radio']),
+  textarea,
+  select,
+  .form-control,
+  .s-form-control {
+    border-radius: 3px;
+    border-color: var(--sard-hairline);
+    font-family: var(--sard-sans);
+
+    &:focus {
+      border-color: var(--sard-accent-ink);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--sard-gold) 18%, transparent);
+    }
+  }
+
+  /* ── ٦) الشريط العلوي والذيل ── */
+  .store-header .main-nav-container { border-bottom: 1px solid var(--sard-hairline); }
+  .navbar-brand img { max-height: 52px; width: auto; }
+
+  footer,
+  .store-footer {
+    background: var(--sard-ink);
+    color: var(--sard-cream);
+    --sard-hairline: rgba(248, 240, 233, .16);
+
+    h3, h4, .footer-title {
+      font-family: var(--sard-serif);
+      color: var(--sard-gold);
+      font-weight: 400;
+    }
+    a { transition: color .3s; }
+    a:hover { color: var(--sard-gold); }
+  }
+
+  /* ── ٧) مسار التنقل وعناوين الأقسام ── */
+  salla-breadcrumb { font-size: .84rem; }
+
+  .s-block__title,
+  .section-title {
+    position: relative;
+    padding-bottom: .6rem;
+
+    &::after {
+      content: ''; position: absolute; inset-block-end: 0; inset-inline-start: 0;
+      width: 44px; height: 1px; background: var(--sard-gold);
+    }
+  }
+
+  /* ── ٨) صفحة المنتج ── */
+  .product-single .product__title,
+  .product-page h1 {
+    font-family: var(--sard-serif);
+    font-weight: 300;
+    font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  }
+
+  .product-single .s-button-element--primary { border-radius: 999px; }
+
+  /* ── ٩) السلة وصفحة الشكر ── */
+  .s-cart-summary-item,
+  .cart-item { border-bottom: 1px solid var(--sard-hairline); }
+
+  /* ── ١٠) صفحات الحساب ── */
+  .s-profile-menu a,
+  .account-nav a {
+    border-radius: 999px;
+    font-family: var(--sard-sans);
+  }
+}
+
+/* ── رموز الجلد العام ──
+   ألوان الصفحات الداخلية فاتحة ومقروءة؛ الأقسام السردية في الرئيسية
+   تحمل جلدها الداكن بنفسها ولا تتأثر بهذه القيم. */
+:root {
+  --sard-page-bg: #FBF8F5;
+  --sard-page-fg: #221F2E;
+  --sard-hairline: rgba(34, 31, 46, .14);
+  --sard-accent-ink: #8A6224;   /* ذهبي داكن يحقّق تباين النص المطلوب */
+}

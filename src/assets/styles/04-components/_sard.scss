@@ -176,40 +176,15 @@ html[dir='rtl'] .sard-btn { letter-spacing: .02em; text-transform: none; font-si
 }
 html[dir='rtl'] .sard-progress { transform-origin: right; }
 
-/* ═══════════ الشريط العلوي ═══════════ */
-.sard-nav {
-  inset-inline: 0; top: 0; z-index: 100;
-  min-height: var(--sard-nav-h);
-  display: flex; align-items: center;
-  border-bottom: 1px solid transparent;
-  transition: background-color .5s var(--sard-ease), backdrop-filter .5s, border-color .5s;
-
-  &.is-fixed { position: fixed; }
-  &.is-stuck {
-    background: color-mix(in srgb, var(--sard-bg) 82%, transparent);
-    backdrop-filter: blur(16px) saturate(1.3);
-    border-bottom-color: var(--sard-line);
-  }
-}
-.sard-nav__in { display: flex; align-items: center; gap: 1.5rem; width: 100%; }
-.sard-nav__links { flex: 1; min-width: 0; }
-.sard-nav__tools { display: flex; align-items: center; gap: .25rem; margin-inline-start: auto; }
-
-/* min-height يضمن هدف لمس ≥44px على الجوال */
-.sard-brand { display: flex; align-items: center; gap: .7rem; color: var(--sard-fg); min-height: 44px; }
-.sard-brand .sard-mark { width: 46px; }
-.sard-brand__img { max-height: 46px; width: auto; }
-.sard-brand__name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.28rem; letter-spacing: .18em; font-weight: 400;
-}
-
-.sard-breadcrumb { display: block; padding-block: 1rem; }
+/* ═══════════ الشريط العلوي ═══════════
+   غير مستخدم في هذا التكامل: شريط ثيم رائد هو المعتمد.
+   ═══════════════════════════════════════ */
 
 /* ═══════════ الفصل ٠ — الواجهة ═══════════ */
 .sard-hero {
   position: relative; isolation: isolate;
-  min-height: 100svh;
+  /* شريط رائد داخل التدفّق فوقنا — نترك له مساحته بدل 100svh كاملة */
+  min-height: 86svh;
   display: grid; place-items: center; text-align: center;
   overflow: hidden;
   background: var(--sard-ink);
@@ -229,7 +204,7 @@ html[dir='rtl'] .sard-progress { transform-origin: right; }
   position: absolute; inset-inline: 0; bottom: 0; z-index: -1;
   width: 100%; height: 46%; opacity: .5;
 }
-.sard-hero__in { padding-block: calc(var(--sard-nav-h) + 3rem) 6rem; }
+.sard-hero__in { padding-block: 3rem 5rem; }
 .sard-hero__mark { width: min(360px, 62vw); margin-inline: auto; color: var(--sard-cream); }
 .sard-hero__mark path { stroke-width: 2.4; }
 /* شعار المتجر الحقيقي داخل الزخرفة — الزخرفة تؤطّره لا تحلّ محلّه */

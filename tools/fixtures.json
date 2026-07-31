@@ -38,9 +38,9 @@
   },
   "home": [
     {
-      "path": "home.hero",
+      "path": "home.sard-hero",
       "data": {
-        "background": "./assets/images/hero-canal.jpg",
+        "background": "./assets/images/sard/hero-canal.jpg",
         "eyebrow": "ثيم سرد · معاينة",
         "wordmark": "SARD",
         "subtitle": "أُو دو بارفان",
@@ -49,7 +49,7 @@
       }
     },
     {
-      "path": "home.layers",
+      "path": "home.sard-layers",
       "data": {
         "eyebrow": "هرم الرائحة",
         "title": "الرائحة تُروى على ثلاث طبقات",
@@ -58,25 +58,25 @@
             "key": "المقدمة",
             "title": "اللقاء الأول",
             "text": "أول عشر دقائق. حمضيات وندى — الانطباع الذي يجعل الرأس يلتفت.",
-            "image": "./assets/images/note-top.jpg"
+            "image": "./assets/images/sard/note-top.jpg"
           },
           {
             "key": "القلب",
             "title": "الحكاية",
             "text": "بعد نصف ساعة يظهر جوهر العطر: زهور وتوابل تبقى ساعات.",
-            "image": "./assets/images/note-heart.jpg"
+            "image": "./assets/images/sard/note-heart.jpg"
           },
           {
             "key": "القاعدة",
             "title": "الأثر",
             "text": "ما يبقى على القماش بعد يوم كامل. أخشاب وعنبر ومسك — هذا ما يُذكر.",
-            "image": "./assets/images/note-base.jpg"
+            "image": "./assets/images/sard/note-base.jpg"
           }
         ]
       }
     },
     {
-      "path": "home.collection",
+      "path": "home.sard-collection",
       "data": {
         "eyebrow": "المجموعة",
         "title": "ستة عطور، ست حكايات",
@@ -94,7 +94,7 @@
             "is_on_sale": false,
             "add_to_cart_label": "أضف للسلة",
             "image": {
-              "url": "./assets/images/p-perla.jpg",
+              "url": "./assets/images/sard/p-perla.jpg",
               "alt": "بيرلا"
             }
           },
@@ -110,7 +110,7 @@
             "is_on_sale": false,
             "add_to_cart_label": "أضف للسلة",
             "image": {
-              "url": "./assets/images/p-notte.jpg",
+              "url": "./assets/images/sard/p-notte.jpg",
               "alt": "نوتّي"
             }
           },
@@ -129,7 +129,7 @@
             "promotion_title": "عرض خاص",
             "add_to_cart_label": "أضف للسلة",
             "image": {
-              "url": "./assets/images/p-rosa.jpg",
+              "url": "./assets/images/sard/p-rosa.jpg",
               "alt": "روزا"
             }
           },
@@ -145,7 +145,7 @@
             "is_on_sale": false,
             "add_to_cart_label": "أضف للسلة",
             "image": {
-              "url": "./assets/images/p-oud.jpg",
+              "url": "./assets/images/sard/p-oud.jpg",
               "alt": "عود"
             }
           },
@@ -161,7 +161,7 @@
             "is_on_sale": false,
             "add_to_cart_label": "أضف للسلة",
             "image": {
-              "url": "./assets/images/p-sole.jpg",
+              "url": "./assets/images/sard/p-sole.jpg",
               "alt": "سولي"
             }
           },
@@ -177,7 +177,7 @@
             "is_on_sale": false,
             "add_to_cart_label": "أضف للسلة",
             "image": {
-              "url": "./assets/images/p-ambra.jpg",
+              "url": "./assets/images/sard/p-ambra.jpg",
               "alt": "أمبرا"
             }
           }
@@ -185,32 +185,32 @@
       }
     },
     {
-      "path": "home.story",
+      "path": "home.sard-story",
       "data": {
         "eyebrow": "الحكاية",
         "chapters": [
           {
             "title": "بدأت من جسر",
             "text": "من جسر ريالتو حيث كان التجار يحملون الجوهر والعطر عبر القنوات. أخذنا من ذلك المشهد اسمنا وشعارنا: جسر، وغندول، ورحلة لا تُستعجل.",
-            "image": "./assets/images/mood-gondola.jpg"
+            "image": "./assets/images/sard/mood-gondola.jpg"
           },
           {
             "title": "تُركّب باليد",
             "text": "كل تركيبة تمر على منضدة العطّار مرات قبل أن تُعتمد. لا دفعات ضخمة ولا اختصارات — الكمية محدودة لأن الجودة لا تُنتج بالجملة.",
-            "image": "./assets/images/story-atelier.jpg"
+            "image": "./assets/images/sard/story-atelier.jpg"
           },
           {
             "title": "تُعبّأ لتبقى",
             "text": "زجاج مضلّع سميك يحمي التركيبة من الضوء، وغطاء تاجي مصقول يدويًا. الزجاجة نفسها قطعة تُترك على الطاولة لا تُخبأ في الدرج.",
-            "image": "./assets/images/story-marble.jpg"
+            "image": "./assets/images/sard/story-marble.jpg"
           }
         ]
       }
     },
     {
-      "path": "home.visit",
+      "path": "home.sard-visit",
       "data": {
-        "background": "./assets/images/mood-silk.jpg",
+        "background": "./assets/images/sard/mood-silk.jpg",
         "eyebrow": "زورونا",
         "title": "الرائحة لا تُوصف، تُجرَّب",
         "text": "تفضّل إلى المعرض لتجربة المجموعة كاملة على البشرة، مع استشارة مجانية لاختيار عطرك.",

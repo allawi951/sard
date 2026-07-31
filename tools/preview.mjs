@@ -84,6 +84,10 @@ Twig.extendFilter('trans', (v) => {
   return String(v).split('.').reduce((o, k) => (o || {})[k], dict) ?? v;
 });
 Twig.extendFunction('trans', (v) => Twig.filters.trans(v));
+// دوال سلة المتاحة في القوالب — نُبدلها بجذوع للمعاينة المحلية
+Twig.extendFunction('link', (...a) => '#' + String(a[0] ?? ''));
+Twig.extendFunction('url', (...a) => '#' + String(a[0] ?? ''));
+Twig.extendFunction('route', (...a) => '#' + String(a[0] ?? ''));
 Twig.extendFunction('is_page', (slug) => slug === fixtures.page.slug);
 
 /* ── ٤) البيانات الوهمية ── */

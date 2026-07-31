@@ -1,0 +1,70 @@
+{#
+| Variable            | Type      | Description                                                |
+|---------------------|-----------|------------------------------------------------------------|
+| component.eyebrow   | ?string   |                                                            |
+| component.title     | ?string   |                                                            |
+| component.hint      | ?string   |                                                            |
+| component.products  | Product[] | المنتجات المختارة — كائنات سلة كاملة                       |
+| position            | int       |                                                            |
+
+  التمرير العمودي يتحوّل هنا إلى حركة أفقية (GSAP ScrollTrigger).
+  البطاقة تصميم الثيم، لكن الإضافة للسلة عبر <salla-add-product-button> الرسمي:
+  السعر والمخزون والضريبة والعملة كلها من المنصة، لا من الثيم.
+#}
+<section class="sard-coll s-block" data-testid="store-home-collection" id="sard-coll-{{ position }}">
+
+  <div class="container sard-coll__head">
+    {% if component.eyebrow %}<p class="sard-eyebrow">{{ component.eyebrow }}</p>{% endif %}
+    {% if component.title %}<h2 class="sard-display">{{ component.title }}</h2>{% endif %}
+    {% if component.hint %}<p class="sard-coll__hint">{{ component.hint }}</p>{% endif %}
+  </div>
+
+  <div class="sard-coll__pin" id="sardCollPin">
+    <div class="sard-coll__track" id="sardCollTrack">
+      {% for product in component.products %}
+        <article class="sard-card" data-product-id="{{ product.id }}">
+          <a class="sard-card__media" href="{{ product.url }}" aria-label="{{ product.name }}">
+            <img src="{{ product.image.url|cdn(800) }}" alt="{{ product.image.alt|default(product.name) }}"
+                 loading="lazy" width="800" height="1000">
+            {% if product.is_on_sale %}
+              <span class="sard-card__badge">{{ product.promotion_title|default('pages.products.sale'|trans) }}</span>
+            {% endif %}
+          </a>
+
+          <div class="sard-card__actions">
+            <salla-add-product-button
+                data-testid="store-home-collection-add"
+                product-id="{{ product.id }}"
+                product-status="{{ product.status }}"
+                product-type="{{ product.type }}"
+                amount="{{ product.base_currency_price }}"
+                {{ product.can_quick_buy ? 'quick-buy' : '' }}
+                width="wide"
+                fill="outline"
+                class="sard-card__add">
+              {{ product.add_to_cart_label }}
+            </salla-add-product-button>
+
+            <a href="{{ product.url }}" class="sard-btn sard-btn--ghost">{{ 'pages.products.details'|trans }}</a>
+          </div>
+
+          <div class="sard-card__body">
+            <div>
+              <h3 class="sard-card__name"><a href="{{ product.url }}">{{ product.name }}</a></h3>
+              {% if product.subtitle %}<p class="sard-card__tag">{{ product.subtitle }}</p>{% endif %}
+            </div>
+
+            <p class="sard-card__price">
+              {% if product.is_on_sale %}
+                <span class="sard-card__sale">{{ product.sale_price|money }}</span>
+                <del>{{ product.regular_price|money }}</del>
+              {% else %}
+                {{ product.starting_price ? product.starting_price|money : product.price|money }}
+              {% endif %}
+            </p>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>

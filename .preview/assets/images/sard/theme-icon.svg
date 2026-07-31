@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Sard theme icon">
+  <defs>
+    <linearGradient id="sardBg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#1F1E45"/>
+      <stop offset="1" stop-color="#0E0D24"/>
+    </linearGradient>
+    <linearGradient id="sardGold" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#E4C88E"/>
+      <stop offset="1" stop-color="#B98C43"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="512" height="512" rx="112" fill="url(#sardBg)"/>
+
+  <g fill="none" stroke="url(#sardGold)" stroke-width="9"
+     stroke-linecap="round" stroke-linejoin="round">
+    <!-- القوس المزدوج -->
+    <path d="M128 262 C 178 176 334 176 384 262"/>
+    <path d="M154 268 C 196 204 316 204 358 268"/>
+    <!-- المسطرتان -->
+    <path d="M104 272 H 222"/>
+    <path d="M290 272 H 408"/>
+    <path d="M104 258 V 286"/>
+    <path d="M408 258 V 286"/>
+    <!-- المعيّن المركزي -->
+    <path d="M256 240 L 288 272 L 256 304 L 224 272 Z"/>
+    <!-- الموجة -->
+    <path d="M164 336 C 194 326 224 346 256 336 C 288 326 318 346 348 336"/>
+  </g>
+
+  <g fill="url(#sardGold)">
+    <path d="M256 259 L 269 272 L 256 285 L 243 272 Z"/>
+    <circle cx="128" cy="262" r="8"/>
+    <circle cx="384" cy="262" r="8"/>
+  </g>
+</svg>

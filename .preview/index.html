@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<!-- بسم الله الرحمن الرحيم -->
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+    <script defer data-cfasync="false" crossorigin="anonymous" src="./assets/product-card.js"></script>
+    <script defer src="./assets/main-menu.js"></script>
+    
+        <script defer src="./assets/add-product-toast.js"></script>
+    
+
+    
+
+
+    <script data-cfasync="false">
+        window.header_is_sticky = "true"
+        window.imageZoom = "false"
+        window.can_access_wallet = false
+        window.enable_more_menu = "true"
+        window.enable_add_product_toast = "true"
+        window.notify_when_available_in_card = "true"
+    </script>
+    
+    
+    
+    
+    <link rel="stylesheet" href="./assets/app.css">
+    <link rel="stylesheet" href=""/>
+    <style>
+        :root {
+            --font-main: '';
+            --color-primary: #2B2A5E;
+            --color-primary-dark: #252450;
+            --color-primary-light: #4b4a76;
+            --color-primary-reverse: #000000;
+        }
+    </style>
+
+    
+            <style>
+      :root {
+        --sard-ink: #14132F;
+        --sard-ink-soft: #22213b;
+        --sard-navy: #35344c;
+        --sard-blush: #EFD6C9;
+        --sard-cream: #F8F0E9;
+        --sard-gold: #C9A15A;
+        --sard-gold-soft: #d5b67e;
+        --sard-bg: var(--sard-ink);
+        --sard-fg: var(--sard-cream);
+        --sard-muted: rgba(248, 240, 233, .58);
+        --sard-line: rgba(248, 240, 233, .16);
+        --sard-accent: var(--sard-gold);
+      }
+    </style>
+    <script data-cfasync="false">
+      window.SARD_CFG = {
+        smoothScroll: true,
+        logoDraw:     true,
+        water:        true,
+        cursor:       true,
+        stickyHeader: true
+      };
+    </script>
+
+    
+    
+</head>
+<body id="app" class="theme-raed theme-sard overflow-x-hidden 
+   footer-is-dark
+   topnav-is-dark
+   is-sticky-product-bar
+  ">
+<noscript>
+    To get full functionality of this site you need to enable JavaScript. Here is how
+    <a href="https://www.enable-javascript.com/" rel="noreferrer"
+       target="_blank">To enable JavaScript on webpage</a>.
+</noscript>
+  <div class="sard-progress" id="sardProgress"></div>
+  <div class="sard-cursor" id="sardCursor"></div>
+  <div class="sard-cursor-dot" id="sardCursorDot"></div>
+<div class="app-inner flex flex-col min-h-full">
+    
+    
+
+<header data-testid="store-header" class="store-header">
+  
+  <div class="top-navbar">
+    <div class="container flex justify-between">
+      <div class="flex-1 flex items-center gap-2">
+          
+          
+            <salla-menu data-testid="store-header-topnav" source="footer" topnav></salla-menu>
+          
+
+          
+          <div class="header-buttons">
+              
+                  <salla-localization-modal data-testid="store-header-localization" show-trigger></salla-localization-modal>
+              
+          </div>
+
+          
+          
+
+          
+          <div class="header-search flex-1">
+            <salla-search data-testid="store-header-search" inline oval height="36"></salla-search>
+          </div>
+      </div>
+
+      <salla-contacts data-testid="store-header-contacts" is-header></salla-contacts>
+    </div>
+  </div>
+
+  
+  <div id="mainnav" class="main-nav-container shadow-default bg-white flex items-center">
+      <div class="inner bg-inherit w-full">
+          <div class="container">
+              <div class="flex items-stretch justify-between relative">
+                  <div class="flex items-center">
+                      <a data-testid="store-header-mobile-toggle" class="lg:hidden mburger mburger--collapse leading-none rtl:ml-4 ltr:mr-4" href="#mobile-menu" aria-label="Open-menu">
+                        <i class="sicon-menu text-primary text-2xl"></i>
+                      </a>
+                      <a data-testid="store-header-logo" class="navbar-brand" href="#">
+                          <img fetchpriority="high" width="100%" height="100%" loading="eager" src="" alt="متجر العيّنة logo">
+                          
+                            <h1 class="sr-only">متجر العيّنة</h1>
+                          
+                      </a>
+                      <custom-main-menu></custom-main-menu>
+                  </div>
+                  <div class="flex items-center justify-end my-2.5">
+                      <salla-user-menu data-testid="store-header-user-menu" avatar-only show-header show-trigger></salla-user-menu>
+                      <salla-cart-summary data-testid="store-header-cart" class="ml-4 rtl:ml-[unset] rtl:mr-4">
+                        <i slot="icon" class="header-btn__icon icon sicon-shopping-bag"></i>
+                      </salla-cart-summary>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </div>
+</header>
+
+    <main id="main-content" role="main">
+    
+    
+
+<section class="sard-hero s-block" data-testid="store-home-hero" id="sard-hero-0">
+
+      <div class="sard-hero__bg">
+      <img src="./assets/images/sard/hero-canal.jpg" alt="" id="sardHeroImg"
+           fetchpriority="high" loading="eager" width="1920" height="1080">
+    </div>
+    <div class="sard-hero__veil"></div>
+  <canvas id="sardWater" class="sard-hero__water" aria-hidden="true"></canvas>
+
+  <div class="sard-hero__in">
+          <p class="sard-eyebrow" id="sardHeroEyebrow">ثيم سرد · معاينة</p>
+    
+    <div class="sard-hero__mark" id="sardHeroMark">
+      
+<svg class="sard-mark"
+     viewBox="0 0 640 220" aria-hidden="true" focusable="false">
+
+  <g fill="none" stroke="currentColor" stroke-width="3"
+     stroke-linecap="round" stroke-linejoin="round">
+
+    
+    <g class="sard-arc">
+      <path class=" sard-draw" d="M70 140 C 190 62 450 62 570 140"/>
+      <path class=" sard-draw" d="M104 148 C 205 84 435 84 536 148"/>
+    </g>
+
+    
+    <g class="sard-rules">
+      <path class=" sard-draw" d="M40 150 H 288"/>
+      <path class=" sard-draw" d="M352 150 H 600"/>
+      <path class=" sard-draw" d="M40 142 V 158"/>
+      <path class=" sard-draw" d="M600 142 V 158"/>
+    </g>
+
+    
+    <path class="sard-diamond sard-draw" d="M320 128 L 344 150 L 320 172 L 296 150 Z"/>
+
+    
+    <g class="sard-wave">
+      <path class=" sard-draw" d="M196 186 C 236 180 276 192 316 186 C 356 180 396 192 436 186"/>
+    </g>
+  </g>
+
+  
+  <g class="sard-jewel" fill="currentColor">
+    <path d="M320 141 L 329 150 L 320 159 L 311 150 Z"/>
+    <circle cx="70" cy="140" r="3.5"/>
+    <circle cx="570" cy="140" r="3.5"/>
+  </g>
+</svg>
+    </div>
+
+    
+              <p class="sard-hero__word" id="sardHeroWord" aria-label="SARD"><span>S</span><span>A</span><span>R</span><span>D</span></p>
+    
+          <p class="sard-hero__sub" id="sardHeroSub">أُو دو بارفان</p>
+    
+          <p class="sard-hero__line" id="sardHeroLine">كل عطر رحلة على الماء</p>
+      </div>
+
+      <div class="sard-hero__cue" id="sardHeroCue">
+      <i></i><span>انزل للإبحار</span>
+    </div>
+  </section>
+
+<section class="sard-layers s-block" data-testid="store-home-scent-pyramid" id="sard-layers-1">
+  <div class="sard-layers__pin" id="sardLayersPin">
+    <div class="container sard-layers__grid">
+
+      
+      <div class="sard-layers__head">
+        <p class="sard-eyebrow">هرم الرائحة</p>        <h2 class="sard-display sard-display--sm">الرائحة تُروى على ثلاث طبقات</h2>      </div>
+
+      <div class="sard-layers__media">
+        <div class="sard-layers__frame">
+        <span class="sard-layers__ring" aria-hidden="true"></span>
+                  <figure class="sard-layers__img is-on" data-layer="0">
+                          <img src="./assets/images/sard/note-top.jpg" alt="اللقاء الأول" loading="lazy" width="900" height="900">
+                      </figure>
+                  <figure class="sard-layers__img" data-layer="1">
+                          <img src="./assets/images/sard/note-heart.jpg" alt="الحكاية" loading="lazy" width="900" height="900">
+                      </figure>
+                  <figure class="sard-layers__img" data-layer="2">
+                          <img src="./assets/images/sard/note-base.jpg" alt="الأثر" loading="lazy" width="900" height="900">
+                      </figure>
+                </div>
+      </div>
+
+      <div class="sard-layers__body">
+        <div class="sard-layers__steps">
+                      <article class="sard-layers__step is-on" data-layer-step="0">
+              <h3>
+                <span>اللقاء الأول</span>
+                <b>المقدمة</b>
+              </h3>
+              <p>أول عشر دقائق. حمضيات وندى — الانطباع الذي يجعل الرأس يلتفت.</p>
+            </article>
+                      <article class="sard-layers__step" data-layer-step="1">
+              <h3>
+                <span>الحكاية</span>
+                <b>القلب</b>
+              </h3>
+              <p>بعد نصف ساعة يظهر جوهر العطر: زهور وتوابل تبقى ساعات.</p>
+            </article>
+                      <article class="sard-layers__step" data-layer-step="2">
+              <h3>
+                <span>الأثر</span>
+                <b>القاعدة</b>
+              </h3>
+              <p>ما يبقى على القماش بعد يوم كامل. أخشاب وعنبر ومسك — هذا ما يُذكر.</p>
+            </article>
+                  </div>
+
+        <div class="sard-layers__bar"><i id="sardLayersBar"></i></div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section class="sard-coll s-block" data-testid="store-home-collection" id="sard-coll-2">
+
+  <div class="container sard-coll__head">
+    <p class="sard-eyebrow">المجموعة</p>    <h2 class="sard-display">ستة عطور، ست حكايات</h2>    <p class="sard-coll__hint">اسحب أو انزل للتنقل</p>  </div>
+
+  <div class="sard-coll__pin" id="sardCollPin">
+    <div class="sard-coll__track" id="sardCollTrack">
+              <article class="sard-card" data-product-id="1">
+          <a class="sard-card__media" href="#" aria-label="بيرلا">
+            <img src="./assets/images/sard/p-perla.jpg" alt="بيرلا"
+                 loading="lazy" width="800" height="1000">
+                      </a>
+
+          <div class="sard-card__actions">
+            <salla-add-product-button
+                data-testid="store-home-collection-add"
+                product-id="1"
+                product-status="sale"
+                product-type="product"
+                amount="420"
+                
+                width="wide"
+                fill="outline"
+                class="sard-card__add">
+              أضف للسلة
+            </salla-add-product-button>
+
+            <a href="#" class="sard-btn sard-btn--ghost">pages.products.details</a>
+          </div>
+
+          <div class="sard-card__body">
+            <div>
+              <h3 class="sard-card__name"><a href="#">بيرلا</a></h3>
+              <p class="sard-card__tag">زهري · مسكي</p>            </div>
+
+            <p class="sard-card__price">
+                              ٤٢٠ ر.س
+                          </p>
+          </div>
+        </article>
+              <article class="sard-card" data-product-id="2">
+          <a class="sard-card__media" href="#" aria-label="نوتّي فينيتسيانا">
+            <img src="./assets/images/sard/p-notte.jpg" alt="نوتّي"
+                 loading="lazy" width="800" height="1000">
+                      </a>
+
+          <div class="sard-card__actions">
+            <salla-add-product-button
+                data-testid="store-home-collection-add"
+                product-id="2"
+                product-status="sale"
+                product-type="product"
+                amount="560"
+                
+                width="wide"
+                fill="outline"
+                class="sard-card__add">
+              أضف للسلة
+            </salla-add-product-button>
+
+            <a href="#" class="sard-btn sard-btn--ghost">pages.products.details</a>
+          </div>
+
+          <div class="sard-card__body">
+            <div>
+              <h3 class="sard-card__name"><a href="#">نوتّي فينيتسيانا</a></h3>
+              <p class="sard-card__tag">خشبي · عنبري</p>            </div>
+
+            <p class="sard-card__price">
+                              ٥٦٠ ر.س
+                          </p>
+          </div>
+        </article>
+              <article class="sard-card" data-product-id="3">
+          <a class="sard-card__media" href="#" aria-label="روزا دورو">
+            <img src="./assets/images/sard/p-rosa.jpg" alt="روزا"
+                 loading="lazy" width="800" height="1000">
+                          <span class="sard-card__badge">عرض خاص</span>
+                      </a>
+
+          <div class="sard-card__actions">
+            <salla-add-product-button
+                data-testid="store-home-collection-add"
+                product-id="3"
+                product-status="sale"
+                product-type="product"
+                amount="440"
+                
+                width="wide"
+                fill="outline"
+                class="sard-card__add">
+              أضف للسلة
+            </salla-add-product-button>
+
+            <a href="#" class="sard-btn sard-btn--ghost">pages.products.details</a>
+          </div>
+
+          <div class="sard-card__body">
+            <div>
+              <h3 class="sard-card__name"><a href="#">روزا دورو</a></h3>
+              <p class="sard-card__tag">وردي · فاكهي</p>            </div>
+
+            <p class="sard-card__price">
+                              <span class="sard-card__sale">٤٤٠ ر.س</span>
+                <del>٤٩٠ ر.س</del>
+                          </p>
+          </div>
+        </article>
+              <article class="sard-card" data-product-id="4">
+          <a class="sard-card__media" href="#" aria-label="عود إمبريال">
+            <img src="./assets/images/sard/p-oud.jpg" alt="عود"
+                 loading="lazy" width="800" height="1000">
+                      </a>
+
+          <div class="sard-card__actions">
+            <salla-add-product-button
+                data-testid="store-home-collection-add"
+                product-id="4"
+                product-status="sale"
+                product-type="product"
+                amount="780"
+                
+                width="wide"
+                fill="outline"
+                class="sard-card__add">
+              أضف للسلة
+            </salla-add-product-button>
+
+            <a href="#" class="sard-btn sard-btn--ghost">pages.products.details</a>
+          </div>
+
+          <div class="sard-card__body">
+            <div>
+              <h3 class="sard-card__name"><a href="#">عود إمبريال</a></h3>
+              <p class="sard-card__tag">عودي · شرقي</p>            </div>
+
+            <p class="sard-card__price">
+                              ٧٨٠ ر.س
+                          </p>
+          </div>
+        </article>
+              <article class="sard-card" data-product-id="5">
+          <a class="sard-card__media" href="#" aria-label="سولي دي فينيتسيا">
+            <img src="./assets/images/sard/p-sole.jpg" alt="سولي"
+                 loading="lazy" width="800" height="1000">
+                      </a>
+
+          <div class="sard-card__actions">
+            <salla-add-product-button
+                data-testid="store-home-collection-add"
+                product-id="5"
+                product-status="sale"
+                product-type="product"
+                amount="390"
+                
+                width="wide"
+                fill="outline"
+                class="sard-card__add">
+              أضف للسلة
+            </salla-add-product-button>
+
+            <a href="#" class="sard-btn sard-btn--ghost">pages.products.details</a>
+          </div>
+
+          <div class="sard-card__body">
+            <div>
+              <h3 class="sard-card__name"><a href="#">سولي دي فينيتسيا</a></h3>
+              <p class="sard-card__tag">حمضي · عطري</p>            </div>
+
+            <p class="sard-card__price">
+                              ٣٩٠ ر.س
+                          </p>
+          </div>
+        </article>
+              <article class="sard-card" data-product-id="6">
+          <a class="sard-card__media" href="#" aria-label="أمبرا نيرا">
+            <img src="./assets/images/sard/p-ambra.jpg" alt="أمبرا"
+                 loading="lazy" width="800" height="1000">
+                      </a>
+
+          <div class="sard-card__actions">
+            <salla-add-product-button
+                data-testid="store-home-collection-add"
+                product-id="6"
+                product-status="sale"
+                product-type="product"
+                amount="640"
+                
+                width="wide"
+                fill="outline"
+                class="sard-card__add">
+              أضف للسلة
+            </salla-add-product-button>
+
+            <a href="#" class="sard-btn sard-btn--ghost">pages.products.details</a>
+          </div>
+
+          <div class="sard-card__body">
+            <div>
+              <h3 class="sard-card__name"><a href="#">أمبرا نيرا</a></h3>
+              <p class="sard-card__tag">عنبري · حلو</p>            </div>
+
+            <p class="sard-card__price">
+                              ٦٤٠ ر.س
+                          </p>
+          </div>
+        </article>
+          </div>
+  </div>
+</section>
+
+<section class="sard-story s-block" data-testid="store-home-story" id="sard-story-3">
+      <div class="container"><p class="sard-eyebrow sard-story__eyebrow">الحكاية</p></div>
+  
+      <div class="container sard-story__row">
+      <figure class="sard-story__media">
+                  <img src="./assets/images/sard/mood-gondola.jpg" alt="بدأت من جسر"
+               loading="lazy" width="1400" height="1000" data-parallax>
+              </figure>
+
+      <div class="sard-story__text">
+        <p class="sard-story__num">01</p>
+        <h3>بدأت من جسر</h3>
+        <p>من جسر ريالتو حيث كان التجار يحملون الجوهر والعطر عبر القنوات. أخذنا من ذلك المشهد اسمنا وشعارنا: جسر، وغندول، ورحلة لا تُستعجل.</p>
+      </div>
+    </div>
+      <div class="container sard-story__row is-flipped">
+      <figure class="sard-story__media">
+                  <img src="./assets/images/sard/story-atelier.jpg" alt="تُركّب باليد"
+               loading="lazy" width="1400" height="1000" data-parallax>
+              </figure>
+
+      <div class="sard-story__text">
+        <p class="sard-story__num">02</p>
+        <h3>تُركّب باليد</h3>
+        <p>كل تركيبة تمر على منضدة العطّار مرات قبل أن تُعتمد. لا دفعات ضخمة ولا اختصارات — الكمية محدودة لأن الجودة لا تُنتج بالجملة.</p>
+      </div>
+    </div>
+      <div class="container sard-story__row">
+      <figure class="sard-story__media">
+                  <img src="./assets/images/sard/story-marble.jpg" alt="تُعبّأ لتبقى"
+               loading="lazy" width="1400" height="1000" data-parallax>
+              </figure>
+
+      <div class="sard-story__text">
+        <p class="sard-story__num">03</p>
+        <h3>تُعبّأ لتبقى</h3>
+        <p>زجاج مضلّع سميك يحمي التركيبة من الضوء، وغطاء تاجي مصقول يدويًا. الزجاجة نفسها قطعة تُترك على الطاولة لا تُخبأ في الدرج.</p>
+      </div>
+    </div>
+  </section>
+
+<section class="sard-visit s-block" data-testid="store-home-visit" id="sard-visit-4">
+      <div class="sard-visit__bg">
+      <img src="./assets/images/sard/mood-silk.jpg" alt="" loading="lazy"
+           width="1600" height="900" data-parallax>
+    </div>
+  
+  <div class="container sard-visit__in">
+    <p class="sard-eyebrow">زورونا</p>    <h2 class="sard-display">الرائحة لا تُوصف، تُجرَّب</h2>    <p class="sard-lede">تفضّل إلى المعرض لتجربة المجموعة كاملة على البشرة، مع استشارة مجانية لاختيار عطرك.</p>    <p class="sard-visit__hours">يوميًا · ٤ عصرًا — ١١ مساءً</p>
+    <div class="sard-visit__cta">
+              <a href="#" class="sard-btn sard-btn--solid" data-magnetic>
+          تسوّق المجموعة
+        </a>
+      
+              <a href="https://wa.me/966500000000"
+           class="sard-btn" target="_blank" rel="noopener" data-magnetic>
+          <i class="sicon-whatsapp"></i> common.elements.whatsapp
+        </a>
+          </div>
+  </div>
+</section>
+
+
+    </main>
+    <footer data-testid="store-footer" class="store-footer">
+	<div aria-label="footer" class="store-footer__inner">
+		<div class="container grid grid-col-1 lg:grid-cols-6 gap-8 lg:gap-6">
+			<div class="lg:col-span-2 rtl:lg:pl-20 ltr:lg:pr-20">
+				<a href="#/" class="flex items-center m-0">
+					<h3>متجر العيّنة</h3>
+				</a>
+				
+
+				<div class="hidden lg:block">
+					<salla-social data-testid="store-footer-social" class="block mb-6"></salla-social>
+				</div>
+
+		<div class="flex gap-4">
+		  
+		  <salla-trust-badges data-testid="store-footer-trust-badges"  dark ></salla-trust-badges>
+          
+          
+            <div class="flex rtl:space-x-reverse space-x-2 items-end">
+              
+              <div>
+                <p class="text-sm text-text-grey mb-1">common.elements.tax_number</p>
+                <b class="text-sm">300000000000003</b>
+              </div>
+            </div>
+
+            
+          
+        </div>
+        </div>
+
+			<div>
+				<h3>blocks.footer.pages_links</h3>
+				<salla-menu data-testid="store-footer-menu" source="footer" with-cookie-preferences></salla-menu>
+			</div>
+
+			<div>
+				<salla-contacts data-testid="store-footer-contacts"></salla-contacts>
+
+				<div class="lg:hidden contact-social">
+					<salla-social data-testid="store-footer-social-mobile"></salla-social>
+				</div>
+			</div>
+
+			<salla-apps-icons data-testid="store-footer-apps" class="lg:col-span-2 rtl:lg:pr-20 ltr:lg:pl-20"></salla-apps-icons>
+
+		</div>
+	</div>
+
+	<div class="md:flex items-center justify-between py-4 container text-center">
+		<span class="text-sm copyright-text"></span>
+		<salla-payments data-testid="store-footer-payments"></salla-payments>
+	</div>
+</div>
+
+<span class="hidden bottom-2 rtl:pl-24 ltr:pr-24 md:grid-cols-3 opacity-40"></span></footer>
+
+</div>
+
+
+    <salla-add-product-toast data-testid="store-add-product-toast"></salla-add-product-toast>
+
+<script defer crossorigin="anonymous" src="./assets/app.js"></script>
+
+
+<salla-offer-modal data-testid="store-offer-modal"></salla-offer-modal>
+<salla-search data-testid="store-search-modal"></salla-search>
+<salla-login-modal data-testid="store-login-modal"></salla-login-modal>
+
+
+    <script defer src="./assets/home.js"></script>
+
+</body>
+</html>

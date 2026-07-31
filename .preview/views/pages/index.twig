@@ -1,0 +1,18 @@
+{#
+| Variable         | Type       | Description                                                         |
+|------------------|------------|---------------------------------------------------------------------|
+| page             | object     |                                                                     |
+| page.title       | string     | *could be html                                                      |
+| page.slug        | string     | ex: "cat.show"                                                      |
+#}
+{% extends '../layouts/master.twig' %}
+{% block content %}
+    {% include '../components/home/sard-hero.twig' with { component: homeData['home.sard-hero'], position: loop_home_sard_hero } %}
+{% include '../components/home/sard-layers.twig' with { component: homeData['home.sard-layers'], position: loop_home_sard_layers } %}
+{% include '../components/home/sard-collection.twig' with { component: homeData['home.sard-collection'], position: loop_home_sard_collection } %}
+{% include '../components/home/sard-story.twig' with { component: homeData['home.sard-story'], position: loop_home_sard_story } %}
+{% include '../components/home/sard-visit.twig' with { component: homeData['home.sard-visit'], position: loop_home_sard_visit } %}
+{% endblock %}
+{% block scripts %}
+    <script defer src="{{ 'home.js' | asset }}"></script>
+{% endblock %}

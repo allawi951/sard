@@ -230,50 +230,19 @@ function start() {
       // الجواهر المصمتة تظهر بعد اكتمال رسم الزخرفة
       .to(solids, { opacity: 1, y: 0, duration: 1.1, stagger: .08, ease: 'power3.out' }, '-=0.5');
 
-    // شعار الواجهة: لو الملف SVG نجلبه ونضمّنه ليُرسم خطًّا خطًّا كالزخرفة،
-    // وإلا (PNG/JPG أو منع CORS) نكشفه بقناع متدرّج يتبع اتجاه اللغة.
+    // شعار الواجهة يستبدل الزخرفة ولا يجتمع معها.
+    // سلة تحوّل المرفوع إلى webp ولا تقبل SVG، فالرسم الخطّي على شعار التاجر
+    // غير ممكن — نكشفه بقناع متدرّج يتبع اتجاه اللغة، وهو أقرب إحساس متاح.
     const imgLogo = $('#sardHeroLogo');
 
-    const maskReveal = (el) => {
-      const rtl = document.documentElement.dir === 'rtl';
-      tl.fromTo(el,
-        { clipPath: rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)', opacity: 1 },
-        { clipPath: 'inset(0 0 0 0)', duration: 1.3, ease: 'power2.inOut' }, '-=0.75');
-    };
-
-    const drawSvg = (host) => {
-      const strokes = [...host.querySelectorAll('path,line,polyline,polygon,circle,ellipse,rect')]
-        .filter((el) => {
-          const cs = getComputedStyle(el);
-          return cs.stroke && cs.stroke !== 'none' && parseFloat(cs.strokeWidth) > 0;
-        });
-      if (!strokes.length) { gsap.from(host, { opacity: 0, y: 20, duration: 1 }); return; }
-      strokes.forEach((el) => {
-        const len = typeof el.getTotalLength === 'function' ? el.getTotalLength() : 0;
-        if (len) gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
-      });
-      gsap.to(strokes, { strokeDashoffset: 0, duration: 1.4, stagger: .05, ease: 'power1.inOut' });
-    };
-
     if (imgLogo) {
-      const src = imgLogo.dataset.sardLogo || imgLogo.src;
-      if (/\.svg(\?|$)/i.test(src)) {
-        maskReveal(imgLogo);                       // حركة مبدئية لا تترك فراغًا
-        fetch(src)
-          .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
-          .then((markup) => {
-            if (!/<svg[\s>]/i.test(markup)) return;
-            const host = document.createElement('div');
-            host.className = 'sard-hero__svglogo';
-            host.innerHTML = markup;
-            imgLogo.replaceWith(host);
-            drawSvg(host);
-          })
-          .catch(() => { /* CORS أو 404 — الصورة والقناع كافيان */ });
-      } else {
-        maskReveal(imgLogo);
-      }
-    } else {
+      const rtl = document.documentElement.dir === 'rtl';
+      tl.fromTo(imgLogo,
+        { clipPath: rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)', opacity: 1 },
+        { clipPath: 'inset(0 0 0 0)', duration: 1.3, ease: 'power2.inOut' }, 0.35);
+    }
+
+    if (!imgLogo) {
       // اسم المتجر: نقسّمه حروفًا **فقط** إن كان لاتينيًّا.
       // العربية نصّ متّصل — تقسيمه إلى <span> يكسر وصل الحروف ويعكس ترتيبها.
       const word = $('#sardHeroWord');
@@ -371,7 +340,7 @@ function start() {
   (function collection() {
     const pin = $('#sardCollPin');
     const track = $('#sardCollTrack');
-    if (!pin || !track) return;
+    if (!pin || !track || !track.children.length) return;
 
     // على الشاشات الصغيرة نترك التمرير الأفقي الأصلي (CSS) — أخف وأصدق للمس
     if (REDUCED || innerWidth < 900) return;
@@ -389,25 +358,38 @@ function start() {
     const distance = () => Math.max(0, span() - innerWidth);
     const dir = document.documentElement.dir === 'rtl' ? 1 : -1;
 
-    gsap.to(track, {
-      x: () => dir * distance(),
-      ease: 'none',
-      scrollTrigger: {
-        trigger: pin,
-        start: 'top top',
-        end: () => `+=${distance()}`,
-        pin: true,
-        scrub: .8,
-        invalidateOnRefresh: true,
-        anticipatePin: 1,
-      },
-    });
+    // لا معنى للتثبيت إن كان المحتوى يسع الشاشة أصلًا
+    if (distance() < 40) return;
 
-    gsap.from('#sardCollTrack .sard-card', {
-      y: 60, opacity: 0, duration: 1, stagger: .08, ease: 'power3.out',
-      scrollTrigger: { trigger: pin, start: 'top 70%' },
-      immediateRender: false,
-    });
+    try {
+      // نُفعّل التثبيت في CSS فقط بعد التأكد أننا سنُنشئ المُشغِّل فعلًا
+      pin.classList.add('is-pinned');
+
+      gsap.to(track, {
+        x: () => dir * distance(),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: pin,
+          start: 'top top',
+          end: () => `+=${distance()}`,
+          pin: true,
+          scrub: .8,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+        },
+      });
+
+      gsap.from('#sardCollTrack .sard-card', {
+        y: 60, opacity: 0, duration: 1, stagger: .08, ease: 'power3.out',
+        scrollTrigger: { trigger: pin, start: 'top 70%' },
+        immediateRender: false,
+      });
+    } catch (e) {
+      // أي إخفاق يعيدنا للشريط الأفقي العادي بدل قسم مقصوص
+      pin.classList.remove('is-pinned');
+      gsap.set(track, { clearProps: 'transform' });
+      console.warn('[sard] تعذّر تثبيت المجموعة — عاد الشريط الأفقي العادي:', e);
+    }
   })();
 
   /* ── ٥) الحكاية: كشف بالقناع ── */

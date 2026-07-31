@@ -212,6 +212,12 @@ html[dir='rtl'] .sard-progress { transform-origin: right; }
   max-width: min(280px, 48vw); max-height: 110px;
   margin: -2.2rem auto 0; display: block; object-fit: contain;
 }
+/* الشعار حين يحلّ محل الزخرفة: أكبر وبلا إزاحة سالبة */
+.sard-hero__logo--solo {
+  max-width: min(400px, 62vw);
+  max-height: 170px;
+  margin: 0 auto;
+}
 
 /* الاسم العربي ككتلة واحدة: تقسيم الحروف يكسر الوصل ويعكس الترتيب */
 .sard-hero__word--solid {
@@ -321,7 +327,24 @@ html[dir='rtl'] .sard-layers__step h3 b { letter-spacing: .06em; font-size: .82r
 .sard-coll__hint { margin-top: 1.2rem; font-size: .74rem; letter-spacing: .2em; text-transform: uppercase; color: var(--sard-muted); }
 html[dir='rtl'] .sard-coll__hint { letter-spacing: .04em; font-size: .9rem; text-transform: none; }
 
-.sard-coll__pin { height: 100svh; display: flex; align-items: center; overflow: hidden; }
+/* الافتراض الآمن: شريط أفقي عادي قابل للسحب — يظهر دائمًا مهما حدث.
+   التثبيت (100svh + overflow:hidden) لا يُفعَّل إلا بعد أن ينجح ScrollTrigger
+   فعلًا ويضيف .is-pinned. قبل ذلك — أو لو فشل الجافاسكربت — يبقى المحتوى مرئيًا.
+   الصيغة السابقة كانت تقصّ القسم كله عند أي إخفاق. */
+.sard-coll__pin {
+  display: flex;
+  align-items: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: thin;
+  padding-block: 2rem;
+
+  &.is-pinned {
+    height: 100svh;
+    overflow: hidden;
+    padding-block: 0;
+  }
+}
 /* الشريط يرث اتجاه المتجر عمدًا: في العربية يبدأ أول منتج من اليمين
    ويمتد الفائض يسارًا، وتُصحَّح إشارة التحويل في home.js.
    (تثبيت direction: ltr هنا كان يقلب ترتيب المنتجات ويجعل داخل البطاقة
@@ -376,10 +399,22 @@ html[dir='rtl'] .sard-card__actions .sard-btn { font-size: .82rem; letter-spacin
 /* ═══════════ الفصل ٣ — الحكاية ═══════════ */
 .sard-story { padding-block: clamp(4rem, 8vw, 7rem); }
 .sard-story__eyebrow { margin-bottom: 2rem; }
+/* سطر الحكاية: صورة وعمود نص، وتتبادلان الجهة سطرًا بعد سطر.
+   نستخدم grid-column صراحةً لا order — أوضح ولا يتأثر بترتيب الـDOM. */
 .sard-story__row {
-  display: grid; grid-template-columns: 1fr 1fr; gap: clamp(2rem, 6vw, 6rem);
-  align-items: center; padding-block: clamp(1.6rem, 3.5vw, 3.2rem);
-  &.is-flipped .sard-story__media { order: 2; }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 6vw, 6rem);
+  align-items: center;
+  padding-block: clamp(1.6rem, 3.5vw, 3.2rem);
+
+  .sard-story__media { grid-column: 1; grid-row: 1; }
+  .sard-story__text  { grid-column: 2; grid-row: 1; }
+
+  &.is-flipped {
+    .sard-story__media { grid-column: 2; }
+    .sard-story__text  { grid-column: 1; }
+  }
 }
 .sard-story__media {
   position: relative; margin: 0; aspect-ratio: 7 / 5;
@@ -491,7 +526,15 @@ html[dir='rtl'] .sard-foot__h { letter-spacing: .04em; font-size: .9rem; text-tr
   .sard-layers__grid,
   .sard-story__row,
   .sard-product { grid-template-columns: 1fr; }
-  .sard-story__row.is-flipped .sard-story__media { order: 0; }
+  /* الجوال: عمود واحد — نُلغي تثبيت الصف والعمود وإلا تراكبت الصورة والنص.
+     الترتيب يعود لترتيب الـDOM: الصورة ثم النص. */
+  .sard-story__row .sard-story__media,
+  .sard-story__row .sard-story__text,
+  .sard-story__row.is-flipped .sard-story__media,
+  .sard-story__row.is-flipped .sard-story__text {
+    grid-column: 1;
+    grid-row: auto;
+  }
   /* الطبقات على الجوال: بلا تثبيت — الصورة تلتصق أعلى الشاشة والخطوات تمرّ تحتها.
      التثبيت هنا يقصّ المحتوى لأن القسم أطول من شاشة الجوال. */
   .sard-layers__pin { min-height: 0; padding-block: 4rem; display: block; }

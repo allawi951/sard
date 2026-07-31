@@ -28,24 +28,25 @@
       <p class="sard-eyebrow" id="sardHeroEyebrow">{{ component.eyebrow }}</p>
     {% endif %}
 
-    <div class="sard-hero__mark" id="sardHeroMark">
-      {% include 'components.parts.ornament' with { draw: true } only %}
-    </div>
-
     {#
-      ثلاثة مسارات لعرض هوية المتجر، بالأولوية:
-      ١) شعار رفعه التاجر أو شعار المتجر → SVG يُرسم خطًّا خطًّا، وغيره بكشف متدرّج
-      ٢) لا شعار + اسم لاتيني → حرفًا حرفًا
-      ٣) لا شعار + اسم عربي → كتلة واحدة (تقسيم الحروف يكسر وصل العربية)
+      مساران متعارضان لا يجتمعان — الشعار **يستبدل** الزخرفة ولا يتراكب معها:
+
+      ١) للمتجر شعار (رفعه التاجر هنا أو شعار المتجر) → يُعرض وحده بكشف متدرّج.
+         ملاحظة: سلة تحوّل المرفوع إلى webp ولا تقبل SVG، فالرسم الخطّي على
+         شعار التاجر غير ممكن — القناع المتدرّج هو البديل الصحيح.
+      ٢) لا شعار → الزخرفة تُرسم خطًّا خطًّا، وتحتها اسم المتجر.
     #}
     {% set hero_logo = component.logo|default('') ?: store.logo %}
 
     {% if hero_logo %}
-      {# لو الملف SVG نحاول رسمه خطًّا خطًّا في sard.js؛ وإلا كشف متدرّج #}
-      <img class="sard-hero__logo" id="sardHeroLogo" src="{{ hero_logo|cdn(560) }}"
-           data-sard-logo="{{ hero_logo }}"
-           alt="{{ store.name }}" width="280" height="110" fetchpriority="high">
+      <img class="sard-hero__logo sard-hero__logo--solo" id="sardHeroLogo"
+           src="{{ hero_logo|cdn(560) }}"
+           alt="{{ store.name }}" width="360" height="150" fetchpriority="high">
     {% else %}
+      <div class="sard-hero__mark" id="sardHeroMark">
+        {% include 'components.parts.ornament' with { draw: true } only %}
+      </div>
+
       {# نصٌّ واحد لا حروف مفرّقة: تقسيم العربية هنا يكسر وصل الحروف ويعكس ترتيبها.
          التقسيم يتم في sard.js وللنصوص اللاتينية وحدها. #}
       <p class="sard-hero__word" id="sardHeroWord">{{ wordmark }}</p>

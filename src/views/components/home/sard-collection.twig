@@ -19,6 +19,8 @@
     {% if component.hint %}<p class="sard-coll__hint">{{ component.hint }}</p>{% endif %}
   </div>
 
+{% if component.products|length %}
+  {# اختار التاجر منتجات → المعرض الأفقي السردي #}
   <div class="sard-coll__pin" id="sardCollPin">
     <div class="sard-coll__track" id="sardCollTrack">
       {% for product in component.products %}
@@ -67,4 +69,15 @@
       {% endfor %}
     </div>
   </div>
+{% else %}
+  {# لم يختر التاجر منتجات بعد → نعرض الأكثر مبيعًا من المتجر تلقائيًا،
+     فيظهر القسم بمحتوى حقيقي فور تطبيق الثيم بلا أي إعداد. #}
+  <div class="container sard-coll__auto">
+    <salla-products-slider
+        data-testid="store-sard-collection-auto"
+        source="sales"
+        block-title=" "
+        slider-id="sard-coll-{{ position }}"></salla-products-slider>
+  </div>
+{% endif %}
 </section>

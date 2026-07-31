@@ -1297,18 +1297,19 @@
         },
         {
           "type": "string",
-          "format": "textarea",
-          "icon": "sicon-typography",
-          "label": "شعار المتجر بصيغة SVG (اختياري)",
-          "description": "ألصق كود شعارك المتجه ليُرسم خطًّا خطًّا في الواجهة تمامًا كالزخرفة. الشعار النقطي (PNG/JPG) لا يمكن رسمه خطيًّا — يُكشف بقناع متدرّج بدلًا من ذلك.",
+          "format": "image",
+          "icon": "sicon-image",
+          "label": "شعار الواجهة (اختياري)",
+          "description": "ارفع شعار متجرك ليظهر داخل الزخرفة. لو رفعته بصيغة SVG سيُرسم خطًّا خطًّا كالزخرفة؛ وأي صيغة أخرى (PNG/JPG) تظهر بكشفٍ متدرّج. اتركه فارغًا ليُستخدم شعار المتجر تلقائيًا.",
           "labelHTML": null,
-          "id": "logo_svg",
+          "id": "logo",
           "value": null,
-          "multilanguage": false,
           "required": false,
-          "placeholder": "الصق كود الشعار المتجه هنا",
-          "minLength": 0,
-          "maxLength": 20000
+          "placeholder": null,
+          "settings": {
+            "width": 560,
+            "height": 220
+          }
         },
         {
           "id": "wordmark",

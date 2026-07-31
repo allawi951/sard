@@ -38,11 +38,11 @@
       ٢) شعار المتجر (PNG/JPG) → كشف بقناع متدرّج يتبع اتجاه اللغة
       ٣) لا شعار → اسم المتجر حرفًا حرفًا
     #}
-    {% set logo_svg = component.logo_svg %}
-    {% if logo_svg %}
-      <div class="sard-hero__svglogo" id="sardHeroSvgLogo">{{ logo_svg|raw }}</div>
-    {% elseif store.logo %}
-      <img class="sard-hero__logo" id="sardHeroLogo" src="{{ store.logo|cdn(560) }}"
+    {% set hero_logo = component.logo|default('') ?: store.logo %}
+    {% if hero_logo %}
+      {# لو الملف SVG نحاول رسمه خطًّا خطًّا في sard.js؛ وإلا كشف متدرّج #}
+      <img class="sard-hero__logo" id="sardHeroLogo" src="{{ hero_logo|cdn(560) }}"
+           data-sard-logo="{{ hero_logo }}"
            alt="{{ store.name }}" width="280" height="110" fetchpriority="high">
     {% else %}
       <p class="sard-hero__word" id="sardHeroWord" aria-label="{{ wordmark }}">

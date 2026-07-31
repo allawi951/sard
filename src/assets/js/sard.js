@@ -121,6 +121,7 @@ function reveal() {
     gsap.from(el, {
       y: 30, opacity: 0, duration: 1, ease: 'power3.out', delay: (i % 4) * .06,
       scrollTrigger: { trigger: el, start: 'top 88%' },
+      immediateRender: false,   // لا تُخفِ العنصر قبل انطلاق المُشغِّل
     });
   });
 }
@@ -230,42 +231,49 @@ function start() {
       // الجواهر المصمتة تظهر بعد اكتمال رسم الزخرفة
       .to(solids, { opacity: 1, y: 0, duration: 1.1, stagger: .08, ease: 'power3.out' }, '-=0.5');
 
-    // ثلاثة مسارات — واحد فقط موجود في الصفحة
-    const svgLogo = $('#sardHeroSvgLogo');
+    // شعار الواجهة: لو الملف SVG نجلبه ونضمّنه ليُرسم خطًّا خطًّا كالزخرفة،
+    // وإلا (PNG/JPG أو منع CORS) نكشفه بقناع متدرّج يتبع اتجاه اللغة.
     const imgLogo = $('#sardHeroLogo');
 
-    if (svgLogo) {
-      // شعار متجهي: رسم ذاتي حقيقي على مسارات الشعار نفسه.
-      // الأشكال المصمتة (fill) لا تُرسم بالخط، فتظهر بالتلاشي بعد انتهاء الخطوط.
-      const strokes = [...svgLogo.querySelectorAll('path, line, polyline, polygon, circle, ellipse, rect')]
+    const maskReveal = (el) => {
+      const rtl = document.documentElement.dir === 'rtl';
+      tl.fromTo(el,
+        { clipPath: rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)', opacity: 1 },
+        { clipPath: 'inset(0 0 0 0)', duration: 1.3, ease: 'power2.inOut' }, '-=0.75');
+    };
+
+    const drawSvg = (host) => {
+      const strokes = [...host.querySelectorAll('path,line,polyline,polygon,circle,ellipse,rect')]
         .filter((el) => {
           const cs = getComputedStyle(el);
           return cs.stroke && cs.stroke !== 'none' && parseFloat(cs.strokeWidth) > 0;
         });
-      const fills = [...svgLogo.querySelectorAll('path, polygon, circle, ellipse, rect')]
-        .filter((el) => !strokes.includes(el));
+      if (!strokes.length) { gsap.from(host, { opacity: 0, y: 20, duration: 1 }); return; }
+      strokes.forEach((el) => {
+        const len = typeof el.getTotalLength === 'function' ? el.getTotalLength() : 0;
+        if (len) gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
+      });
+      gsap.to(strokes, { strokeDashoffset: 0, duration: 1.4, stagger: .05, ease: 'power1.inOut' });
+    };
 
-      if (strokes.length) {
-        strokes.forEach((el) => {
-          const len = typeof el.getTotalLength === 'function' ? el.getTotalLength() : 0;
-          if (len) gsap.set(el, { strokeDasharray: len, strokeDashoffset: len });
-        });
-        tl.to(strokes, { strokeDashoffset: 0, duration: 1.4, stagger: .05, ease: 'power1.inOut' }, '-=0.7');
+    if (imgLogo) {
+      const src = imgLogo.dataset.sardLogo || imgLogo.src;
+      if (/\.svg(\?|$)/i.test(src)) {
+        maskReveal(imgLogo);                       // حركة مبدئية لا تترك فراغًا
+        fetch(src)
+          .then((r) => (r.ok ? r.text() : Promise.reject(r.status)))
+          .then((markup) => {
+            if (!/<svg[\s>]/i.test(markup)) return;
+            const host = document.createElement('div');
+            host.className = 'sard-hero__svglogo';
+            host.innerHTML = markup;
+            imgLogo.replaceWith(host);
+            drawSvg(host);
+          })
+          .catch(() => { /* CORS أو 404 — الصورة والقناع كافيان */ });
+      } else {
+        maskReveal(imgLogo);
       }
-      if (fills.length) {
-        tl.from(fills, { opacity: 0, duration: .9, stagger: .05, ease: 'power2.out' }, strokes.length ? '-=0.5' : '-=0.7');
-      }
-      if (!strokes.length && !fills.length) {
-        tl.from(svgLogo, { opacity: 0, y: 24, duration: 1.1, ease: 'power3.out' }, '-=0.75');
-      }
-    } else if (imgLogo) {
-      // شعار نقطي (PNG/JPG): لا يمكن رسمه خطًّا — المسارات غير موجودة أصلًا.
-      // البديل الأقرب إحساسًا: كشف بقناع متدرّج يمرّ عبر الشعار باتجاه اللغة.
-      const rtl = document.documentElement.dir === 'rtl';
-      const from = rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)';
-      tl.fromTo(imgLogo,
-        { clipPath: from, opacity: 1 },
-        { clipPath: 'inset(0 0 0 0)', duration: 1.3, ease: 'power2.inOut' }, '-=0.75');
     } else if (letters.length) {
       tl.from(letters, { opacity: 0, yPercent: 115, rotateX: -60, duration: 1.1, stagger: .07, ease: 'power3.out' }, '-=0.75');
     }
@@ -377,6 +385,7 @@ function start() {
     gsap.from('#sardCollTrack .sard-card', {
       y: 60, opacity: 0, duration: 1, stagger: .08, ease: 'power3.out',
       scrollTrigger: { trigger: pin, start: 'top 70%' },
+      immediateRender: false,
     });
   })();
 
@@ -394,12 +403,14 @@ function start() {
           {
             clipPath: 'inset(0 0 0% 0)', duration: 1.4, ease: 'power3.out',
             scrollTrigger: { trigger: row, start: 'top 78%' },
+            immediateRender: false,
           });
       }
       if (text) {
         gsap.from(text.children, {
           y: 34, opacity: 0, duration: 1, stagger: .12, ease: 'power3.out',
           scrollTrigger: { trigger: row, start: 'top 72%' },
+          immediateRender: false,
         });
       }
     });
@@ -445,5 +456,41 @@ function start() {
 // app.js يعمل بـ defer قبلنا، لكن نتحوّط لو تأخّر تنفيذه
 
 // نبدأ بعد أن تجهّز النواة window.SARD
-if (window.SARD) start();
-else addEventListener('load', () => window.SARD && start());
+function sardBoot() {
+  try { start(); }
+  catch (e) { console.warn('[sard] تعذّرت الحركة — المحتوى يبقى ظاهرًا:', e); }
+}
+if (window.SARD) sardBoot();
+else addEventListener('load', () => window.SARD && sardBoot());
+
+/* ─────────── شبكة أمان: لا يبقى شيء مخفيًا مهما حدث ───────────
+   حركة الدخول تعتمد على GSAP و ScrollTrigger. لو فشل أيٌّ منهما (خطأ
+   جافاسكربت، تعارض مع سكربت آخر، تخطيط لم يستقر)، يجب أن يظهر المحتوى
+   لا أن يختفي. هذه الشبكة تُجبر أي عنصر بقي شفافًا على الظهور. */
+function sardSafetyNet() {
+  const SECTIONS = '.sard-hero, .sard-layers, .sard-coll, .sard-story, .sard-visit';
+
+  const unhide = () => {
+    document.querySelectorAll(SECTIONS).forEach((sec) => {
+      sec.querySelectorAll('*').forEach((el) => {
+        const s = el.style;
+        if (s && s.opacity !== '' && parseFloat(s.opacity) < 0.05) {
+          s.opacity = '';
+          s.transform = '';
+          s.visibility = '';
+        }
+      });
+      // الزخرفة تُرسم بـ stroke-dashoffset — نُكمل الرسم إن توقّف
+      sec.querySelectorAll('.sard-draw').forEach((p) => {
+        if (p.style.strokeDashoffset && parseFloat(p.style.strokeDashoffset) > 1) {
+          p.style.strokeDashoffset = '0';
+        }
+      });
+    });
+  };
+
+  // بعد استقرار الصفحة، ثم مرة أخيرة بعد تحميل الصور البطيئة
+  setTimeout(unhide, 4000);
+  addEventListener('load', () => setTimeout(unhide, 2500));
+}
+sardSafetyNet();

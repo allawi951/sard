@@ -407,7 +407,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "hero-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-hero.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>زخرفة تُرسم خطًّا خطًّا، ثم يظهر شعار متجرك (أو اسمه حرفًا حرفًا) فوق خلفية متموّجة.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-hero.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>زخرفة تُرسم خطًّا خطًّا، ثم يظهر شعار متجرك (أو اسمه حرفًا حرفًا) فوق خلفية متموّجة.</div>"
                 },
                 {
                     "id": "background",
@@ -503,7 +503,7 @@
                     "maxLength": 30
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-hero.jpg?v=1"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-hero.jpg?v=2"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c02",
@@ -519,7 +519,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "pyramid-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-layers.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>قسم يثبت أثناء التمرير: كل تمريرة تكشف طبقة بصورتها ونصّها. يصلح لمكوّنات منتج، أو مراحل صناعة، أو قيم العلامة.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-layers.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>قسم يثبت أثناء التمرير: كل تمريرة تكشف طبقة بصورتها ونصّها. يصلح لمكوّنات منتج، أو مراحل صناعة، أو قيم العلامة.</div>"
                 },
                 {
                     "id": "title",
@@ -550,8 +550,8 @@
                     "format": "collection",
                     "label": "الطبقات",
                     "item_label": "طبقة",
-                    "required": true,
-                    "minLength": 2,
+                    "required": false,
+                    "minLength": 1,
                     "maxLength": 4,
                     "value": [
                         {
@@ -621,7 +621,7 @@
                     ]
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-layers.jpg?v=1"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-layers.jpg?v=2"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c03",
@@ -637,7 +637,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "coll-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-collection.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>التمرير العمودي يتحوّل إلى حركة أفقية على المنتجات المختارة — <strong>ويحترم اتجاه اللغة</strong>: يبدأ من اليمين في العربية ومن اليسار في الإنجليزية. أزرار الإضافة للسلة رسمية من سلة.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-collection.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>التمرير العمودي يتحوّل إلى حركة أفقية على المنتجات المختارة — <strong>ويحترم اتجاه اللغة</strong>: يبدأ من اليمين في العربية ومن اليسار في الإنجليزية. أزرار الإضافة للسلة رسمية من سلة.</div>"
                 },
                 {
                     "id": "eyebrow",
@@ -682,15 +682,15 @@
                     "source": "products",
                     "multichoice": true,
                     "searchable": true,
-                    "required": true,
-                    "minLength": 3,
+                    "required": false,
                     "maxLength": 12,
                     "selected": [],
                     "options": [],
-                    "value": []
+                    "value": [],
+                    "description": "اتركه فارغًا ليعرض الثيم الأكثر مبيعًا من متجرك تلقائيًا. اختر منتجات لتفعيل المعرض الأفقي السردي."
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-collection.jpg?v=1"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-collection.jpg?v=2"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c04",
@@ -706,7 +706,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "story-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-story.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>فصول متتابعة: كل فصل صورة تُكشف بقناع ونص يظهر بجانبها.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-story.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>فصول متتابعة: كل فصل صورة تُكشف بقناع ونص يظهر بجانبها.</div>"
                 },
                 {
                     "id": "eyebrow",
@@ -726,7 +726,7 @@
                     "format": "collection",
                     "label": "الفصول",
                     "item_label": "فصل",
-                    "required": true,
+                    "required": false,
                     "minLength": 1,
                     "maxLength": 6,
                     "value": [
@@ -783,7 +783,7 @@
                     ]
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-story.jpg?v=1"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-story.jpg?v=2"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c05",
@@ -799,7 +799,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "visit-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-visit.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>قسم ختامي بخلفية وبارالاكس وأزرار تنجذب للمؤشر.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-visit.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>قسم ختامي بخلفية وبارالاكس وأزرار تنجذب للمؤشر.</div>"
                 },
                 {
                     "id": "background",
@@ -913,7 +913,7 @@
                     ]
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-visit.jpg?v=1"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-visit.jpg?v=2"
         }
     ],
     "support_url": null,

@@ -213,6 +213,14 @@ html[dir='rtl'] .sard-progress { transform-origin: right; }
   margin: -2.2rem auto 0; display: block; object-fit: contain;
 }
 
+/* الاسم العربي ككتلة واحدة: تقسيم الحروف يكسر الوصل ويعكس الترتيب */
+.sard-hero__word--solid {
+  direction: rtl; display: block; flex-wrap: nowrap;
+  font-family: var(--sard-serif);
+  letter-spacing: normal; line-height: 1.4;
+  font-size: clamp(2.2rem, 8vw, 6rem);
+}
+
 .sard-hero__word {
   margin-top: 1.1rem;
   font-family: 'Cormorant Garamond', serif; font-weight: 300;
@@ -530,4 +538,29 @@ html[dir='rtl'] .sard-foot__h { letter-spacing: .04em; font-size: .9rem; text-tr
 
   svg { width: 100%; height: auto; display: block; }
   /* الشعار قد يأتي بألوان مثبّتة — نتركها كما هي إن وُجدت، ونرث لون الواجهة إن كانت currentColor */
+}
+
+/* ═══════════ التدهور اللطيف عند غياب الصور ═══════════
+   عند أول تطبيق للثيم تكون حقول الصور فارغة. بدل إطارات فارغة،
+   ينهار التخطيط إلى عمود واحد ويختفي مكان الصورة تمامًا. */
+
+.sard-layers__grid:not(:has(.sard-layers__media img)) {
+  grid-template-columns: 1fr;
+
+  .sard-layers__media { display: none; }
+  .sard-layers__head,
+  .sard-layers__body { grid-column: 1; }
+}
+
+.sard-story__row:not(:has(.sard-story__media img)) {
+  grid-template-columns: 1fr;
+
+  .sard-story__media { display: none; }
+}
+
+/* قسم زورونا بلا خلفية: نبقي تدرّجًا هادئًا بدل مساحة مسطّحة */
+.sard-visit:not(:has(.sard-visit__bg img))::before {
+  content: ''; position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(ellipse 80% 60% at 50% 40%,
+              color-mix(in srgb, var(--sard-gold) 10%, transparent), transparent 70%);
 }

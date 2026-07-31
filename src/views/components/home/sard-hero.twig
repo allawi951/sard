@@ -34,22 +34,21 @@
 
     {#
       ثلاثة مسارات لعرض هوية المتجر، بالأولوية:
-      ١) شعار SVG ألصقه التاجر في إعدادات الثيم → رسم ذاتي حقيقي على شعاره نفسه
-      ٢) شعار المتجر (PNG/JPG) → كشف بقناع متدرّج يتبع اتجاه اللغة
-      ٣) لا شعار → اسم المتجر حرفًا حرفًا
+      ١) شعار رفعه التاجر أو شعار المتجر → SVG يُرسم خطًّا خطًّا، وغيره بكشف متدرّج
+      ٢) لا شعار + اسم لاتيني → حرفًا حرفًا
+      ٣) لا شعار + اسم عربي → كتلة واحدة (تقسيم الحروف يكسر وصل العربية)
     #}
     {% set hero_logo = component.logo|default('') ?: store.logo %}
+
     {% if hero_logo %}
       {# لو الملف SVG نحاول رسمه خطًّا خطًّا في sard.js؛ وإلا كشف متدرّج #}
       <img class="sard-hero__logo" id="sardHeroLogo" src="{{ hero_logo|cdn(560) }}"
            data-sard-logo="{{ hero_logo }}"
            alt="{{ store.name }}" width="280" height="110" fetchpriority="high">
     {% else %}
-      <p class="sard-hero__word" id="sardHeroWord" aria-label="{{ wordmark }}">
-        {%- for letter in wordmark|split('') -%}
-          <span>{{ letter == ' ' ? '&nbsp;'|raw : letter }}</span>
-        {%- endfor -%}
-      </p>
+      {# نصٌّ واحد لا حروف مفرّقة: تقسيم العربية هنا يكسر وصل الحروف ويعكس ترتيبها.
+         التقسيم يتم في sard.js وللنصوص اللاتينية وحدها. #}
+      <p class="sard-hero__word" id="sardHeroWord">{{ wordmark }}</p>
     {% endif %}
 
     {% if component.subtitle %}

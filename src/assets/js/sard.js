@@ -210,11 +210,10 @@ function start() {
     if (!mark) return;
 
     const paths = $$('.sard-draw', mark);
-    const letters = $$('#sardHeroWord span');
     const solids = $$('.sard-jewel', mark);
 
     if (REDUCED || CFG.logoDraw === false) {
-      gsap.set([...paths, ...letters, ...solids], { opacity: 1 });
+      gsap.set([...paths, ...solids], { opacity: 1, y: 0, strokeDashoffset: 0 });
       return;
     }
 
@@ -274,8 +273,30 @@ function start() {
       } else {
         maskReveal(imgLogo);
       }
-    } else if (letters.length) {
-      tl.from(letters, { opacity: 0, yPercent: 115, rotateX: -60, duration: 1.1, stagger: .07, ease: 'power3.out' }, '-=0.75');
+    } else {
+      // اسم المتجر: نقسّمه حروفًا **فقط** إن كان لاتينيًّا.
+      // العربية نصّ متّصل — تقسيمه إلى <span> يكسر وصل الحروف ويعكس ترتيبها.
+      const word = $('#sardHeroWord');
+      const RTL_SCRIPT = /[؀-ۿݐ-ݿࢠ-ࣿﭐ-﷿ﹰ-﻿֐-׿]/;
+
+      if (word && word.textContent.trim()) {
+        const text = word.textContent.trim();
+
+        if (RTL_SCRIPT.test(text)) {
+          word.classList.add('sard-hero__word--solid');
+          tl.from(word, { opacity: 0, y: 26, duration: 1.1, ease: 'power3.out' }, '-=0.75');
+        } else {
+          word.setAttribute('aria-label', text);
+          word.textContent = '';
+          for (const ch of text) {
+            const s = document.createElement('span');
+            s.textContent = ch === ' ' ? ' ' : ch;
+            word.appendChild(s);
+          }
+          tl.from(word.children,
+            { opacity: 0, yPercent: 115, rotateX: -60, duration: 1.1, stagger: .07, ease: 'power3.out' }, '-=0.75');
+        }
+      }
     }
 
     tl.from('#sardHeroSub', { opacity: 0, y: 16, duration: .9 }, '-=0.6')

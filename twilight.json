@@ -1,924 +1,924 @@
 {
-  "name": {
-    "ar": "سرد",
-    "en": "SARD"
-  },
-  "repository": "https://github.com/allawi951/sard",
-  "author_email": "ali.veterans@gmail.com",
-  "features": [
-    "mega-menu",
-    "fonts",
-    "color",
-    "breadcrumb",
-    "unite-cards-height",
-    "component-featured-products",
-    "component-fixed-banner",
-    "component-products-slider",
-    "component-photos-slider",
-    "component-testimonials",
-    "component-square-photos",
-    "component-store-features",
-    "menu-images",
-    "filters"
-  ],
-  "settings": [
-    {
-      "id": "squar_photo_bg_image_size",
-      "type": "items",
-      "format": "dropdown-list",
-      "label": "طريقة عرض الصور في قسم قائمة عناصر ",
-      "description": null,
-      "labelHTML": null,
-      "icon": "sicon-list",
-      "selected": [
+    "name": {
+        "ar": "سرد",
+        "en": "SARD"
+    },
+    "repository": "https://github.com/allawi951/sard",
+    "author_email": "ali.veterans@gmail.com",
+    "features": [
+        "mega-menu",
+        "fonts",
+        "color",
+        "breadcrumb",
+        "unite-cards-height",
+        "component-featured-products",
+        "component-fixed-banner",
+        "component-products-slider",
+        "component-photos-slider",
+        "component-testimonials",
+        "component-square-photos",
+        "component-store-features",
+        "menu-images",
+        "filters"
+    ],
+    "settings": [
         {
-          "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
-          "value": "contain",
-          "key": "f4adec13-6e4c-654b-b978-b2807935ced9"
-        }
-      ],
-      "options": [
-        {
-          "label": "تغطية الصورة كامل المساحة مع المحافظة على أبعاد الصورة (Cover)",
-          "value": "cover",
-          "key": "e9c8ea8f-c5c6-234e-935-3bce269afde4"
+            "id": "squar_photo_bg_image_size",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "طريقة عرض الصور في قسم قائمة عناصر ",
+            "description": null,
+            "labelHTML": null,
+            "icon": "sicon-list",
+            "selected": [
+                {
+                    "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
+                    "value": "contain",
+                    "key": "f4adec13-6e4c-654b-b978-b2807935ced9"
+                }
+            ],
+            "options": [
+                {
+                    "label": "تغطية الصورة كامل المساحة مع المحافظة على أبعاد الصورة (Cover)",
+                    "value": "cover",
+                    "key": "e9c8ea8f-c5c6-234e-935-3bce269afde4"
+                },
+                {
+                    "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
+                    "value": "contain",
+                    "key": "f4adec13-6e4c-654b-b978-b2807935ced9"
+                }
+            ],
+            "source": "Manual",
+            "required": true
         },
         {
-          "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
-          "value": "contain",
-          "key": "f4adec13-6e4c-654b-b978-b2807935ced9"
-        }
-      ],
-      "source": "Manual",
-      "required": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "وضع عمودي للمنتجات في مربع المنتجات الثابتة في الصفحة الرئيسية",
-      "description": null,
-      "id": "vertical_fixed_products",
-      "format": "switch",
-      "required": false,
-      "value": false,
-      "selected": false
-    },
-    {
-      "type": "boolean",
-      "id": "is_more_button_enabled",
-      "label": "عرض (زر الكل) في الصفحة الرئيسية",
-      "format": "switch"
-    },
-    {
-      "type": "static",
-      "id": "static-line1",
-      "format": "line"
-    },
-    {
-      "type": "static",
-      "format": "title",
-      "id": "static-label2",
-      "value": "<div class='rounded-lg' style='background-color: #21636d; display: flex; justify-content: center; align-items: center;padding: 15px;margin-bottom: 20px !important; flex-direction: column;gap: 15px;'><h6 style='color: #ffffff;font-size: 15px; font-weight: bold;'> خيارات أعلى الصفحة</h6></div>",
-      "variant": "h6"
-    },
-    {
-      "id": "header_is_sticky",
-      "label": "تثبت القائمة الرئيسية أعلى الصفحة عند التمرير لأسفل",
-      "description": "يُنصح بالغاء تفعيلها في حالة وجود عناصر كثيرة في القائمة المنسدلة",
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "شريط علوي داكن",
-      "description": null,
-      "id": "topnav_is_dark",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": false
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "عرض روابط الصفحات الهامة في الشريط العلوي",
-      "description": "مثل صفحة الهبوط ، المدونة ،الصفحات التعريفية",
-      "id": "important_links",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "تفعيل قائمة المزيد في القائمة الرئيسية",
-      "description": "عند تفعيلها، ستظهر الروابط الإضافية في قائمة منسدلة تسمى 'المزيد' عند عدم وجود مساحة كافية",
-      "id": "enable_more_menu",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "static",
-      "id": "static-line3",
-      "format": "line"
-    },
-    {
-      "type": "static",
-      "format": "title",
-      "id": "static-label4",
-      "value": "<div class='rounded-lg' style='background-color: #21636d; display: flex; justify-content: center; align-items: center;padding: 15px;margin-bottom: 20px !important; flex-direction: column;gap: 15px;'><h6 style='color: #ffffff;font-size: 15px; font-weight: bold;'> خيارات أسفل الصفحة</h6></div>",
-      "variant": "h6"
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "الوضع الداكن",
-      "description": null,
-      "id": "footer_is_dark",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": false
-    },
-    {
-      "type": "static",
-      "id": "static-line5",
-      "format": "line"
-    },
-    {
-      "type": "static",
-      "format": "title",
-      "id": "static-label6",
-      "value": "<div class='rounded-lg' style='background-color: #21636d; display: flex; justify-content: center; align-items: center;padding: 15px;margin-bottom: 20px !important; flex-direction: column;gap: 15px;'><h6 style='color: #ffffff;font-size: 15px; font-weight: bold;'> خيارات صفحة المنتج</h6></div>",
-      "variant": "h6"
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "إظهار مسار التنقل في صفحة المنتج",
-      "description": null,
-      "id": "product_show_breadcrumbs",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "إظهار مسار التنقل في صفحة قائمة المنتجات",
-      "description": null,
-      "id": "product_index_show_breadcrumbs",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "تفعيل إشعار الإضافة للسلة المحسن",
-      "description": null,
-      "id": "enable_add_product_toast",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "إظهار زر \"أعلمني عند التوفر\" في بطاقة المنتج",
-      "description": "يظهر زر إشعار التوفر في بطاقات المنتجات التي نفذت كميتها",
-      "id": "notify_when_available_in_card",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "تثبيت زر الإضافة والكمية أسفل شاشة الجوال",
-      "description": null,
-      "id": "sticky_add_to_cart",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "اظهار الوسوم",
-      "description": null,
-      "id": "show_tags",
-      "format": "switch",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "id": "slider_background_size",
-      "type": "items",
-      "format": "dropdown-list",
-      "label": "طريقة عرض الصور في سليدر صور المنتج",
-      "description": null,
-      "labelHTML": null,
-      "icon": "sicon-list",
-      "selected": [
-        {
-          "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
-          "value": "contain",
-          "key": "f4adec13-6e4c-433b-b141-b2807935ced9"
-        }
-      ],
-      "options": [
-        {
-          "label": "تغطية الصورة كامل المساحة مع المحافظة على أبعاد الصورة (Cover)",
-          "value": "cover",
-          "key": "e9c8ea8f-c5c6-438e-9d45-3bce269afde4"
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "وضع عمودي للمنتجات في مربع المنتجات الثابتة في الصفحة الرئيسية",
+            "description": null,
+            "id": "vertical_fixed_products",
+            "format": "switch",
+            "required": false,
+            "value": false,
+            "selected": false
         },
         {
-          "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
-          "value": "contain",
-          "key": "f4adec13-6e4c-433b-b141-b2807935ced9"
-        }
-      ],
-      "source": "Manual",
-      "required": true
-    },
-    {
-      "type": "boolean",
-      "icon": "sicon-toggle-off",
-      "label": "تكبير الصور في سليدر صور المنتج",
-      "description": "هذه الخاصية تمكنك من تكبير الصورة لتسهل رؤية المزيد من التفاصيل بها",
-      "id": "imageZoom",
-      "format": "switch",
-      "required": false,
-      "value": false,
-      "selected": false
-    },
-    {
-      "type": "static",
-      "format": "title",
-      "id": "s-title-motion",
-      "variant": "h6",
-      "value": "<div style='background-color:#2B2A5E;border-radius:8px;display:flex;justify-content:center;padding:15px;margin-bottom:20px'><h6 style='color:#EFD6C9;font-size:15px;font-weight:bold'>الحركة والتأثيرات</h6></div>"
-    },
-    {
-      "id": "enable_smooth_scroll",
-      "type": "boolean",
-      "format": "switch",
-      "icon": "sicon-toggle-off",
-      "label": "تفعيل التمرير الناعم",
-      "description": "تمرير انسيابي يعطي إحساسًا فاخرًا. يُعطَّل تلقائيًا لمن فعّل تقليل الحركة في نظامه.",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "id": "enable_logo_draw",
-      "type": "boolean",
-      "format": "switch",
-      "icon": "sicon-toggle-off",
-      "label": "رسم الشعار ذاتيًا عند فتح الصفحة",
-      "description": "الشعار يُرسم خطًّا خطًّا ثم ينزلق الغندول داخل القوس.",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "id": "enable_water_canvas",
-      "type": "boolean",
-      "format": "switch",
-      "icon": "sicon-toggle-off",
-      "label": "موجات الماء المتحركة أسفل الواجهة",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "id": "enable_custom_cursor",
-      "type": "boolean",
-      "format": "switch",
-      "icon": "sicon-toggle-off",
-      "label": "مؤشر مخصّص (أجهزة سطح المكتب فقط)",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "id": "enable_grain",
-      "type": "boolean",
-      "format": "switch",
-      "icon": "sicon-toggle-off",
-      "label": "طبقة حبيبات فوق الصفحة",
-      "description": "تعطي دفئًا تحريريًا بدل المظهر الرقمي المسطّح.",
-      "required": false,
-      "value": true,
-      "selected": true
-    },
-    {
-      "type": "static",
-      "id": "s-line-1",
-      "format": "line"
-    },
-    {
-      "type": "static",
-      "format": "title",
-      "id": "s-title-colors",
-      "variant": "h6",
-      "value": "<div style='background-color:#2B2A5E;border-radius:8px;display:flex;justify-content:center;padding:15px;margin-bottom:20px'><h6 style='color:#EFD6C9;font-size:15px;font-weight:bold'>الألوان</h6></div>"
-    },
-    {
-      "id": "color_palette",
-      "type": "items",
-      "format": "dropdown-list",
-      "label": "لوحة ألوان الثيم",
-      "description": "تحكم في خلفية الأقسام الداكنة والفاتحة ولون التمييز. يسري فورًا بلا إعادة بناء.",
-      "labelHTML": null,
-      "icon": "sicon-list",
-      "selected": [
-        {
-          "label": "نيلي وذهبي — فخامة ليلية (الافتراضي)",
-          "value": "indigo",
-          "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9101"
-        }
-      ],
-      "options": [
-        {
-          "label": "نيلي وذهبي — فخامة ليلية (الافتراضي)",
-          "value": "indigo",
-          "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9101"
+            "type": "boolean",
+            "id": "is_more_button_enabled",
+            "label": "عرض (زر الكل) في الصفحة الرئيسية",
+            "format": "switch"
         },
         {
-          "label": "رملي ونحاسي — دافئ وترابي",
-          "value": "sand",
-          "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9102"
+            "type": "static",
+            "id": "static-line1",
+            "format": "line"
         },
         {
-          "label": "زمردي وذهبي — طبيعي وراقٍ",
-          "value": "emerald",
-          "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9103"
+            "type": "static",
+            "format": "title",
+            "id": "static-label2",
+            "value": "<div class='rounded-lg' style='background-color: #21636d; display: flex; justify-content: center; align-items: center;padding: 15px;margin-bottom: 20px !important; flex-direction: column;gap: 15px;'><h6 style='color: #ffffff;font-size: 15px; font-weight: bold;'> خيارات أعلى الصفحة</h6></div>",
+            "variant": "h6"
         },
         {
-          "label": "فحمي وفضي — حديث ومحايد",
-          "value": "charcoal",
-          "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9104"
+            "id": "header_is_sticky",
+            "label": "تثبت القائمة الرئيسية أعلى الصفحة عند التمرير لأسفل",
+            "description": "يُنصح بالغاء تفعيلها في حالة وجود عناصر كثيرة في القائمة المنسدلة",
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "شريط علوي داكن",
+            "description": null,
+            "id": "topnav_is_dark",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": false
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "عرض روابط الصفحات الهامة في الشريط العلوي",
+            "description": "مثل صفحة الهبوط ، المدونة ،الصفحات التعريفية",
+            "id": "important_links",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "تفعيل قائمة المزيد في القائمة الرئيسية",
+            "description": "عند تفعيلها، ستظهر الروابط الإضافية في قائمة منسدلة تسمى 'المزيد' عند عدم وجود مساحة كافية",
+            "id": "enable_more_menu",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "static",
+            "id": "static-line3",
+            "format": "line"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "static-label4",
+            "value": "<div class='rounded-lg' style='background-color: #21636d; display: flex; justify-content: center; align-items: center;padding: 15px;margin-bottom: 20px !important; flex-direction: column;gap: 15px;'><h6 style='color: #ffffff;font-size: 15px; font-weight: bold;'> خيارات أسفل الصفحة</h6></div>",
+            "variant": "h6"
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "الوضع الداكن",
+            "description": null,
+            "id": "footer_is_dark",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": false
+        },
+        {
+            "type": "static",
+            "id": "static-line5",
+            "format": "line"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "static-label6",
+            "value": "<div class='rounded-lg' style='background-color: #21636d; display: flex; justify-content: center; align-items: center;padding: 15px;margin-bottom: 20px !important; flex-direction: column;gap: 15px;'><h6 style='color: #ffffff;font-size: 15px; font-weight: bold;'> خيارات صفحة المنتج</h6></div>",
+            "variant": "h6"
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "إظهار مسار التنقل في صفحة المنتج",
+            "description": null,
+            "id": "product_show_breadcrumbs",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "إظهار مسار التنقل في صفحة قائمة المنتجات",
+            "description": null,
+            "id": "product_index_show_breadcrumbs",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "تفعيل إشعار الإضافة للسلة المحسن",
+            "description": null,
+            "id": "enable_add_product_toast",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "إظهار زر \"أعلمني عند التوفر\" في بطاقة المنتج",
+            "description": "يظهر زر إشعار التوفر في بطاقات المنتجات التي نفذت كميتها",
+            "id": "notify_when_available_in_card",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "تثبيت زر الإضافة والكمية أسفل شاشة الجوال",
+            "description": null,
+            "id": "sticky_add_to_cart",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "اظهار الوسوم",
+            "description": null,
+            "id": "show_tags",
+            "format": "switch",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "id": "slider_background_size",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "طريقة عرض الصور في سليدر صور المنتج",
+            "description": null,
+            "labelHTML": null,
+            "icon": "sicon-list",
+            "selected": [
+                {
+                    "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
+                    "value": "contain",
+                    "key": "f4adec13-6e4c-433b-b141-b2807935ced9"
+                }
+            ],
+            "options": [
+                {
+                    "label": "تغطية الصورة كامل المساحة مع المحافظة على أبعاد الصورة (Cover)",
+                    "value": "cover",
+                    "key": "e9c8ea8f-c5c6-438e-9d45-3bce269afde4"
+                },
+                {
+                    "label": "اظهار الصورة كاملةً في المنتصف (Contain)",
+                    "value": "contain",
+                    "key": "f4adec13-6e4c-433b-b141-b2807935ced9"
+                }
+            ],
+            "source": "Manual",
+            "required": true
+        },
+        {
+            "type": "boolean",
+            "icon": "sicon-toggle-off",
+            "label": "تكبير الصور في سليدر صور المنتج",
+            "description": "هذه الخاصية تمكنك من تكبير الصورة لتسهل رؤية المزيد من التفاصيل بها",
+            "id": "imageZoom",
+            "format": "switch",
+            "required": false,
+            "value": false,
+            "selected": false
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "s-title-motion",
+            "variant": "h6",
+            "value": "<div style='background-color:#2B2A5E;border-radius:8px;display:flex;justify-content:center;padding:15px;margin-bottom:20px'><h6 style='color:#EFD6C9;font-size:15px;font-weight:bold'>الحركة والتأثيرات</h6></div>"
+        },
+        {
+            "id": "enable_smooth_scroll",
+            "type": "boolean",
+            "format": "switch",
+            "icon": "sicon-toggle-off",
+            "label": "تفعيل التمرير الناعم",
+            "description": "تمرير انسيابي يعطي إحساسًا فاخرًا. يُعطَّل تلقائيًا لمن فعّل تقليل الحركة في نظامه.",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "id": "enable_logo_draw",
+            "type": "boolean",
+            "format": "switch",
+            "icon": "sicon-toggle-off",
+            "label": "رسم الشعار ذاتيًا عند فتح الصفحة",
+            "description": "الشعار يُرسم خطًّا خطًّا ثم ينزلق الغندول داخل القوس.",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "id": "enable_water_canvas",
+            "type": "boolean",
+            "format": "switch",
+            "icon": "sicon-toggle-off",
+            "label": "موجات الماء المتحركة أسفل الواجهة",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "id": "enable_custom_cursor",
+            "type": "boolean",
+            "format": "switch",
+            "icon": "sicon-toggle-off",
+            "label": "مؤشر مخصّص (أجهزة سطح المكتب فقط)",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "id": "enable_grain",
+            "type": "boolean",
+            "format": "switch",
+            "icon": "sicon-toggle-off",
+            "label": "طبقة حبيبات فوق الصفحة",
+            "description": "تعطي دفئًا تحريريًا بدل المظهر الرقمي المسطّح.",
+            "required": false,
+            "value": true,
+            "selected": true
+        },
+        {
+            "type": "static",
+            "id": "s-line-1",
+            "format": "line"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "s-title-colors",
+            "variant": "h6",
+            "value": "<div style='background-color:#2B2A5E;border-radius:8px;display:flex;justify-content:center;padding:15px;margin-bottom:20px'><h6 style='color:#EFD6C9;font-size:15px;font-weight:bold'>الألوان</h6></div>"
+        },
+        {
+            "id": "color_palette",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "لوحة ألوان الثيم",
+            "description": "تحكم في خلفية الأقسام الداكنة والفاتحة ولون التمييز. يسري فورًا بلا إعادة بناء.",
+            "labelHTML": null,
+            "icon": "sicon-list",
+            "selected": [
+                {
+                    "label": "نيلي وذهبي — فخامة ليلية (الافتراضي)",
+                    "value": "indigo",
+                    "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9101"
+                }
+            ],
+            "options": [
+                {
+                    "label": "نيلي وذهبي — فخامة ليلية (الافتراضي)",
+                    "value": "indigo",
+                    "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9101"
+                },
+                {
+                    "label": "رملي ونحاسي — دافئ وترابي",
+                    "value": "sand",
+                    "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9102"
+                },
+                {
+                    "label": "زمردي وذهبي — طبيعي وراقٍ",
+                    "value": "emerald",
+                    "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9103"
+                },
+                {
+                    "label": "فحمي وفضي — حديث ومحايد",
+                    "value": "charcoal",
+                    "key": "c1a7f0e2-1b34-4a55-9d10-7e2b5a8c9104"
+                }
+            ],
+            "source": "Manual",
+            "required": true
+        },
+        {
+            "type": "static",
+            "id": "s-line-2",
+            "format": "line"
+        },
+        {
+            "type": "static",
+            "format": "title",
+            "id": "s-title-layout",
+            "variant": "h6",
+            "value": "<div style='background-color:#2B2A5E;border-radius:8px;display:flex;justify-content:center;padding:15px;margin-bottom:20px'><h6 style='color:#EFD6C9;font-size:15px;font-weight:bold'>التخطيط</h6></div>"
         }
-      ],
-      "source": "Manual",
-      "required": true
-    },
-    {
-      "type": "static",
-      "id": "s-line-2",
-      "format": "line"
-    },
-    {
-      "type": "static",
-      "format": "title",
-      "id": "s-title-layout",
-      "variant": "h6",
-      "value": "<div style='background-color:#2B2A5E;border-radius:8px;display:flex;justify-content:center;padding:15px;margin-bottom:20px'><h6 style='color:#EFD6C9;font-size:15px;font-weight:bold'>التخطيط</h6></div>"
+    ],
+    "components": [
+        {
+            "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c01",
+            "title": {
+                "ar": "سرد · الواجهة السردية",
+                "en": "Sard · Narrative Hero"
+            },
+            "icon": "sicon-image-carousel",
+            "path": "home.sard-hero",
+            "is_default": true,
+            "fields": [
+                {
+                    "type": "static",
+                    "format": "description",
+                    "id": "hero-desc",
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-hero.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>زخرفة تُرسم خطًّا خطًّا، ثم يظهر شعار متجرك (أو اسمه حرفًا حرفًا) فوق خلفية متموّجة.</div>"
+                },
+                {
+                    "id": "background",
+                    "type": "string",
+                    "format": "image",
+                    "icon": "sicon-image",
+                    "label": "صورة الخلفية",
+                    "description": "* المقاس المناسب 1920×1080 بكسل. يُفضَّل مشهد داكن هادئ.",
+                    "required": false,
+                    "value": null,
+                    "settings": {
+                        "width": 1920,
+                        "height": 1080
+                    }
+                },
+                {
+                    "id": "eyebrow",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "سطر التعريف",
+                    "multilanguage": true,
+                    "placeholder": "مثال: منذ ١٩٩٨ · الرياض",
+                    "value": null,
+                    "required": false,
+                    "minLength": 0,
+                    "maxLength": 60
+                },
+                {
+                    "type": "string",
+                    "format": "image",
+                    "icon": "sicon-image",
+                    "label": "شعار الواجهة (اختياري)",
+                    "description": "ارفع شعار متجرك ليظهر داخل الزخرفة. لو رفعته بصيغة SVG سيُرسم خطًّا خطًّا كالزخرفة؛ وأي صيغة أخرى (PNG/JPG) تظهر بكشفٍ متدرّج. اتركه فارغًا ليُستخدم شعار المتجر تلقائيًا.",
+                    "labelHTML": null,
+                    "id": "logo",
+                    "value": null,
+                    "required": false,
+                    "placeholder": null,
+                    "settings": {
+                        "width": 560,
+                        "height": 220
+                    }
+                },
+                {
+                    "id": "wordmark",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "اسم العلامة (يظهر حرفًا حرفًا)",
+                    "description": "يُستخدم فقط إذا لم ترفع شعارًا للمتجر. اتركه فارغًا ليظهر اسم المتجر.",
+                    "placeholder": "L'AMORE",
+                    "value": null,
+                    "required": false,
+                    "minLength": 0,
+                    "maxLength": 24
+                },
+                {
+                    "id": "subtitle",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-typography",
+                    "label": "سطر فرعي",
+                    "multilanguage": true,
+                    "placeholder": "سطر فرعي قصير",
+                    "value": null,
+                    "required": false,
+                    "minLength": 0,
+                    "maxLength": 60
+                },
+                {
+                    "id": "tagline",
+                    "type": "string",
+                    "format": "textarea",
+                    "icon": "sicon-typography",
+                    "label": "جملة الافتتاح",
+                    "multilanguage": true,
+                    "placeholder": "جملة الافتتاح",
+                    "value": null,
+                    "required": false,
+                    "minLength": 0,
+                    "maxLength": 140
+                },
+                {
+                    "id": "scroll_hint",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "نص مؤشر التمرير",
+                    "multilanguage": true,
+                    "value": "انزل للاستكشاف",
+                    "required": false,
+                    "maxLength": 30
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-hero.jpg?v=1"
+        },
+        {
+            "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c02",
+            "title": {
+                "ar": "سرد · طبقات مثبّتة",
+                "en": "Sard · Pinned Layers"
+            },
+            "icon": "sicon-list-play",
+            "path": "home.sard-layers",
+            "is_default": true,
+            "fields": [
+                {
+                    "type": "static",
+                    "format": "description",
+                    "id": "pyramid-desc",
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-layers.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>قسم يثبت أثناء التمرير: كل تمريرة تكشف طبقة بصورتها ونصّها. يصلح لمكوّنات منتج، أو مراحل صناعة، أو قيم العلامة.</div>"
+                },
+                {
+                    "id": "title",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "العنوان",
+                    "multilanguage": true,
+                    "value": "ثلاث طبقات تحكي القصة",
+                    "required": false,
+                    "maxLength": 100
+                },
+                {
+                    "id": "eyebrow",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "سطر التعريف",
+                    "multilanguage": true,
+                    "value": null,
+                    "required": false,
+                    "maxLength": 40,
+                    "placeholder": "مثال: كيف نصنعها"
+                },
+                {
+                    "id": "layers",
+                    "type": "collection",
+                    "format": "collection",
+                    "label": "الطبقات",
+                    "item_label": "طبقة",
+                    "required": true,
+                    "minLength": 2,
+                    "maxLength": 4,
+                    "value": [
+                        {
+                            "layers.key": "الأولى",
+                            "layers.title": "العنوان الأول",
+                            "layers.text": "اكتب هنا وصف الطبقة الأولى في سطرين أو ثلاثة.",
+                            "layers.image": null
+                        },
+                        {
+                            "layers.key": "الثانية",
+                            "layers.title": "العنوان الثاني",
+                            "layers.text": "اكتب هنا وصف الطبقة الثانية في سطرين أو ثلاثة.",
+                            "layers.image": null
+                        },
+                        {
+                            "layers.key": "الثالثة",
+                            "layers.title": "العنوان الثالث",
+                            "layers.text": "اكتب هنا وصف الطبقة الثالثة في سطرين أو ثلاثة.",
+                            "layers.image": null
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "layers.key",
+                            "type": "string",
+                            "format": "text",
+                            "icon": "sicon-format-text-alt",
+                            "label": "اسم الطبقة",
+                            "multilanguage": true,
+                            "placeholder": "المقدمة",
+                            "required": true,
+                            "maxLength": 20
+                        },
+                        {
+                            "id": "layers.title",
+                            "type": "string",
+                            "format": "text",
+                            "icon": "sicon-format-text-alt",
+                            "label": "العنوان",
+                            "multilanguage": true,
+                            "required": false,
+                            "maxLength": 60
+                        },
+                        {
+                            "id": "layers.text",
+                            "type": "string",
+                            "format": "textarea",
+                            "icon": "sicon-typography",
+                            "label": "الوصف",
+                            "multilanguage": true,
+                            "required": false,
+                            "maxLength": 220
+                        },
+                        {
+                            "id": "layers.image",
+                            "type": "string",
+                            "format": "image",
+                            "icon": "sicon-image",
+                            "label": "صورة الطبقة",
+                            "description": "* المقاس المناسب 900×900 بكسل",
+                            "required": false,
+                            "settings": {
+                                "width": 900,
+                                "height": 900
+                            }
+                        }
+                    ]
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-layers.jpg?v=1"
+        },
+        {
+            "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c03",
+            "title": {
+                "ar": "سرد · المجموعة (تمرير أفقي)",
+                "en": "Sard · Collection — Horizontal Scroll"
+            },
+            "icon": "sicon-layout-grid-rearrange",
+            "path": "home.sard-collection",
+            "is_default": true,
+            "fields": [
+                {
+                    "type": "static",
+                    "format": "description",
+                    "id": "coll-desc",
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-collection.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>التمرير العمودي يتحوّل إلى حركة أفقية على المنتجات المختارة — <strong>ويحترم اتجاه اللغة</strong>: يبدأ من اليمين في العربية ومن اليسار في الإنجليزية. أزرار الإضافة للسلة رسمية من سلة.</div>"
+                },
+                {
+                    "id": "eyebrow",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "سطر التعريف",
+                    "multilanguage": true,
+                    "value": null,
+                    "required": false,
+                    "maxLength": 40,
+                    "placeholder": "مثال: الأكثر مبيعًا"
+                },
+                {
+                    "id": "title",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "العنوان",
+                    "multilanguage": true,
+                    "value": "مجموعتنا المختارة",
+                    "required": false,
+                    "maxLength": 100
+                },
+                {
+                    "id": "hint",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-typography",
+                    "label": "تلميح التنقل",
+                    "multilanguage": true,
+                    "value": "اسحب أو انزل للتنقل",
+                    "required": false,
+                    "maxLength": 60
+                },
+                {
+                    "id": "products",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "icon": "sicon-keyboard_arrow_down",
+                    "label": "المنتجات",
+                    "source": "products",
+                    "multichoice": true,
+                    "searchable": true,
+                    "required": true,
+                    "minLength": 3,
+                    "maxLength": 12,
+                    "selected": [],
+                    "options": [],
+                    "value": []
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-collection.jpg?v=1"
+        },
+        {
+            "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c04",
+            "title": {
+                "ar": "سرد · الحكاية (كشف بالقناع)",
+                "en": "Sard · The Story"
+            },
+            "icon": "sicon-chat-bubbles",
+            "path": "home.sard-story",
+            "is_default": true,
+            "fields": [
+                {
+                    "type": "static",
+                    "format": "description",
+                    "id": "story-desc",
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-story.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>فصول متتابعة: كل فصل صورة تُكشف بقناع ونص يظهر بجانبها.</div>"
+                },
+                {
+                    "id": "eyebrow",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "سطر التعريف",
+                    "multilanguage": true,
+                    "value": null,
+                    "required": false,
+                    "maxLength": 40,
+                    "placeholder": "مثال: عن المتجر"
+                },
+                {
+                    "id": "chapters",
+                    "type": "collection",
+                    "format": "collection",
+                    "label": "الفصول",
+                    "item_label": "فصل",
+                    "required": true,
+                    "minLength": 1,
+                    "maxLength": 6,
+                    "value": [
+                        {
+                            "chapters.title": "الفصل الأول",
+                            "chapters.text": "اكتب هنا فقرة عن بداية المتجر أو ما يميّزه.",
+                            "chapters.image": null
+                        },
+                        {
+                            "chapters.title": "الفصل الثاني",
+                            "chapters.text": "اكتب هنا فقرة عن طريقة العمل أو جودة المنتج.",
+                            "chapters.image": null
+                        },
+                        {
+                            "chapters.title": "الفصل الثالث",
+                            "chapters.text": "اكتب هنا فقرة عن التغليف أو خدمة العملاء.",
+                            "chapters.image": null
+                        }
+                    ],
+                    "fields": [
+                        {
+                            "id": "chapters.image",
+                            "type": "string",
+                            "format": "image",
+                            "icon": "sicon-image",
+                            "label": "الصورة",
+                            "description": "* المقاس المناسب 1400×1000 بكسل",
+                            "required": false,
+                            "settings": {
+                                "width": 1400,
+                                "height": 1000
+                            }
+                        },
+                        {
+                            "id": "chapters.title",
+                            "type": "string",
+                            "format": "text",
+                            "icon": "sicon-format-text-alt",
+                            "label": "العنوان",
+                            "multilanguage": true,
+                            "required": false,
+                            "maxLength": 80
+                        },
+                        {
+                            "id": "chapters.text",
+                            "type": "string",
+                            "format": "textarea",
+                            "icon": "sicon-typography",
+                            "label": "النص",
+                            "multilanguage": true,
+                            "required": false,
+                            "maxLength": 320
+                        }
+                    ]
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-story.jpg?v=1"
+        },
+        {
+            "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c05",
+            "title": {
+                "ar": "سرد · زورونا (دعوة للزيارة)",
+                "en": "Sard · Visit Us"
+            },
+            "icon": "sicon-location",
+            "path": "home.sard-visit",
+            "is_default": true,
+            "fields": [
+                {
+                    "type": "static",
+                    "format": "description",
+                    "id": "visit-desc",
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-visit.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>قسم ختامي بخلفية وبارالاكس وأزرار تنجذب للمؤشر.</div>"
+                },
+                {
+                    "id": "background",
+                    "type": "string",
+                    "format": "image",
+                    "icon": "sicon-image",
+                    "label": "صورة الخلفية",
+                    "description": "* المقاس المناسب 1600×900 بكسل",
+                    "required": false,
+                    "settings": {
+                        "width": 1600,
+                        "height": 900
+                    }
+                },
+                {
+                    "id": "eyebrow",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "سطر التعريف",
+                    "multilanguage": true,
+                    "value": "زورونا",
+                    "required": false,
+                    "maxLength": 40
+                },
+                {
+                    "id": "title",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "العنوان",
+                    "multilanguage": true,
+                    "value": "تفضّل بزيارتنا",
+                    "required": false,
+                    "maxLength": 100
+                },
+                {
+                    "id": "text",
+                    "type": "string",
+                    "format": "textarea",
+                    "icon": "sicon-typography",
+                    "label": "النص",
+                    "multilanguage": true,
+                    "value": "نسعد بخدمتك في المعرض. فريقنا جاهز لمساعدتك في اختيار ما يناسبك.",
+                    "required": false,
+                    "maxLength": 300
+                },
+                {
+                    "id": "hours",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-calendar-date",
+                    "label": "أوقات العمل",
+                    "multilanguage": true,
+                    "value": "يوميًا · ٤ عصرًا — ١١ مساءً",
+                    "required": false,
+                    "maxLength": 80
+                },
+                {
+                    "id": "cta_label",
+                    "type": "string",
+                    "format": "text",
+                    "icon": "sicon-format-text-alt",
+                    "label": "نص الزر الأساسي",
+                    "multilanguage": true,
+                    "value": "تسوّق الآن",
+                    "required": false,
+                    "maxLength": 40
+                },
+                {
+                    "id": "cta_url",
+                    "type": "items",
+                    "format": "variable-list",
+                    "icon": "sicon-link",
+                    "label": "رابط الزر الأساسي",
+                    "source": "custom",
+                    "searchable": true,
+                    "required": false,
+                    "value": [],
+                    "sources": [
+                        {
+                            "label": "تصنيف",
+                            "key": "categories",
+                            "value": "categories"
+                        },
+                        {
+                            "label": "منتج",
+                            "key": "products",
+                            "value": "products"
+                        },
+                        {
+                            "label": "ماركة تجارية",
+                            "key": "brands",
+                            "value": "brands"
+                        },
+                        {
+                            "label": "التخفيضات",
+                            "key": "offers_link",
+                            "value": "offers_link"
+                        },
+                        {
+                            "label": "صفحة تعريفية",
+                            "key": "pages",
+                            "value": "pages"
+                        },
+                        {
+                            "label": "رابط خارجي",
+                            "key": "custom",
+                            "value": "custom"
+                        }
+                    ]
+                }
+            ],
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-visit.jpg?v=1"
+        }
+    ],
+    "support_url": null,
+    "description": {
+        "ar": "ثيم سردي فاخر — التمرير يروي قصة المتجر: زخرفة تُرسم بنفسها، طبقات مثبّتة، ومعرض أفقي يحترم اتجاه اللغة",
+        "en": "A narrative luxury theme — scrolling tells the store's story: a self-drawing ornament, pinned layers, and a direction-aware horizontal gallery"
     }
-  ],
-  "components": [
-    {
-      "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c01",
-      "title": {
-        "ar": "سرد · الواجهة السردية",
-        "en": "Sard · Narrative Hero"
-      },
-      "icon": "sicon-image-carousel",
-      "path": "home.sard-hero",
-      "is_default": true,
-      "fields": [
-        {
-          "type": "static",
-          "format": "description",
-          "id": "hero-desc",
-          "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-hero.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>زخرفة تُرسم خطًّا خطًّا، ثم يظهر شعار متجرك (أو اسمه حرفًا حرفًا) فوق خلفية متموّجة.</div>"
-        },
-        {
-          "id": "background",
-          "type": "string",
-          "format": "image",
-          "icon": "sicon-image",
-          "label": "صورة الخلفية",
-          "description": "* المقاس المناسب 1920×1080 بكسل. يُفضَّل مشهد داكن هادئ.",
-          "required": false,
-          "value": null,
-          "settings": {
-            "width": 1920,
-            "height": 1080
-          }
-        },
-        {
-          "id": "eyebrow",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "سطر التعريف",
-          "multilanguage": true,
-          "placeholder": "مثال: منذ ١٩٩٨ · الرياض",
-          "value": null,
-          "required": false,
-          "minLength": 0,
-          "maxLength": 60
-        },
-        {
-          "type": "string",
-          "format": "image",
-          "icon": "sicon-image",
-          "label": "شعار الواجهة (اختياري)",
-          "description": "ارفع شعار متجرك ليظهر داخل الزخرفة. لو رفعته بصيغة SVG سيُرسم خطًّا خطًّا كالزخرفة؛ وأي صيغة أخرى (PNG/JPG) تظهر بكشفٍ متدرّج. اتركه فارغًا ليُستخدم شعار المتجر تلقائيًا.",
-          "labelHTML": null,
-          "id": "logo",
-          "value": null,
-          "required": false,
-          "placeholder": null,
-          "settings": {
-            "width": 560,
-            "height": 220
-          }
-        },
-        {
-          "id": "wordmark",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "اسم العلامة (يظهر حرفًا حرفًا)",
-          "description": "يُستخدم فقط إذا لم ترفع شعارًا للمتجر. اتركه فارغًا ليظهر اسم المتجر.",
-          "placeholder": "L'AMORE",
-          "value": null,
-          "required": false,
-          "minLength": 0,
-          "maxLength": 24
-        },
-        {
-          "id": "subtitle",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-typography",
-          "label": "سطر فرعي",
-          "multilanguage": true,
-          "placeholder": "سطر فرعي قصير",
-          "value": null,
-          "required": false,
-          "minLength": 0,
-          "maxLength": 60
-        },
-        {
-          "id": "tagline",
-          "type": "string",
-          "format": "textarea",
-          "icon": "sicon-typography",
-          "label": "جملة الافتتاح",
-          "multilanguage": true,
-          "placeholder": "جملة الافتتاح",
-          "value": null,
-          "required": false,
-          "minLength": 0,
-          "maxLength": 140
-        },
-        {
-          "id": "scroll_hint",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "نص مؤشر التمرير",
-          "multilanguage": true,
-          "value": "انزل للاستكشاف",
-          "required": false,
-          "maxLength": 30
-        }
-      ],
-      "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-hero.jpg?v=1"
-    },
-    {
-      "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c02",
-      "title": {
-        "ar": "سرد · طبقات مثبّتة",
-        "en": "Sard · Pinned Layers"
-      },
-      "icon": "sicon-list-play",
-      "path": "home.sard-layers",
-      "is_default": true,
-      "fields": [
-        {
-          "type": "static",
-          "format": "description",
-          "id": "pyramid-desc",
-          "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-layers.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>قسم يثبت أثناء التمرير: كل تمريرة تكشف طبقة بصورتها ونصّها. يصلح لمكوّنات منتج، أو مراحل صناعة، أو قيم العلامة.</div>"
-        },
-        {
-          "id": "title",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "العنوان",
-          "multilanguage": true,
-          "value": "ثلاث طبقات تحكي القصة",
-          "required": false,
-          "maxLength": 100
-        },
-        {
-          "id": "eyebrow",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "سطر التعريف",
-          "multilanguage": true,
-          "value": null,
-          "required": false,
-          "maxLength": 40,
-          "placeholder": "مثال: كيف نصنعها"
-        },
-        {
-          "id": "layers",
-          "type": "collection",
-          "format": "collection",
-          "label": "الطبقات",
-          "item_label": "طبقة",
-          "required": true,
-          "minLength": 2,
-          "maxLength": 4,
-          "value": [
-            {
-              "layers.key": "الأولى",
-              "layers.title": "العنوان الأول",
-              "layers.text": "اكتب هنا وصف الطبقة الأولى في سطرين أو ثلاثة.",
-              "layers.image": null
-            },
-            {
-              "layers.key": "الثانية",
-              "layers.title": "العنوان الثاني",
-              "layers.text": "اكتب هنا وصف الطبقة الثانية في سطرين أو ثلاثة.",
-              "layers.image": null
-            },
-            {
-              "layers.key": "الثالثة",
-              "layers.title": "العنوان الثالث",
-              "layers.text": "اكتب هنا وصف الطبقة الثالثة في سطرين أو ثلاثة.",
-              "layers.image": null
-            }
-          ],
-          "fields": [
-            {
-              "id": "layers.key",
-              "type": "string",
-              "format": "text",
-              "icon": "sicon-format-text-alt",
-              "label": "اسم الطبقة",
-              "multilanguage": true,
-              "placeholder": "المقدمة",
-              "required": true,
-              "maxLength": 20
-            },
-            {
-              "id": "layers.title",
-              "type": "string",
-              "format": "text",
-              "icon": "sicon-format-text-alt",
-              "label": "العنوان",
-              "multilanguage": true,
-              "required": false,
-              "maxLength": 60
-            },
-            {
-              "id": "layers.text",
-              "type": "string",
-              "format": "textarea",
-              "icon": "sicon-typography",
-              "label": "الوصف",
-              "multilanguage": true,
-              "required": false,
-              "maxLength": 220
-            },
-            {
-              "id": "layers.image",
-              "type": "string",
-              "format": "image",
-              "icon": "sicon-image",
-              "label": "صورة الطبقة",
-              "description": "* المقاس المناسب 900×900 بكسل",
-              "required": false,
-              "settings": {
-                "width": 900,
-                "height": 900
-              }
-            }
-          ]
-        }
-      ],
-      "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-layers.jpg?v=1"
-    },
-    {
-      "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c03",
-      "title": {
-        "ar": "سرد · المجموعة (تمرير أفقي)",
-        "en": "Sard · Collection — Horizontal Scroll"
-      },
-      "icon": "sicon-layout-grid-rearrange",
-      "path": "home.sard-collection",
-      "is_default": true,
-      "fields": [
-        {
-          "type": "static",
-          "format": "description",
-          "id": "coll-desc",
-          "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-collection.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>التمرير العمودي يتحوّل إلى حركة أفقية على المنتجات المختارة — <strong>ويحترم اتجاه اللغة</strong>: يبدأ من اليمين في العربية ومن اليسار في الإنجليزية. أزرار الإضافة للسلة رسمية من سلة.</div>"
-        },
-        {
-          "id": "eyebrow",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "سطر التعريف",
-          "multilanguage": true,
-          "value": null,
-          "required": false,
-          "maxLength": 40,
-          "placeholder": "مثال: الأكثر مبيعًا"
-        },
-        {
-          "id": "title",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "العنوان",
-          "multilanguage": true,
-          "value": "مجموعتنا المختارة",
-          "required": false,
-          "maxLength": 100
-        },
-        {
-          "id": "hint",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-typography",
-          "label": "تلميح التنقل",
-          "multilanguage": true,
-          "value": "اسحب أو انزل للتنقل",
-          "required": false,
-          "maxLength": 60
-        },
-        {
-          "id": "products",
-          "type": "items",
-          "format": "dropdown-list",
-          "icon": "sicon-keyboard_arrow_down",
-          "label": "المنتجات",
-          "source": "products",
-          "multichoice": true,
-          "searchable": true,
-          "required": true,
-          "minLength": 3,
-          "maxLength": 12,
-          "selected": [],
-          "options": [],
-          "value": []
-        }
-      ],
-      "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-collection.jpg?v=1"
-    },
-    {
-      "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c04",
-      "title": {
-        "ar": "سرد · الحكاية (كشف بالقناع)",
-        "en": "Sard · The Story"
-      },
-      "icon": "sicon-chat-bubbles",
-      "path": "home.sard-story",
-      "is_default": true,
-      "fields": [
-        {
-          "type": "static",
-          "format": "description",
-          "id": "story-desc",
-          "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-story.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>فصول متتابعة: كل فصل صورة تُكشف بقناع ونص يظهر بجانبها.</div>"
-        },
-        {
-          "id": "eyebrow",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "سطر التعريف",
-          "multilanguage": true,
-          "value": null,
-          "required": false,
-          "maxLength": 40,
-          "placeholder": "مثال: عن المتجر"
-        },
-        {
-          "id": "chapters",
-          "type": "collection",
-          "format": "collection",
-          "label": "الفصول",
-          "item_label": "فصل",
-          "required": true,
-          "minLength": 1,
-          "maxLength": 6,
-          "value": [
-            {
-              "chapters.title": "الفصل الأول",
-              "chapters.text": "اكتب هنا فقرة عن بداية المتجر أو ما يميّزه.",
-              "chapters.image": null
-            },
-            {
-              "chapters.title": "الفصل الثاني",
-              "chapters.text": "اكتب هنا فقرة عن طريقة العمل أو جودة المنتج.",
-              "chapters.image": null
-            },
-            {
-              "chapters.title": "الفصل الثالث",
-              "chapters.text": "اكتب هنا فقرة عن التغليف أو خدمة العملاء.",
-              "chapters.image": null
-            }
-          ],
-          "fields": [
-            {
-              "id": "chapters.image",
-              "type": "string",
-              "format": "image",
-              "icon": "sicon-image",
-              "label": "الصورة",
-              "description": "* المقاس المناسب 1400×1000 بكسل",
-              "required": false,
-              "settings": {
-                "width": 1400,
-                "height": 1000
-              }
-            },
-            {
-              "id": "chapters.title",
-              "type": "string",
-              "format": "text",
-              "icon": "sicon-format-text-alt",
-              "label": "العنوان",
-              "multilanguage": true,
-              "required": false,
-              "maxLength": 80
-            },
-            {
-              "id": "chapters.text",
-              "type": "string",
-              "format": "textarea",
-              "icon": "sicon-typography",
-              "label": "النص",
-              "multilanguage": true,
-              "required": false,
-              "maxLength": 320
-            }
-          ]
-        }
-      ],
-      "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-story.jpg?v=1"
-    },
-    {
-      "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c05",
-      "title": {
-        "ar": "سرد · زورونا (دعوة للزيارة)",
-        "en": "Sard · Visit Us"
-      },
-      "icon": "sicon-location",
-      "path": "home.sard-visit",
-      "is_default": true,
-      "fields": [
-        {
-          "type": "static",
-          "format": "description",
-          "id": "visit-desc",
-          "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-visit.jpg?v=1'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>قسم ختامي بخلفية وبارالاكس وأزرار تنجذب للمؤشر.</div>"
-        },
-        {
-          "id": "background",
-          "type": "string",
-          "format": "image",
-          "icon": "sicon-image",
-          "label": "صورة الخلفية",
-          "description": "* المقاس المناسب 1600×900 بكسل",
-          "required": false,
-          "settings": {
-            "width": 1600,
-            "height": 900
-          }
-        },
-        {
-          "id": "eyebrow",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "سطر التعريف",
-          "multilanguage": true,
-          "value": "زورونا",
-          "required": false,
-          "maxLength": 40
-        },
-        {
-          "id": "title",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "العنوان",
-          "multilanguage": true,
-          "value": "تفضّل بزيارتنا",
-          "required": false,
-          "maxLength": 100
-        },
-        {
-          "id": "text",
-          "type": "string",
-          "format": "textarea",
-          "icon": "sicon-typography",
-          "label": "النص",
-          "multilanguage": true,
-          "value": "نسعد بخدمتك في المعرض. فريقنا جاهز لمساعدتك في اختيار ما يناسبك.",
-          "required": false,
-          "maxLength": 300
-        },
-        {
-          "id": "hours",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-calendar-date",
-          "label": "أوقات العمل",
-          "multilanguage": true,
-          "value": "يوميًا · ٤ عصرًا — ١١ مساءً",
-          "required": false,
-          "maxLength": 80
-        },
-        {
-          "id": "cta_label",
-          "type": "string",
-          "format": "text",
-          "icon": "sicon-format-text-alt",
-          "label": "نص الزر الأساسي",
-          "multilanguage": true,
-          "value": "تسوّق الآن",
-          "required": false,
-          "maxLength": 40
-        },
-        {
-          "id": "cta_url",
-          "type": "items",
-          "format": "variable-list",
-          "icon": "sicon-link",
-          "label": "رابط الزر الأساسي",
-          "source": "custom",
-          "searchable": true,
-          "required": false,
-          "value": [],
-          "sources": [
-            {
-              "label": "تصنيف",
-              "key": "categories",
-              "value": "categories"
-            },
-            {
-              "label": "منتج",
-              "key": "products",
-              "value": "products"
-            },
-            {
-              "label": "ماركة تجارية",
-              "key": "brands",
-              "value": "brands"
-            },
-            {
-              "label": "التخفيضات",
-              "key": "offers_link",
-              "value": "offers_link"
-            },
-            {
-              "label": "صفحة تعريفية",
-              "key": "pages",
-              "value": "pages"
-            },
-            {
-              "label": "رابط خارجي",
-              "key": "custom",
-              "value": "custom"
-            }
-          ]
-        }
-      ],
-      "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/preview/screens/desktop-visit.jpg?v=1"
-    }
-  ],
-  "support_url": null,
-  "description": {
-    "ar": "ثيم سردي فاخر — التمرير يروي قصة المتجر: زخرفة تُرسم بنفسها، طبقات مثبّتة، ومعرض أفقي يحترم اتجاه اللغة",
-    "en": "A narrative luxury theme — scrolling tells the store's story: a self-drawing ornament, pinned layers, and a direction-aware horizontal gallery"
-  }
 }

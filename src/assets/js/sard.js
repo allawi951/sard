@@ -5,6 +5,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
+import { traceLogo, loadForTrace } from './sard-trace';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -147,6 +148,45 @@ document.addEventListener('salla:products.fetched', () => ScrollTrigger.refresh(
 addEventListener('resize', () => ScrollTrigger.refresh(), { passive: true });
 
 
+/* ── الرسم الذاتي لشعار التاجر ──
+   يعيد true إن نُفِّذ الرسم فعلًا، و false ليتولّى النداءُ الكشفَ بالقناع. */
+async function drawLogo(img) {
+  const probe = await loadForTrace(img);
+  if (!probe) return false;
+
+  const svg = traceLogo(probe);
+  if (!svg) return false;
+
+  // غلاف نسبيّ يضع الخطوط فوق الصورة تمامًا بلا إزاحة تخطيط
+  const wrap = document.createElement('span');
+  wrap.className = 'sard-hero__draw';
+  img.parentElement.insertBefore(wrap, img);
+  wrap.appendChild(img);
+  wrap.appendChild(svg);
+
+  const strokes = [...svg.querySelectorAll('path')];
+  strokes.forEach((p) => {
+    const len = p.getTotalLength();
+    p.style.strokeDasharray = `${len}`;
+    p.style.strokeDashoffset = `${len}`;
+  });
+
+  // الأطول أولًا (مرتّبة أصلًا) فيبدأ الرسم بالهيكل ثم التفاصيل
+  await gsap.timeline()
+    .to(strokes, {
+      strokeDashoffset: 0,
+      duration: 1.15,
+      ease: 'power1.inOut',
+      stagger: { each: Math.min(0.055, 1.1 / strokes.length), from: 'start' },
+    })
+    .to(img, { opacity: 1, duration: 0.75, ease: 'power2.out' }, '-=0.35')
+    .to(svg, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '<')
+    .then();
+
+  svg.remove();
+  return true;
+}
+
 /* ─────────── حركة الصفحة الرئيسية ─────────── */
 
 function start() {
@@ -210,6 +250,28 @@ function start() {
   /* ── ٢) دخول الواجهة: الزخرفة ترسم نفسها ── */
   (function heroIntro() {
     const mark = $('#sardHeroMark');
+    const imgLogo = $('#sardHeroLogo');
+
+    // القالب يعرض إمّا الزخرفة **أو** شعار التاجر، لا الاثنين. الصيغة السابقة
+    // كانت تبدأ بـ `if (!mark) return` فتموت الدالة كلّها متى رفع التاجر شعارًا
+    // — ولذلك لم تكن للشعار أي حركة أصلًا. الفرعان الآن مستقلّان.
+    gsap.from('#sardHeroEyebrow', { opacity: 0, y: 14, duration: 1, ease: 'power2.out' });
+
+    if (imgLogo) {
+      const rtl = document.documentElement.dir === 'rtl';
+      const wipe = (delay = 0.35) => gsap.fromTo(imgLogo,
+        { clipPath: rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)', opacity: 1 },
+        { clipPath: 'inset(0 0 0 0)', duration: 1.3, ease: 'power2.inOut', delay });
+
+      if (REDUCED || CFG.logoDraw === false) { gsap.set(imgLogo, { opacity: 1 }); return; }
+
+      gsap.set(imgLogo, { opacity: 0 });
+      drawLogo(imgLogo)
+        .then((drawn) => { if (!drawn) wipe(0.1); })
+        .catch(() => wipe(0.1));
+      return;
+    }
+
     if (!mark) return;
 
     const paths = $$('.sard-draw', mark);
@@ -228,24 +290,12 @@ function start() {
 
     const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
-    tl.from('#sardHeroEyebrow', { opacity: 0, y: 14, duration: 1 }, 0)
-      .to(paths, { strokeDashoffset: 0, duration: 1.5, stagger: .045, ease: 'power1.inOut' }, .25)
+    tl.to(paths, { strokeDashoffset: 0, duration: 1.5, stagger: .045, ease: 'power1.inOut' }, .25)
       // الجواهر المصمتة تظهر بعد اكتمال رسم الزخرفة
       .to(solids, { opacity: 1, y: 0, duration: 1.1, stagger: .08, ease: 'power3.out' }, '-=0.5');
 
-    // شعار الواجهة يستبدل الزخرفة ولا يجتمع معها.
-    // سلة تحوّل المرفوع إلى webp ولا تقبل SVG، فالرسم الخطّي على شعار التاجر
-    // غير ممكن — نكشفه بقناع متدرّج يتبع اتجاه اللغة، وهو أقرب إحساس متاح.
-    const imgLogo = $('#sardHeroLogo');
-
-    if (imgLogo) {
-      const rtl = document.documentElement.dir === 'rtl';
-      tl.fromTo(imgLogo,
-        { clipPath: rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)', opacity: 1 },
-        { clipPath: 'inset(0 0 0 0)', duration: 1.3, ease: 'power2.inOut' }, 0.35);
-    }
-
-    if (!imgLogo) {
+    // اسم المتجر يظهر تحت الزخرفة (فرع «لا شعار» حصرًا)
+    {
       // اسم المتجر: نقسّمه حروفًا **فقط** إن كان لاتينيًّا.
       // العربية نصّ متّصل — تقسيمه إلى <span> يكسر وصل الحروف ويعكس ترتيبها.
       const word = $('#sardHeroWord');

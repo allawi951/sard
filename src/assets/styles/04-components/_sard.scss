@@ -219,6 +219,19 @@ html[dir='rtl'] .sard-progress { transform-origin: right; }
   margin: 0 auto;
 }
 
+/* غلاف الرسم الذاتي: يُنشئه sard.js حول الشعار ليضع خطوط التتبّع فوقه تمامًا.
+   inline-block بمقاس الصورة نفسها — فلا إزاحة تخطيط عند إدخاله أو إزالته. */
+.sard-hero__draw {
+  position: relative; display: inline-block; line-height: 0;
+  > img { display: block; }
+  > .sard-draw {
+    position: absolute; inset: 0;
+    width: 100%; height: 100%;
+    overflow: visible; pointer-events: none;
+    color: var(--sard-gold);
+  }
+}
+
 /* الاسم العربي ككتلة واحدة: تقسيم الحروف يكسر الوصل ويعكس الترتيب */
 .sard-hero__word--solid {
   direction: rtl; display: block; flex-wrap: nowrap;

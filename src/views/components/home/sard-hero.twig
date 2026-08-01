@@ -47,8 +47,11 @@
     {% endif %}
 
     {% if hero_logo %}
+      {# لوّنه بما يناسب الخلفية؟ يُقرأ في sard.js: اللون واحد من أول خطّ
+         إلى آخر إطار في الحالتين، فلا قفزة لونية بين الرسم والصورة. #}
       <img class="sard-hero__logo{{ show_ornament ? '' : ' sard-hero__logo--solo' }}"
            id="sardHeroLogo"
+           data-sard-tint="{{ component.logo_tint is same as(false) ? '0' : '1' }}"
            src="{{ hero_logo|cdn(560) }}"
            alt="{{ store.name }}" width="360" height="150" fetchpriority="high">
     {% else %}

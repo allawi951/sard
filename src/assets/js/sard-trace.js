@@ -256,11 +256,12 @@ export function inkStats(img) {
      الداكن تشبّعه عالٍ لكنه لونٌ واحد ويُقلَب بأمان — معيار التشبّع كان
      يصنّفه ملوّنًا فلا يُقلَب، فيبقى مختفيًا على الخلفية الداكنة. */
   const hues = new Set();
-  let sum = 0, n = 0;
+  let sum = 0, n = 0, sr = 0, sg = 0, sb = 0, ink = 0;
   for (let i = 0; i < data.length; i += 4) {
     if (data[i + 3] < 40) continue;                       // شفّاف — ليس حبرًا
     const r = data[i], g = data[i + 1], b = data[i + 2];
     if (r > 250 && g > 250 && b > 250) continue;          // أبيض خالص — خلفية
+    if (data[i + 3] > 200) { sr += r; sg += g; sb += b; ink++; }
     sum += (r * 0.2126 + g * 0.7152 + b * 0.0722) / 255;
     // الألوان تُعدّ من الحبر المصمت وحده: حواف التنعيم تتدرّج نحو الشفافية
     // فتُنتج عشرات الظلال، وعدّها كان يصنّف كل شعار «ملوّنًا» فلا يُقلَب.
@@ -270,7 +271,10 @@ export function inkStats(img) {
     n++;
   }
   if (!n) return null;
-  return { luma: sum / n, mono: hues.size <= 24 };
+  // لون الحبر الغالب: به تُرسم الخطوط في وضع «احتفظ بلون الشعار»، فلا تقع
+  // قفزة لونية بين الرسم والصورة — كانت الخطوط ذهبية ثم تنقلب الصورة بيضاء.
+  const rgb = ink ? `rgb(${Math.round(sr / ink)}, ${Math.round(sg / ink)}, ${Math.round(sb / ink)})` : null;
+  return { luma: sum / n, mono: hues.size <= 24, rgb };
 }
 
 /* ── ٦) انتظار جهوز الصورة مع تمكين CORS ──

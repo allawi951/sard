@@ -157,18 +157,19 @@ async function drawLogo(img) {
   const svg = traceLogo(probe);
   if (!svg) return false;
 
-  /* شعار أحاديّ اللون حبرُه قريب من إضاءة الخلفية يختفي تمامًا بعد ذوبان
-     الكفاف فيه. نقلبه عندئذٍ فيصير فاتحًا على الداكن (أو العكس). الشعارات
-     الملوّنة لا تُقلَب — القلب يُفسد ألوانها. */
+  /* اللون واحدٌ من أول خطّ إلى آخر إطار — لا قفزة.
+     كانت الخطوط تُرسم بلون الثيم ثم تنقلب الصورة بيضاء، وهو أثرٌ رديء.
+
+     • «لوّنه بما يناسب الخلفية» (tint): يُرسم الكفاف بلون الواجهة **ويبقى
+       كما رُسِم** — لا صورة تحلّ محلّه ولا ملء يُضاف. جرّبنا ملء الكفاف
+       بقاعدتَي evenodd و nonzero فأنتجتا كتلةً صمّاء تطمس تفاصيل الشعار،
+       لأن كفافات الخطوط الرفيعة متداخلة لا متجاورة.
+     • «احتفظ بلون الشعار»: يُرسم الكفاف **بلون حبر الشعار نفسه** المقيس من
+       بكسلاته، ثم تذوب فيه الصورة بألوانها الحقيقية — فلا فرق يُرى. */
   const ink = inkStats(probe);
-  if (ink && ink.mono) {
-    const bg = getComputedStyle(document.querySelector('.sard-hero') || document.body).backgroundColor;
-    const m = bg.match(/\d+(\.\d+)?/g);
-    if (m && m.length >= 3) {
-      const bgLuma = (+m[0] * 0.2126 + +m[1] * 0.7152 + +m[2] * 0.0722) / 255;
-      if (Math.abs(ink.luma - bgLuma) < 0.34) img.classList.add('sard-hero__logo--flip');
-    }
-  }
+  const tint = img.dataset.sardTint === '1';
+
+  if (!tint && ink && ink.rgb) svg.style.color = ink.rgb;
 
   // غلاف نسبيّ يضع الخطوط فوق الصورة تمامًا بلا إزاحة تخطيط
   const wrap = document.createElement('span');
@@ -186,16 +187,23 @@ async function drawLogo(img) {
 
   // الأطول أولًا (مرتّبة أصلًا) فيبدأ الرسم بالهيكل ثم التفاصيل.
   // المدّة والتدرّج مضبوطان ليكتمل الرسم مع رسم علامة سرد فوقه (~١٫٦ث).
-  await gsap.timeline()
-    .to(strokes, {
-      strokeDashoffset: 0,
-      duration: 1.15,
-      ease: 'power1.inOut',
-      stagger: { each: Math.min(0.05, 0.45 / strokes.length), from: 'start' },
-    })
-    .to(img, { opacity: 1, duration: 0.75, ease: 'power2.out' }, '-=0.35')
-    .to(svg, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '<')
-    .then();
+  const tl = gsap.timeline().to(strokes, {
+    strokeDashoffset: 0,
+    duration: 1.15,
+    ease: 'power1.inOut',
+    stagger: { each: Math.min(0.05, 0.45 / strokes.length), from: 'start' },
+  });
+
+  if (tint) {
+    // ما رُسِم يبقى: الكفاف بلون الواجهة، والصورة لا تظهر إطلاقًا
+    await tl.then();
+    img.dataset.sardHidden = '1';               // تُستثنى من شبكة الأمان
+    return true;
+  }
+
+  tl.to(img, { opacity: 1, duration: 0.75, ease: 'power2.out' }, '-=0.35')
+    .to(svg, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '<');
+  await tl.then();
 
   svg.remove();
   return true;
@@ -587,6 +595,8 @@ function sardSafetyNet() {
   const unhide = () => {
     document.querySelectorAll(SECTIONS).forEach((sec) => {
       sec.querySelectorAll('*').forEach((el) => {
+        // الشعار في وضع التلوين مخفيٌّ عمدًا — كفافه الممتلئ هو ما يُرى
+        if (el.dataset && el.dataset.sardHidden === '1') return;
         const s = el.style;
         if (s && s.opacity !== '' && parseFloat(s.opacity) < 0.05) {
           s.opacity = '';

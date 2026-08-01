@@ -463,6 +463,16 @@
                     }
                 },
                 {
+                    "id": "logo_tint",
+                    "type": "boolean",
+                    "format": "switch",
+                    "icon": "sicon-brush",
+                    "label": "لوّن الشعار بما يناسب الخلفية",
+                    "description": "مُفعَّلًا: يُرسم شعارك بلون الواجهة ويبقى به — مناسب للشعارات الداكنة التي تختفي على خلفية داكنة. مُطفأً: يُرسم بلون شعارك الأصلي ويحتفظ بألوانه.",
+                    "value": true,
+                    "required": false
+                },
+                {
                     "id": "wordmark",
                     "type": "string",
                     "format": "text",

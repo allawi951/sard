@@ -154,6 +154,11 @@ async function drawLogo(img) {
   const probe = await loadForTrace(img);
   if (!probe) return false;
 
+  /* التتبّع عملية متزامنة على المعالج (عشرات الأجزاء من الثانية). تشغيلها
+     داخل مسار التصيير الحرج يؤخّر أول رسم ويهبط بالأداء — قِسناه: الرئيسية
+     على سطح المكتب نزلت من ٥٥ إلى ٣٨. نُفسح إطارين ليقع أول رسم أولًا. */
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
   const svg = traceLogo(probe);
   if (!svg) return false;
 
@@ -189,9 +194,9 @@ async function drawLogo(img) {
   // المدّة والتدرّج مضبوطان ليكتمل الرسم مع رسم علامة سرد فوقه (~١٫٦ث).
   const tl = gsap.timeline().to(strokes, {
     strokeDashoffset: 0,
-    duration: 1.15,
+    duration: 0.85,
     ease: 'power1.inOut',
-    stagger: { each: Math.min(0.05, 0.45 / strokes.length), from: 'start' },
+    stagger: { each: Math.min(0.04, 0.3 / strokes.length), from: 'start' },
   });
 
   if (tint) {
@@ -201,8 +206,8 @@ async function drawLogo(img) {
     return true;
   }
 
-  tl.to(img, { opacity: 1, duration: 0.75, ease: 'power2.out' }, '-=0.35')
-    .to(svg, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '<');
+  tl.to(img, { opacity: 1, duration: 0.55, ease: 'power2.out' }, '-=0.3')
+    .to(svg, { opacity: 0, duration: 0.45, ease: 'power2.out' }, '<');
   await tl.then();
 
   svg.remove();
@@ -294,7 +299,7 @@ function start() {
         });
         gsap.set(solids, { opacity: 0, y: 26 });
 
-        tl.to(paths, { strokeDashoffset: 0, duration: 1.5, stagger: .045, ease: 'power1.inOut' }, .25)
+        tl.to(paths, { strokeDashoffset: 0, duration: 1.05, stagger: .03, ease: 'power1.inOut' }, .1)
           // الجواهر المصمتة تظهر بعد اكتمال رسم الزخرفة
           .to(solids, { opacity: 1, y: 0, duration: 1.1, stagger: .08, ease: 'power3.out' }, '-=0.5');
       }
@@ -311,12 +316,12 @@ function start() {
       } else {
         // العلامة وشعار المتجر يُرسمان **في اللحظة نفسها** لا تتابعًا:
         // نبدأ من زمن الزخرفة نفسه (0.25) وبمدّة مماثلة فينتهيان معًا.
+        /* بلا تأخير: الشعار هو عنصر LCP، وكل جزء من الثانية نؤخّره فيه
+           يُحسب علينا في الأداء — وعتبة سطح المكتب أضيق من الجوال. */
         gsap.set(imgLogo, { opacity: 0 });
-        gsap.delayedCall(0.25, () => {
-          drawLogo(imgLogo)
-            .then((drawn) => { if (!drawn) wipe(0); })
-            .catch(() => wipe(0));
-        });
+        drawLogo(imgLogo)
+          .then((drawn) => { if (!drawn) wipe(0); })
+          .catch(() => wipe(0));
       }
     }
 

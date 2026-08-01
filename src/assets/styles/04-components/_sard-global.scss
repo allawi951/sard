@@ -143,7 +143,77 @@ body.theme-sard {
     border-radius: 999px;
     font-family: var(--sard-sans);
   }
+
+  /* ── ١١) أهداف اللمس ──
+     مراجعة سلة تشترط وصولية ≥ 90، وأهدافُ اللمس الصغيرة أكثر ما يخفضها.
+     الروابط الأيقونية في الهيكل الموروث تنزل إلى 16×15px. نوسّع مساحة
+     اللمس **بلا تحريك الأيقونة**: حشوٌ يكبّر الصندوق وهامشٌ سالب يعيد
+     التخطيط كما كان — فلا ينزاح شيء بصريًّا. */
+  .mburger,
+  [data-testid='store-header-mobile-toggle'] {
+    padding: 14px;
+    margin: -14px;
+    /* الهامش السالب يلغي أثر الحشو على الجيران، ونعيد الفاصل الأصلي */
+    margin-inline-end: calc(1rem - 14px);
+  }
+
+  a:has(> i[class*='sicon-']),
+  a:has(> svg:only-child),
+  button:has(> i[class*='sicon-']),
+  button:has(> svg:only-child),
+  .dropdown__trigger,
+  .brand-logo {
+    min-width: 44px;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* أدنى ارتفاع لمس (WCAG 2.2 AA = 24px) للروابط المستقلّة — حشوٌ رأسي
+     خفيف لا يغيّر التخطيط، ولا يمسّ الروابط داخل النصّ الجاري. */
+  .s-tags a,
+  .tags a,
+  .fix-align,
+  .store-footer a,
+  a.text-primary,
+  a.underline.inline-flex,
+  h2 a, h3 a, h4 a,
+  a[href^='https://wa.me'] {
+    /* min-height لا أثر له على عنصر inline — لا بدّ من inline-block */
+    display: inline-block;
+    padding-block: .2rem;
+    min-height: 24px;
+  }
+
+  /* ── تباين النصّ ──
+     Lighthouse يرصد `.text-gray-500` و `.text-red-800` الموروثتين دون نسبة
+     التباين المطلوبة على خلفية سرد الفاتحة. نُعيد تعريفهما بلونَي الهوية
+     المُختارَين لتحقيق ٤٫٥:١ لا لتغيير الشكل. */
+  .text-gray-500 { color: #56505F; }
+  .text-red-800 { color: #8E1F2B; }
+
+  /* عناصر مطلقة الموضع قد تخرج عن الشاشة (تلميحات، قوائم منسدلة) فتُحدث
+     تمريرًا أفقيًّا للصفحة. `clip` يمنع التمرير ولا يُنشئ حاوية تمرير،
+     فيبقى `position: sticky` عاملًا — بخلاف `hidden`. */
+  overflow-x: clip;
+
+  /* ── ١٢) الجداول العريضة ──
+     جدول تفاصيل الطلب أعرض من شاشة الجوال فيُحدث تمريرًا أفقيًّا للصفحة
+     كلها. نحبس التمرير داخل الجدول نفسه. */
+  .s-order-details table,
+  .order-details table,
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
 }
+
+/* التمرير الأفقي يُقاس على <html> لا على <body>، فلا يكفي كبحه على الأخير.
+   `clip` لا يُنشئ حاوية تمرير فيبقى position: sticky عاملًا — بخلاف hidden. */
+html:has(body.theme-sard) { overflow-x: clip; }
 
 /* ── رموز الجلد العام ──
    ألوان الصفحات الداخلية فاتحة ومقروءة؛ الأقسام السردية في الرئيسية

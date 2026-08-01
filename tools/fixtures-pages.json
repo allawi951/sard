@@ -1,0 +1,124 @@
+{
+  "_comment": "بيانات وهمية للصفحات الداخلية — الغرض فحص الهوية والاستجابة والاتجاه، لا صحة البيانات. مكوّنات <salla-*> تبقى فارغة محليًّا.",
+
+  "product": {
+    "id": 101,
+    "name": "عطر ليلة البندقية",
+    "subtitle": "شرقي خشبي · 100 مل",
+    "url": "#",
+    "description": "<p>مزيج من العنبر والعود على قاعدة من خشب الصندل، صُنع ليروي حكاية مساء على الماء.</p>",
+    "type": "product",
+    "status": "sale",
+    "sku": "SARD-101",
+    "price": 349,
+    "sale_price": 249,
+    "regular_price": 349,
+    "starting_price": null,
+    "base_currency_price": 249,
+    "is_on_sale": true,
+    "promotion_title": "تخفيض",
+    "quantity": 12,
+    "max_quantity": 5,
+    "can_quick_buy": true,
+    "add_to_cart_label": "أضِف إلى الحقيبة",
+    "is_taxable": true,
+    "rating": { "count": 24, "stars": 5 },
+    "image": { "url": "assets/images/preview/desktop-collection.jpg", "alt": "عطر ليلة البندقية" },
+    "images": [
+      { "id": 1, "url": "assets/images/preview/desktop-collection.jpg", "alt": "واجهة", "type": "image" },
+      { "id": 2, "url": "assets/images/preview/desktop-story.jpg", "alt": "تفصيل", "type": "image" }
+    ],
+    "category": { "name": "عطور شرقية", "url": "#" },
+    "brand": { "id": 3, "name": "سرد", "url": "#", "logo": "" },
+    "tags": [{ "name": "عود", "url": "#" }, { "name": "عنبر", "url": "#" }],
+    "options": [],
+    "donation": null,
+    "notify_availability": null
+  },
+
+  "products": [
+    { "id": 101, "name": "عطر ليلة البندقية", "url": "#", "price": 349, "sale_price": 249, "regular_price": 349, "is_on_sale": true, "status": "sale", "type": "product", "base_currency_price": 249, "add_to_cart_label": "أضِف", "image": { "url": "assets/images/preview/desktop-collection.jpg", "alt": "" } },
+    { "id": 102, "name": "ماء الورد المعتّق", "url": "#", "price": 189, "is_on_sale": false, "status": "sale", "type": "product", "base_currency_price": 189, "add_to_cart_label": "أضِف", "image": { "url": "assets/images/preview/desktop-story.jpg", "alt": "" } },
+    { "id": 103, "name": "عنبر الليل", "url": "#", "price": 420, "is_on_sale": false, "status": "sale", "type": "product", "base_currency_price": 420, "add_to_cart_label": "أضِف", "image": { "url": "assets/images/preview/desktop-layers.jpg", "alt": "" } },
+    { "id": 104, "name": "خشب الصندل", "url": "#", "price": 275, "is_on_sale": false, "status": "sale", "type": "product", "base_currency_price": 275, "add_to_cart_label": "أضِف", "image": { "url": "assets/images/preview/desktop-visit.jpg", "alt": "" } }
+  ],
+
+  "cart": {
+    "id": 9001,
+    "items": [
+      { "id": 1, "product_id": 101, "name": "عطر ليلة البندقية", "url": "#", "quantity": 1, "price": 249, "product_price": 349, "original_price": 349, "total": 249, "is_on_sale": true, "has_discount": true, "image": "assets/images/preview/desktop-collection.jpg", "options": [], "detailed_offers": [] },
+      { "id": 2, "product_id": 102, "name": "ماء الورد المعتّق", "url": "#", "quantity": 2, "price": 189, "product_price": 189, "original_price": 189, "total": 378, "is_on_sale": false, "has_discount": false, "image": "assets/images/preview/desktop-story.jpg", "options": [], "detailed_offers": [] }
+    ],
+    "count": 3,
+    "sub_total": 627,
+    "total": 627,
+    "free_shipping_bar": null
+  },
+
+  "order": {
+    "id": 5501,
+    "reference_id": "SARD-5501",
+    "date": "2026-08-01",
+    "status": { "name": "قيد التجهيز", "slug": "processing" },
+    "total": 627,
+    "sub_total": 627,
+    "items": [
+      { "id": 1, "name": "عطر ليلة البندقية", "quantity": 1, "price": 249, "total": 249, "image": "assets/images/preview/desktop-collection.jpg", "options": [] }
+    ],
+    "shipping": { "number": "TRK-77120" },
+    "payment_method": "بطاقة مدى"
+  },
+
+  "orders": [
+    { "id": 5501, "reference_id": "SARD-5501", "date": "2026-08-01", "total": 627, "status": { "name": "قيد التجهيز" }, "url": "#" },
+    { "id": 5488, "reference_id": "SARD-5488", "date": "2026-07-24", "total": 189, "status": { "name": "مكتمل" }, "url": "#" }
+  ],
+
+  "article": {
+    "id": 12,
+    "title": "كيف يُصنع العطر الشرقي",
+    "url": "#",
+    "content": "<p>ثلاث طبقات تُبنى واحدة فوق الأخرى: المقدّمة، القلب، القاعدة.</p>",
+    "image": { "url": "assets/images/preview/desktop-story.jpg", "alt": "" },
+    "date": "2026-07-20",
+    "category": { "name": "المكوّنات", "url": "#" }
+  },
+
+  "articles": [
+    { "id": 12, "title": "كيف يُصنع العطر الشرقي", "url": "#", "image": { "url": "assets/images/preview/desktop-story.jpg", "alt": "" }, "date": "2026-07-20" },
+    { "id": 13, "title": "دليل اختيار عطرك", "url": "#", "image": { "url": "assets/images/preview/desktop-layers.jpg", "alt": "" }, "date": "2026-07-12" }
+  ],
+
+  "brands": [
+    { "id": 3, "name": "سرد", "url": "#", "logo": "assets/images/preview/desktop-hero.jpg" },
+    { "id": 4, "name": "دار العطور", "url": "#", "logo": "assets/images/preview/desktop-visit.jpg" }
+  ],
+
+  "brand": { "id": 3, "name": "سرد", "url": "#", "logo": "assets/images/preview/desktop-hero.jpg", "description": "علامة تروي." },
+
+  "categories": [
+    { "id": 1, "name": "عطور شرقية", "url": "#", "image": "", "icon": "sicon-star" },
+    { "id": 2, "name": "عطور غربية", "url": "#", "image": "", "icon": "sicon-star" }
+  ],
+
+  "testimonials": [],
+  "comments": [],
+
+  "PAGES": {
+    "index":                     { "slug": "index",              "title": "الرئيسية" },
+    "product/single":            { "slug": "product.single",     "title": "عطر ليلة البندقية" },
+    "product/index":             { "slug": "product.index",      "title": "كل العطور" },
+    "cart":                      { "slug": "cart",               "title": "الحقيبة" },
+    "thank-you":                 { "slug": "thank-you",          "title": "شكرًا لك" },
+    "customer/profile":          { "slug": "customer.profile",   "title": "ملفي" },
+    "customer/wishlist":         { "slug": "customer.wishlist",  "title": "أمنياتي" },
+    "customer/notifications":    { "slug": "customer.notifications", "title": "الإشعارات" },
+    "customer/orders/index":     { "slug": "customer.orders",    "title": "طلباتي" },
+    "customer/orders/single":    { "slug": "customer.order",     "title": "طلب SARD-5501" },
+    "page-single":               { "slug": "page.single",        "title": "من نحن" },
+    "blog/index":                { "slug": "blog.index",         "title": "المدونة" },
+    "blog/single":               { "slug": "blog.single",        "title": "كيف يُصنع العطر الشرقي" },
+    "brands/index":              { "slug": "brands.index",       "title": "الماركات" },
+    "brands/single":             { "slug": "brands.single",      "title": "سرد" }
+  }
+}

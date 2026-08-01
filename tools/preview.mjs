@@ -78,6 +78,9 @@ for (const f of files) {
 /* ── ٣) فلاتر ودوال سلة ── */
 Twig.extendFilter('asset', (v) => `./assets/${v}`);
 Twig.extendFilter('cdn', (v) => v);
+// فلترا سلة يستعملهما هيكل الثيم في صفحات المدونة والطلبات
+Twig.extendFilter('number', (v) => String(v ?? ''));
+Twig.extendFilter('is_placeholder', () => false);
 Twig.extendFilter('money', (v) => `${Number(v).toLocaleString('ar-EG')} ر.س`);
 Twig.extendFilter('trans', (v) => {
   const dict = JSON.parse(readFileSync(join(ROOT, 'src/locales/ar.json'), 'utf8'));
@@ -123,26 +126,82 @@ const data = {
   ...Object.fromEntries(fixtures.home.map((c, i) => [`loop_${c.path.replace(/\W/g, '_')}`, i])),
 };
 
-/* ── ٥) التصيير ── */
-Twig.cache(false);
-const html = Twig.twig({
-  data: readFileSync(join(WORK, 'pages/index.twig'), 'utf8'),
-  path: join(WORK, 'pages/index.twig'),
-  async: false,
-  allowInlineIncludes: true,
-  namespaces: {},
-}).render(data);
-
-/* ── ٦) ننسخ الأصول المبنية بجانب الصفحة ── */
+/* ── ٥) الأصول المبنية بجانب الصفحات ── */
 if (!existsSync(join(ROOT, 'public/app.css'))) {
   console.error('✗ لا توجد مخرجات بناء. شغّل أولًا:  npm run production');
   process.exit(1);
 }
 cpSync(join(ROOT, 'public'), join(OUT, 'assets'), { recursive: true });
 
-// أيقونات سلة تُخدَم من CDN المنصة فقط — نحذف الرابط محليًا لئلا يلوّث سجل الأخطاء
-writeFileSync(join(OUT, 'index.html'), html.replace(/<link[^>]*sallaicons[^>]*>\s*/g, ''));
+/* ── ٦) التصيير — كل الصفحات لا الرئيسية وحدها ──
+   خطة التسليم تطلب التحقّق من هوية سرد والاستجابة والاتجاه في **كل صفحة**،
+   وذلك متعذّر ما دامت المعاينة تُصيّر الرئيسية فقط. بيانات كل صفحة في
+   `tools/fixtures-pages.json`، وغرضها الهوية والتخطيط لا صحّة البيانات. */
+const pageFx = JSON.parse(readFileSync(join(ROOT, 'tools/fixtures-pages.json'), 'utf8'));
+const dir = (process.env.SARD_DIR === 'ltr') ? 'ltr' : 'rtl';
 
-console.log(`✓ ${relative(ROOT, join(OUT, 'index.html'))}`);
-console.log('  افتحه في المتصفح لمعاينة التصميم والحركة.');
+const only = process.argv[2];                       // مثال: node tools/preview.mjs cart
+const targets = Object.entries(pageFx.PAGES)
+  .filter(([name]) => !only || name === only)
+  .filter(([name]) => existsSync(join(WORK, `pages/${name}.twig`)));
+
+Twig.cache(false);
+let ok = 0; const failed = [];
+
+for (const [name, page] of targets) {
+  const file = join(WORK, `pages/${name}.twig`);
+  const pageData = {
+    ...data,
+    ...pageFx,
+    page: { ...page, id: 1 },
+    language: { code: dir === 'rtl' ? 'ar' : 'en' },
+    theme: { ...data.theme, is_rtl: dir === 'rtl' },
+  };
+
+  let html;
+  try {
+    html = Twig.twig({ data: readFileSync(file, 'utf8'), path: file,
+      async: false, allowInlineIncludes: true, namespaces: {} }).render(pageData);
+  } catch (e) {
+    failed.push([name, String(e.message || e).slice(0, 120)]);
+    continue;
+  }
+
+  // أيقونات سلة تُخدَم من CDN المنصة فقط — نحذف الرابط محليًا لئلا يلوّث سجل الأخطاء
+  html = html.replace(/<link[^>]*sallaicons[^>]*>\s*/g, '');
+  /* `salla` كائن المنصة، غير موجود محليًّا فيرمي خطأً يُغرِق سجل الأخطاء
+     ويحجب أخطاءنا الحقيقية. نضع بديلًا صامتًا — للمعاينة وحدها. */
+  /* العنوان تحقنه سلة عبر {% hook head %}، والخطّافات تُحذف محليًّا — فتخرج
+     الصفحة بلا <title> ويرصدها Lighthouse خطأَ وصولية غير موجود فعلًا.
+     نحقن العنوان هنا ليعكس القياسُ المحليّ الواقعَ لا نقص المحاكي. */
+  if (!/<title>/i.test(html)) {
+    html = html.replace('</head>',
+      `<title>${page.title} · ${(fixtures.store && fixtures.store.name) || 'سرد'}</title></head>`);
+  }
+  html = html.replace('</head>', `<script>
+  window.salla = new Proxy(function () {}, {
+    get: (t, k) => (k === 'then' ? undefined : window.salla),
+    apply: () => Promise.resolve(),          // salla.onReady().then(...) شائع في الهيكل
+    construct: () => window.salla,
+  });
+</script></head>`);
+  /* الأصول نسبية: الصفحات المتداخلة تحتاج ../ بعدد مستوياتها.
+     فلتر asset يُخرِج «./assets/…» فلا بدّ من مطابقة النقطة أيضًا —
+     بدونها لا تُحمَّل app.css في الصفحات المتداخلة أصلًا، فيبدو الثيم
+     بلا هوية والخلل في المعاينة لا في الثيم. */
+  const depth = name.split('/').length - 1;
+  if (depth) html = html.replace(/(["'(])\.?\/?assets\//g, `$1${'../'.repeat(depth)}assets/`);
+
+  const out = join(OUT, `${name}.html`);
+  mkdirSync(dirname(out), { recursive: true });
+  writeFileSync(out, html);
+  ok++;
+}
+
+console.log(`✓ ${ok} صفحة في ${relative(ROOT, OUT)}/  (الاتجاه: ${dir})`);
+if (failed.length) {
+  console.log('✗ تعذّر تصيير:');
+  for (const [n, m] of failed) console.log(`    · ${n} — ${m}`);
+}
 console.log('  ⚠ مكوّنات <salla-*> تظهر فارغة هنا — سكربتاتها من المنصة فقط.');
+process.exitCode = failed.length ? 1 : 0;

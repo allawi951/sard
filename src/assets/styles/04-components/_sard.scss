@@ -207,10 +207,10 @@ html[dir='rtl'] .sard-progress { transform-origin: right; }
 .sard-hero__in { padding-block: 3rem 5rem; }
 .sard-hero__mark { width: min(360px, 62vw); margin-inline: auto; color: var(--sard-cream); }
 .sard-hero__mark path { stroke-width: 2.4; }
-/* شعار المتجر الحقيقي داخل الزخرفة — الزخرفة تؤطّره لا تحلّ محلّه */
+/* شعار المتجر أسفل الزخرفة — الاثنان يُرسمان تتابعًا: الزخرفة ثم الشعار */
 .sard-hero__logo {
-  max-width: min(280px, 48vw); max-height: 110px;
-  margin: -2.2rem auto 0; display: block; object-fit: contain;
+  max-width: min(300px, 52vw); max-height: 120px;
+  margin: 1.4rem auto 0; display: block; object-fit: contain;
 }
 /* الشعار حين يحلّ محل الزخرفة: أكبر وبلا إزاحة سالبة */
 .sard-hero__logo--solo {
@@ -224,7 +224,7 @@ html[dir='rtl'] .sard-progress { transform-origin: right; }
 .sard-hero__draw {
   position: relative; display: inline-block; line-height: 0;
   > img { display: block; }
-  > .sard-draw {
+  > .sard-trace {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
     overflow: visible; pointer-events: none;

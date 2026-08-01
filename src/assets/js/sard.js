@@ -252,50 +252,54 @@ function start() {
     const mark = $('#sardHeroMark');
     const imgLogo = $('#sardHeroLogo');
 
-    // القالب يعرض إمّا الزخرفة **أو** شعار التاجر، لا الاثنين. الصيغة السابقة
-    // كانت تبدأ بـ `if (!mark) return` فتموت الدالة كلّها متى رفع التاجر شعارًا
-    // — ولذلك لم تكن للشعار أي حركة أصلًا. الفرعان الآن مستقلّان.
+    // الزخرفة وشعار المتجر يجتمعان الآن: الزخرفة تُرسم أولًا، ثم يُرسم الشعار
+    // تحتها. (الصيغة الأقدم كانت تجعلهما متعارضين، ثم كانت تبدأ بـ
+    // `if (!mark) return` فتموت الدالة كلّها متى رفع التاجر شعارًا.)
+    const still = REDUCED || CFG.logoDraw === false;
     gsap.from('#sardHeroEyebrow', { opacity: 0, y: 14, duration: 1, ease: 'power2.out' });
+
+    const paths = mark ? $$('.sard-draw', mark) : [];
+    const solids = mark ? $$('.sard-jewel', mark) : [];
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+    if (mark) {
+      if (still) {
+        gsap.set([...paths, ...solids], { opacity: 1, y: 0, strokeDashoffset: 0 });
+      } else {
+        paths.forEach((p) => {
+          const len = p.getTotalLength();
+          gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
+        });
+        gsap.set(solids, { opacity: 0, y: 26 });
+
+        tl.to(paths, { strokeDashoffset: 0, duration: 1.5, stagger: .045, ease: 'power1.inOut' }, .25)
+          // الجواهر المصمتة تظهر بعد اكتمال رسم الزخرفة
+          .to(solids, { opacity: 1, y: 0, duration: 1.1, stagger: .08, ease: 'power3.out' }, '-=0.5');
+      }
+    }
 
     if (imgLogo) {
       const rtl = document.documentElement.dir === 'rtl';
-      const wipe = (delay = 0.35) => gsap.fromTo(imgLogo,
+      const wipe = (delay) => gsap.fromTo(imgLogo,
         { clipPath: rtl ? 'inset(0 0 0 100%)' : 'inset(0 100% 0 0)', opacity: 1 },
         { clipPath: 'inset(0 0 0 0)', duration: 1.3, ease: 'power2.inOut', delay });
 
-      if (REDUCED || CFG.logoDraw === false) { gsap.set(imgLogo, { opacity: 1 }); return; }
-
-      gsap.set(imgLogo, { opacity: 0 });
-      drawLogo(imgLogo)
-        .then((drawn) => { if (!drawn) wipe(0.1); })
-        .catch(() => wipe(0.1));
-      return;
+      if (still) {
+        gsap.set(imgLogo, { opacity: 1 });
+      } else {
+        // ينتظر الشعارُ اكتمالَ رسم الزخرفة فوقه، فيُقرأ الاثنان تتابعًا لا معًا
+        const after = mark ? 1.9 : 0.1;
+        gsap.set(imgLogo, { opacity: 0 });
+        gsap.delayedCall(after, () => {
+          drawLogo(imgLogo)
+            .then((drawn) => { if (!drawn) wipe(0); })
+            .catch(() => wipe(0));
+        });
+      }
     }
 
-    if (!mark) return;
-
-    const paths = $$('.sard-draw', mark);
-    const solids = $$('.sard-jewel', mark);
-
-    if (REDUCED || CFG.logoDraw === false) {
-      gsap.set([...paths, ...solids], { opacity: 1, y: 0, strokeDashoffset: 0 });
-      return;
-    }
-
-    paths.forEach((p) => {
-      const len = p.getTotalLength();
-      gsap.set(p, { strokeDasharray: len, strokeDashoffset: len });
-    });
-    gsap.set(solids, { opacity: 0, y: 26 });
-
-    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
-
-    tl.to(paths, { strokeDashoffset: 0, duration: 1.5, stagger: .045, ease: 'power1.inOut' }, .25)
-      // الجواهر المصمتة تظهر بعد اكتمال رسم الزخرفة
-      .to(solids, { opacity: 1, y: 0, duration: 1.1, stagger: .08, ease: 'power3.out' }, '-=0.5');
-
-    // اسم المتجر يظهر تحت الزخرفة (فرع «لا شعار» حصرًا)
-    {
+    // اسم المتجر يظهر تحت الزخرفة (حين لا شعار للمتجر)
+    if (!imgLogo && !still) {
       // اسم المتجر: نقسّمه حروفًا **فقط** إن كان لاتينيًّا.
       // العربية نصّ متّصل — تقسيمه إلى <span> يكسر وصل الحروف ويعكس ترتيبها.
       const word = $('#sardHeroWord');

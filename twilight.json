@@ -437,6 +437,16 @@
                     "maxLength": 60
                 },
                 {
+                    "id": "ornament",
+                    "type": "boolean",
+                    "format": "switch",
+                    "icon": "sicon-brush",
+                    "label": "زخرفة سرد المرسومة",
+                    "description": "خطوط الزخرفة تُرسم خطًّا خطًّا عند فتح الصفحة. أطفئه لعرض شعار متجرك وحده.",
+                    "value": true,
+                    "required": false
+                },
+                {
                     "type": "string",
                     "format": "image",
                     "icon": "sicon-image",

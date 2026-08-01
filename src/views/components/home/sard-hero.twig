@@ -29,24 +29,29 @@
     {% endif %}
 
     {#
-      مساران متعارضان لا يجتمعان — الشعار **يستبدل** الزخرفة ولا يتراكب معها:
+      الطبقتان تجتمعان الآن ولا تتعارضان:
 
-      ١) للمتجر شعار (رفعه التاجر هنا أو شعار المتجر) → يُعرض وحده بكشف متدرّج.
-         ملاحظة: سلة تحوّل المرفوع إلى webp ولا تقبل SVG، فالرسم الخطّي على
-         شعار التاجر غير ممكن — القناع المتدرّج هو البديل الصحيح.
-      ٢) لا شعار → الزخرفة تُرسم خطًّا خطًّا، وتحتها اسم المتجر.
+      ١) زخرفة سرد تُرسم خطًّا خطًّا — خيار للتاجر، **مفعَّل افتراضيًّا**.
+      ٢) شعار المتجر أسفلها، يُرسم هو أيضًا: نستخرج حدوده من بكسلاته
+         (sard-trace.js) فيُرسم كفافه ثم يذوب في الصورة الأصلية. سلة تحوّل
+         المرفوع إلى webp ولا تقبل SVG، لكن ذلك لم يعد مانعًا.
+      ٣) لا شعار → اسم المتجر نصًّا تحت الزخرفة كما كان.
     #}
+    {% set show_ornament = component.ornament is same as(false) ? false : true %}
     {% set hero_logo = component.logo|default('') ?: store.logo %}
 
-    {% if hero_logo %}
-      <img class="sard-hero__logo sard-hero__logo--solo" id="sardHeroLogo"
-           src="{{ hero_logo|cdn(560) }}"
-           alt="{{ store.name }}" width="360" height="150" fetchpriority="high">
-    {% else %}
+    {% if show_ornament %}
       <div class="sard-hero__mark" id="sardHeroMark">
         {% include 'components.parts.ornament' with { draw: true } only %}
       </div>
+    {% endif %}
 
+    {% if hero_logo %}
+      <img class="sard-hero__logo{{ show_ornament ? '' : ' sard-hero__logo--solo' }}"
+           id="sardHeroLogo"
+           src="{{ hero_logo|cdn(560) }}"
+           alt="{{ store.name }}" width="360" height="150" fetchpriority="high">
+    {% else %}
       {# نصٌّ واحد لا حروف مفرّقة: تقسيم العربية هنا يكسر وصل الحروف ويعكس ترتيبها.
          التقسيم يتم في sard.js وللنصوص اللاتينية وحدها. #}
       <p class="sard-hero__word" id="sardHeroWord">{{ wordmark }}</p>

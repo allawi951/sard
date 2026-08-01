@@ -179,7 +179,7 @@ export function traceLogo(img) {
   svg.setAttribute('viewBox', `0 0 ${px.w} ${px.h}`);
   svg.setAttribute('fill', 'none');
   svg.setAttribute('aria-hidden', 'true');
-  svg.classList.add('sard-draw');
+  svg.classList.add('sard-trace');
 
   for (const p of paths) {
     const d = p.map(([x, y], i) => `${i ? 'L' : 'M'}${x} ${y}`).join('') + 'Z';

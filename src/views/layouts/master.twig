@@ -122,12 +122,13 @@
         --color-primary-light: {{ theme.color.lighter(0.22, sard_pal.gold) }};
         --color-primary-reverse: {{ sard_pal.ink }};
 
-        --color-text: #221F2E;
-        --main-text-color: #221F2E;
-        --main-text-color-dark: {{ sard_pal.ink }};
-        --color-grey: #56505F;
-        --color-light-grey: #8B8595;
-        --bg-gray: #F4EFE9;
+        /* الثيم داكن، فرموز النصّ والخلفيات تتبعه — لا قيم فاتحة على داكن */
+        --color-text: #F8F0E9;
+        --main-text-color: #F8F0E9;
+        --main-text-color-dark: #F8F0E9;
+        --color-grey: rgba(248, 240, 233, .68);
+        --color-light-grey: rgba(248, 240, 233, .46);
+        --bg-gray: {{ theme.color.lighter(0.05, sard_pal.ink) }};
 
         --font-main: 'Tajawal', 'Jost', {{ theme.font.name ? "'" ~ theme.font.name ~ "'," : '' }} system-ui, sans-serif;
         --font-sm: .875rem;

@@ -190,8 +190,21 @@ body.theme-sard {
      Lighthouse يرصد `.text-gray-500` و `.text-red-800` الموروثتين دون نسبة
      التباين المطلوبة على خلفية سرد الفاتحة. نُعيد تعريفهما بلونَي الهوية
      المُختارَين لتحقيق ٤٫٥:١ لا لتغيير الشكل. */
-  .text-gray-500 { color: #56505F; }
-  .text-red-800 { color: #8E1F2B; }
+  .text-gray-500, .text-gray-400, .text-gray-600 { color: rgba(248, 240, 233, .68); }
+  .text-gray-700, .text-gray-800, .text-gray-900, .text-black { color: var(--sard-cream); }
+  .text-red-800, .text-red-600 { color: #E8A0A8; }
+
+  /* ── الأسطح البيضاء الموروثة ──
+     الهيكل يفترض خلفية فاتحة فيضع bg-white على البطاقات واللوحات. على جلد
+     سرد الداكن تصير مربّعاتٍ بيضاء صارخة. نُبدّلها بلوحة شفّافة رفيعة. */
+  .bg-white, .bg-gray-50, .bg-gray-100, .bg-light,
+  .card, .s-card, .box, .panel {
+    background-color: var(--sard-panel);
+    border-color: var(--sard-hairline);
+    color: inherit;
+  }
+  .border, .border-t, .border-b, .border-s, .border-e,
+  .border-gray-100, .border-gray-200, .border-gray-300 { border-color: var(--sard-hairline); }
 
   /* عناصر مطلقة الموضع قد تخرج عن الشاشة (تلميحات، قوائم منسدلة) فتُحدث
      تمريرًا أفقيًّا للصفحة. `clip` يمنع التمرير ولا يُنشئ حاوية تمرير،
@@ -216,11 +229,16 @@ body.theme-sard {
 html:has(body.theme-sard) { overflow-x: clip; }
 
 /* ── رموز الجلد العام ──
-   ألوان الصفحات الداخلية فاتحة ومقروءة؛ الأقسام السردية في الرئيسية
-   تحمل جلدها الداكن بنفسها ولا تتأثر بهذه القيم. */
+   الثيم داكن، والصفحات الداخلية تتبعه: كانت فاتحة فبدت كثيمٍ آخر بجانب
+   الواجهة الكحلية. البشرة الوردية (blush) تبقى لهجةً في أقسام بعينها
+   (الحكاية، آراء العملاء) لا خلفيةً عامة.
+
+   التباين: كريمي #F8F0E9 على كحلي #14132F ≈ 15:1، وذهبي #C9A15A ≈ 7:1 —
+   كلاهما فوق AA بمراحل. */
 :root {
-  --sard-page-bg: #FBF8F5;
-  --sard-page-fg: #221F2E;
-  --sard-hairline: rgba(34, 31, 46, .14);
-  --sard-accent-ink: #8A6224;   /* ذهبي داكن يحقّق تباين النص المطلوب */
+  --sard-page-bg: var(--sard-ink);
+  --sard-page-fg: var(--sard-cream);
+  --sard-hairline: rgba(248, 240, 233, .15);
+  --sard-accent-ink: var(--sard-gold);
+  --sard-panel: color-mix(in srgb, var(--sard-cream) 5%, transparent);
 }

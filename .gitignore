@@ -38,3 +38,6 @@ src/assets/preview/
 tools/fixtures.json.bak
 
 .preview/
+shots/
+brand/concepts/sheet.png
+brand/concepts/sheet.html

@@ -34,7 +34,7 @@
       {% if store.contacts.whatsapp %}
         <a href="https://wa.me/{{ store.contacts.whatsapp|replace({'+': '', ' ': ''}) }}"
            class="sard-btn" target="_blank" rel="noopener" data-magnetic>
-          <i class="sicon-whatsapp"></i> {{ 'common.elements.whatsapp'|trans }}
+          <i class="sicon-whatsapp"></i> {{ trans('common.elements.whatsapp') }}
         </a>
       {% endif %}
     </div>

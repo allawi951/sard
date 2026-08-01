@@ -12,8 +12,8 @@
   بحقول فارغة ولم يكن للمتجر سجل مبيعات، صُيِّر القسم فارغًا تمامًا —
   لا عنوان ولا منتجات، مجرد مساحة بيضاء. هنا لكل شيء بديل مضمون.
 #}
-{% set coll_title = component.title|default('') ?: 'pages.products.collection_title'|trans %}
-{% set coll_hint  = component.hint|default('')  ?: 'pages.products.collection_hint'|trans %}
+{% set coll_title = component.title|default('') ?: trans('pages.products.collection_title') %}
+{% set coll_hint  = component.hint|default('')  ?: trans('pages.products.collection_hint') %}
 {% set coll_count = component.products|default([])|length %}
 
 <section class="sard-coll"
@@ -39,7 +39,7 @@
               <img src="{{ product.image.url|cdn(800) }}" alt="{{ product.image.alt|default(product.name) }}"
                    loading="lazy" width="800" height="1000">
               {% if product.is_on_sale %}
-                <span class="sard-card__badge">{{ product.promotion_title|default('pages.products.sale'|trans) }}</span>
+                <span class="sard-card__badge">{{ product.promotion_title|default(trans('pages.products.sale')) }}</span>
               {% endif %}
             </a>
 
@@ -57,7 +57,7 @@
                 {{ product.add_to_cart_label }}
               </salla-add-product-button>
 
-              <a href="{{ product.url }}" class="sard-btn sard-btn--ghost">{{ 'pages.products.details'|trans }}</a>
+              <a href="{{ product.url }}" class="sard-btn sard-btn--ghost">{{ trans('pages.products.details') }}</a>
             </div>
 
             <div class="sard-card__body">

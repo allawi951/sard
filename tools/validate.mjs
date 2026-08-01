@@ -102,6 +102,53 @@ for (const file of twigs) {
 }
 pass('كل الـ extends/include/component تشير إلى ملفات موجودة');
 
+/* ── ٤-أ) مفردات فلاتر Twig ────────────────────────────────────────────────
+   محرّك تويلايت لا يقبل إلا فلاتر Twig القياسية + فلاتر سلة الخاصة. الفلتر
+   المجهول ليس خطأً صامتًا: إنه خطأ **وقت الترجمة** يُفشِل القالب كلّه، فيصيّر
+   محرّك سلة المكوّن **فراغًا تامًا** — بلا عنوان ولا محتوى ولا رسالة خطأ.
+   هكذا اختفى مكوّنا «المجموعة» و«دعوة الزيارة» طويلًا بسبب `|trans` وحده،
+   بينما الصيغة الصحيحة في ثيم سلة الرسمي دالةٌ لا فلتر: trans('key').
+   المرجع الحاكم: مفردات الفلاتر في ثيم رائد الرسمي (لقطة الهيكل الأولى).  */
+console.log('\n— مفردات فلاتر Twig —');
+const KNOWN_FILTERS = new Set([
+  // فلاتر Twig القياسية
+  'abs', 'batch', 'capitalize', 'column', 'convert_encoding', 'country_name', 'currency_name',
+  'currency_symbol', 'data_uri', 'date', 'date_modify', 'default', 'escape', 'e', 'filter',
+  'first', 'format', 'format_currency', 'format_date', 'format_datetime', 'format_number',
+  'format_time', 'html_to_markdown', 'inky_to_html', 'inline_css', 'join', 'json_encode',
+  'keys', 'language_name', 'last', 'length', 'locale_name', 'lower', 'map', 'markdown_to_html',
+  'merge', 'nl2br', 'number_format', 'raw', 'reduce', 'replace', 'reverse', 'round', 'slice',
+  'slug', 'sort', 'spaceless', 'split', 'striptags', 'timezone_name', 'title', 'trim', 'u',
+  'upper', 'url_encode',
+  // فلاتر سلة الخاصة — مستخرَجة من تعابير ثيم سلة الرسمي وحده (لا من جداول التوثيق):
+  // asset cdn date default e first is_placeholder join json_encode length map money
+  // number raw replace slice trim  ← وليس فيها trans، ولهذا هو دالةٌ لا فلتر.
+  'asset', 'cdn', 'money', 'number', 'is_placeholder',
+]);
+// كلمات تلي `|` داخل تعليقات جدولية أو نصوص ليست فلاتر — نقصر الفحص على تعابير Twig
+const filterHits = new Map();
+for (const file of twigs) {
+  const src = readFileSync(file, 'utf8').replace(/\{#[\s\S]*?#\}/g, '');
+  const rel = relative(ROOT, file).replace(/\\/g, '/');
+  for (const expr of src.matchAll(/\{\{([\s\S]*?)\}\}|\{%([\s\S]*?)%\}/g)) {
+    const body = expr[1] || expr[2] || '';
+    for (const f of body.matchAll(/\|\s*([a-z_][a-z0-9_]*)/gi)) {
+      if (!KNOWN_FILTERS.has(f[1])) {
+        if (!filterHits.has(f[1])) filterHits.set(f[1], new Set());
+        filterHits.get(f[1]).add(rel);
+      }
+    }
+  }
+}
+if (filterHits.size) {
+  for (const [f, files] of filterHits) {
+    fail(`فلتر Twig غير معروف "|${f}" — يُفشِل القالب كلّه ويصيّره فراغًا: ${[...files].join(', ')}`
+       + (f === 'trans' ? '  ← الصيغة الصحيحة: trans(\'key\') دالةً لا فلترًا' : ''));
+  }
+} else {
+  pass(`كل الفلاتر ضمن المفردات المقبولة (${KNOWN_FILTERS.size} فلترًا)`);
+}
+
 /* ── ٥) مسارات مكوّنات twilight.json ── */
 console.log('\n— مكوّنات twilight.json —');
 const tw = JSON.parse(readFileSync(join(ROOT, 'twilight.json'), 'utf8'));

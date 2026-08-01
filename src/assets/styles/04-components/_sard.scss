@@ -220,6 +220,10 @@ html[dir='rtl'] .sard-progress { transform-origin: right; }
   margin: 0 auto;
 }
 
+/* شعار أحاديّ اللون لا يتباين مع خلفية الواجهة — يقلبه sard.js فيظهر.
+   (شعار حبره داكن على واجهة داكنة كان يختفي تمامًا بعد انتهاء الرسم.) */
+.sard-hero__logo--flip { filter: invert(1) brightness(1.35); }
+
 /* غلاف الرسم الذاتي: يُنشئه sard.js حول الشعار ليضع خطوط التتبّع فوقه تمامًا.
    inline-block بمقاس الصورة نفسها — فلا إزاحة تخطيط عند إدخاله أو إزالته. */
 .sard-hero__draw {

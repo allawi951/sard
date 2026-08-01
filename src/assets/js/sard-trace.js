@@ -20,8 +20,8 @@ const LUMA_ON = 0.62;       // عتبة بديلة على الإضاءة حين 
 const RDP_EPS = 0.9;        // تبسيط: بالبكسل في المقاس المُصغَّر
 const MIN_POINTS = 10;      // كفاف أقصر من هذا ضجيج
 const MIN_PERIM = 26;
-const MAX_PATHS = 44;
-const MAX_POINTS = 4200;    // سقف كلّي يحمي الأداء على الشعارات المعقّدة
+const MAX_PATHS = 160;      // الشعارات الخطّية المفصّلة تتجاوز الأربعين كفافًا بسهولة
+const MAX_POINTS = 12000;   // سقف كلّي يحمي الأداء على الشعارات المعقّدة
 
 /* ── ١) قراءة البكسلات ── */
 function readPixels(img) {
@@ -85,66 +85,105 @@ function buildMask({ data, w, h }) {
   return inside;
 }
 
-/* ── ٣) تتبّع حدود مور ──
-   نمشي على محيط كل شكل بكسلًا بكسل. حدود الثقوب تُلتقط تلقائيًّا لأن بكسلاتها
-   حدودٌ أيضًا — وهذا مقصود: تفاصيل داخل الحرف تجعل الرسم أقنع. */
-const N8 = [[1, 0], [1, 1], [0, 1], [-1, 1], [-1, 0], [-1, -1], [0, -1], [1, -1]];
+/* ── ٣) تتبّع الحدّ بمربّعات مسيرة (Marching Squares) ──
 
-const STEPS_PER_CONTOUR = 6000;   // محيط أطول من هذا ليس شعارًا
-const STEP_BUDGET = 140000;       // ميزانية كلّية تحرس الإطار الأول من التجمّد
+   نمشي على **شبكة الزوايا** بين البكسلات لا على البكسلات نفسها. كل ضلع نعبره
+   يفصل بكسلًا داخل الشكل عن بكسل خارجه، والاتجاه يتحدّد حتميًّا من البكسلات
+   الأربعة المحيطة بالزاوية — فالمسار **مغلقٌ دائمًا** بحكم البناء.
+
+   ولماذا استُبدلت مشية مور: تلك كانت تمشي على بكسلات الحدّ وتدور في جوار
+   ثُماني، وهي تفشل في الإغلاق على الأشكال الرفيعة (خطوط الشعار عرضها بكسلان).
+   القياس أثبته: ٣٢٠ كفافًا كثيرٌ منها بطول ٦٠٠٠ بالضبط — أي سقف الحارس —
+   وبمحيطات متطابقة، أي إعادة تتبّع للحدّ نفسه بلا إغلاق. ولأن المسار كان
+   يتذبذب بمقياس البكسل، لم يستطع التبسيط تقليصه (٦٠٠٠ → ٥٩٩٩ نقطة).
+
+   الاتجاه صالح متى اختلف البكسلان المتجاوران للضلع، والداخل عن يميننا:
+     يمين ⟺ أسفل-يمين داخل و أعلى-يمين خارج
+     يسار ⟺ أعلى-يسار داخل و أسفل-يسار خارج
+     أسفل ⟺ أسفل-يسار داخل و أسفل-يمين خارج
+     أعلى ⟺ أعلى-يمين داخل و أعلى-يسار خارج
+   ولا يلتبس إلا في حالتَي السَّرج (قطران متقابلان)، وتُحسم بعدم الرجوع. */
+
+const STEPS_PER_CONTOUR = 60000;  // محيط مغلق أطول من هذا ليس شعارًا
+const R = 0, D = 1, L = 2, U = 3;
+const STEP = [[1, 0], [0, 1], [-1, 0], [0, -1]];
 
 function contours(inside, w, h) {
   const at = (x, y) => (x < 0 || y < 0 || x >= w || y >= h ? 0 : inside[y * w + x]);
-  const isEdge = (x, y) => at(x, y) && !(at(x - 1, y) && at(x + 1, y) && at(x, y - 1) && at(x, y + 1));
-  const seen = new Uint8Array(w * h);
+  const W1 = w + 1;
+  // ضلعٌ مَعبور لا يُعبَر ثانية: يمنع إعادة تتبّع الحلقة من زاوية أخرى
+  const used = new Uint8Array(W1 * (h + 1) * 4);
   const out = [];
-  let budget = STEP_BUDGET;
 
-  for (let y = 1; y < h - 1 && out.length < MAX_PATHS * 2 && budget > 0; y++) {
-    for (let x = 1; x < w - 1 && budget > 0; x++) {
-      if (seen[y * w + x] || !isEdge(x, y)) continue;
+  for (let sy = 0; sy <= h && out.length < MAX_PATHS * 3; sy++) {
+    for (let sx = 0; sx <= w; sx++) {
+      const ul = at(sx - 1, sy - 1), ur = at(sx, sy - 1);
+      const ll = at(sx - 1, sy), lr = at(sx, sy);
+      if (!(lr && !ur) || used[(sy * W1 + sx) * 4 + R]) continue;   // نبدأ بضلع «يمين»
 
       const path = [];
-      let cx = x, cy = y, dir = 0, guard = STEPS_PER_CONTOUR;
+      let cx = sx, cy = sy, dir = R, guard = STEPS_PER_CONTOUR;
 
-      do {
+      while (guard-- > 0) {
+        const key = (cy * W1 + cx) * 4 + dir;
+        if (used[key]) break;
+        used[key] = 1;
         path.push([cx, cy]);
-        seen[cy * w + cx] = 1;
 
-        // ندور من الاتجاه المقابل للقادم منه، بحثًا عن أول جار على الحدّ
-        let next = null;
-        for (let k = 0; k < 8; k++) {
-          const d = (dir + 6 + k) % 8;
-          const nx = cx + N8[d][0], ny = cy + N8[d][1];
-          if (isEdge(nx, ny)) { next = [nx, ny, d]; break; }
+        cx += STEP[dir][0]; cy += STEP[dir][1];
+        if (cx === sx && cy === sy) break;                         // أُغلقت الحلقة
+
+        const a = at(cx - 1, cy - 1), b = at(cx, cy - 1);
+        const c = at(cx - 1, cy), d = at(cx, cy);
+
+        const ok = [d && !b, c && !d, a && !c, b && !a];           // R, D, L, U
+        const back = (dir + 2) % 4;
+        let next = -1;
+        // نفضّل الاستمرار ثم الانعطاف، ولا نرجع أدراجنا إلا اضطرارًا
+        for (const cand of [dir, (dir + 3) % 4, (dir + 1) % 4, back]) {
+          if (ok[cand] && (cand !== back || next === -1)) { next = cand; break; }
         }
-        if (!next) break;
-        [cx, cy, dir] = next;
-        budget--;
-      } while ((cx !== x || cy !== y) && --guard > 0);
+        if (next === -1) break;
+        dir = next;
+      }
 
       if (path.length >= MIN_POINTS) out.push(path);
     }
   }
-  // نفاد الميزانية = صورة أعقد من أن تُرسم خطًّا؛ الكشف بالقناع أصدق منها
-  return budget > 0 ? out : [];
+  return out;
 }
 
-/* ── ٤) تبسيط رامر–دوغلاس–بويكر ── */
+/* ── ٤) تبسيط رامر–دوغلاس–بويكر ──
+   تكراريّ بمكدّس مدَياتٍ لا تعاوديّ بنسخ المصفوفات: الصيغة التعاودية كانت
+   تُنشئ مصفوفتين جديدتين عند كل انقسام (slice + spread)، فتبلغ كلفتها
+   على شعار خطّي مفصّل (٧٢٥ ألف نقطة) قرابة ٧٫٦ ثانية. هذه لا تُخصّص شيئًا. */
 function rdp(pts, eps) {
-  if (pts.length < 3) return pts;
-  const [ax, ay] = pts[0];
-  const [bx, by] = pts[pts.length - 1];
-  const dx = bx - ax, dy = by - ay;
-  const den = Math.hypot(dx, dy) || 1;
+  const n = pts.length;
+  if (n < 3) return pts;
 
-  let far = 0, idx = 0;
-  for (let i = 1; i < pts.length - 1; i++) {
-    const d = Math.abs(dy * (pts[i][0] - ax) - dx * (pts[i][1] - ay)) / den;
-    if (d > far) { far = d; idx = i; }
+  const keep = new Uint8Array(n);
+  keep[0] = keep[n - 1] = 1;
+  const stack = [0, n - 1];
+
+  while (stack.length) {
+    const b = stack.pop(), a = stack.pop();
+    if (b - a < 2) continue;
+
+    const ax = pts[a][0], ay = pts[a][1];
+    const dx = pts[b][0] - ax, dy = pts[b][1] - ay;
+    const den = Math.hypot(dx, dy) || 1;
+
+    let far = 0, idx = -1;
+    for (let i = a + 1; i < b; i++) {
+      const d = Math.abs(dy * (pts[i][0] - ax) - dx * (pts[i][1] - ay)) / den;
+      if (d > far) { far = d; idx = i; }
+    }
+    if (far > eps && idx > 0) { keep[idx] = 1; stack.push(a, idx, idx, b); }
   }
-  if (far <= eps) return [pts[0], pts[pts.length - 1]];
-  return [...rdp(pts.slice(0, idx + 1), eps).slice(0, -1), ...rdp(pts.slice(idx), eps)];
+
+  const out = [];
+  for (let i = 0; i < n; i++) if (keep[i]) out.push(pts[i]);
+  return out;
 }
 
 const perimeter = (p) => p.reduce((s, q, i) => (i ? s + Math.hypot(q[0] - p[i - 1][0], q[1] - p[i - 1][1]) : 0), 0);
@@ -158,14 +197,21 @@ export function traceLogo(img) {
   const mask = buildMask(px);
   if (!mask) return null;
 
+  /* المحيط يُحسب **مرّة واحدة** لكل كفاف ثم يُرتَّب بالقيمة المحفوظة.
+     حسابه داخل مُقارِن الفرز كان يعيد المرور على كل نقاط كل كفاف عند كل
+     مقارنة — وحده كلّف أكثر من ثانية على شعار مفصّل. */
   let paths = contours(mask, px.w, px.h)
     .map((p) => rdp(p, RDP_EPS))
-    .filter((p) => p.length >= 4 && perimeter(p) >= MIN_PERIM)
-    .sort((a, b) => perimeter(b) - perimeter(a))
-    .slice(0, MAX_PATHS);
+    .filter((p) => p.length >= 4)
+    .map((p) => ({ p, len: perimeter(p) }))
+    .filter((o) => o.len >= MIN_PERIM)
+    .sort((a, b) => b.len - a.len)
+    .slice(0, MAX_PATHS)
+    .map((o) => o.p);
 
   if (!paths.length) return null;
 
+  // نُسقِط الأصغرَ محيطًا حتى نسع الميزانية — الهيكل يبقى والتفاصيل تنحسر
   let total = paths.reduce((s, p) => s + p.length, 0);
   while (total > MAX_POINTS && paths.length > 1) {
     total -= paths.pop().length;
@@ -194,6 +240,37 @@ export function traceLogo(img) {
   }
 
   return svg;
+}
+
+/* ── ٥-أ) إضاءة حبر الشعار ──
+   شعارٌ حبره داكن على خلفية داكنة يُرسم كفافُه ثم **يختفي** حين يذوب في
+   صورته. نقيس متوسط إضاءة البكسلات غير الشفّافة، ونخبر النداءَ ليقلبه.
+   نُبلّغ أيضًا إن كان أحاديّ اللون: قلبُ شعارٍ ملوّن يُفسد ألوانه، فلا يُقلَب. */
+export function inkStats(img) {
+  let px;
+  try { px = readPixels(img); } catch { return null; }
+  if (!px) return null;
+
+  const { data } = px;
+  /* «أحاديّ اللون» = قليل الألوان المتمايزة، لا «رماديّ». الشعار الكحليّ
+     الداكن تشبّعه عالٍ لكنه لونٌ واحد ويُقلَب بأمان — معيار التشبّع كان
+     يصنّفه ملوّنًا فلا يُقلَب، فيبقى مختفيًا على الخلفية الداكنة. */
+  const hues = new Set();
+  let sum = 0, n = 0;
+  for (let i = 0; i < data.length; i += 4) {
+    if (data[i + 3] < 40) continue;                       // شفّاف — ليس حبرًا
+    const r = data[i], g = data[i + 1], b = data[i + 2];
+    if (r > 250 && g > 250 && b > 250) continue;          // أبيض خالص — خلفية
+    sum += (r * 0.2126 + g * 0.7152 + b * 0.0722) / 255;
+    // الألوان تُعدّ من الحبر المصمت وحده: حواف التنعيم تتدرّج نحو الشفافية
+    // فتُنتج عشرات الظلال، وعدّها كان يصنّف كل شعار «ملوّنًا» فلا يُقلَب.
+    if (data[i + 3] > 200 && hues.size <= 40) {
+      hues.add(((r >> 4) << 8) | ((g >> 4) << 4) | (b >> 4));
+    }
+    n++;
+  }
+  if (!n) return null;
+  return { luma: sum / n, mono: hues.size <= 24 };
 }
 
 /* ── ٦) انتظار جهوز الصورة مع تمكين CORS ──

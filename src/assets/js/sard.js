@@ -5,7 +5,7 @@
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from 'lenis';
-import { traceLogo, loadForTrace } from './sard-trace';
+import { traceLogo, loadForTrace, inkStats } from './sard-trace';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -157,6 +157,19 @@ async function drawLogo(img) {
   const svg = traceLogo(probe);
   if (!svg) return false;
 
+  /* شعار أحاديّ اللون حبرُه قريب من إضاءة الخلفية يختفي تمامًا بعد ذوبان
+     الكفاف فيه. نقلبه عندئذٍ فيصير فاتحًا على الداكن (أو العكس). الشعارات
+     الملوّنة لا تُقلَب — القلب يُفسد ألوانها. */
+  const ink = inkStats(probe);
+  if (ink && ink.mono) {
+    const bg = getComputedStyle(document.querySelector('.sard-hero') || document.body).backgroundColor;
+    const m = bg.match(/\d+(\.\d+)?/g);
+    if (m && m.length >= 3) {
+      const bgLuma = (+m[0] * 0.2126 + +m[1] * 0.7152 + +m[2] * 0.0722) / 255;
+      if (Math.abs(ink.luma - bgLuma) < 0.34) img.classList.add('sard-hero__logo--flip');
+    }
+  }
+
   // غلاف نسبيّ يضع الخطوط فوق الصورة تمامًا بلا إزاحة تخطيط
   const wrap = document.createElement('span');
   wrap.className = 'sard-hero__draw';
@@ -171,13 +184,14 @@ async function drawLogo(img) {
     p.style.strokeDashoffset = `${len}`;
   });
 
-  // الأطول أولًا (مرتّبة أصلًا) فيبدأ الرسم بالهيكل ثم التفاصيل
+  // الأطول أولًا (مرتّبة أصلًا) فيبدأ الرسم بالهيكل ثم التفاصيل.
+  // المدّة والتدرّج مضبوطان ليكتمل الرسم مع رسم علامة سرد فوقه (~١٫٦ث).
   await gsap.timeline()
     .to(strokes, {
       strokeDashoffset: 0,
       duration: 1.15,
       ease: 'power1.inOut',
-      stagger: { each: Math.min(0.055, 1.1 / strokes.length), from: 'start' },
+      stagger: { each: Math.min(0.05, 0.45 / strokes.length), from: 'start' },
     })
     .to(img, { opacity: 1, duration: 0.75, ease: 'power2.out' }, '-=0.35')
     .to(svg, { opacity: 0, duration: 0.6, ease: 'power2.out' }, '<')
@@ -287,10 +301,10 @@ function start() {
       if (still) {
         gsap.set(imgLogo, { opacity: 1 });
       } else {
-        // ينتظر الشعارُ اكتمالَ رسم الزخرفة فوقه، فيُقرأ الاثنان تتابعًا لا معًا
-        const after = mark ? 1.9 : 0.1;
+        // العلامة وشعار المتجر يُرسمان **في اللحظة نفسها** لا تتابعًا:
+        // نبدأ من زمن الزخرفة نفسه (0.25) وبمدّة مماثلة فينتهيان معًا.
         gsap.set(imgLogo, { opacity: 0 });
-        gsap.delayedCall(after, () => {
+        gsap.delayedCall(0.25, () => {
           drawLogo(imgLogo)
             .then((drawn) => { if (!drawn) wipe(0); })
             .catch(() => wipe(0));

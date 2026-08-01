@@ -1,0 +1,218 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   كتل «سرد» — هوية الثيم داخل كتل الهيكل الموروث نفسها.
+
+   الترتيب المنطقي بعد `_sard-global.scss`:
+     · `_sard-global` يضبط الرموز العامة (خطّ، لون، حافّة) لكل الثيم.
+     · هذا الملف يعالج **الكتل بعينها** التي يراها الزائر في الصفحات
+       الداخلية: معلومات المنتج، التبويبات، التقييمات، «قد يعجبك»،
+       الفلاتر، شبكة التصنيفات، آراء العملاء، بطاقات الحساب.
+
+   ملاحظة على مكوّنات سلة: تُصيَّر في Shadow DOM، فلا يصلها إلا:
+     ١) المتغيّرات التي تقرؤها — وقد رُبطت بلوحة سرد في master.twig،
+        وهي الرافعة الأكبر.
+     ٢) مقابض ::part() التي يعرضها المكوّن (button · card · title · payment).
+   ما عدا ذلك من أنماطنا يطال غلافَها في الضوء لا داخلها.
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+body.theme-sard {
+
+  /* ── ١) عنوان أي كتلة: خطّ سرد وخطّ ذهبي تحته ── */
+  .s-block__title h2,
+  .s-block__title h3,
+  .section-title,
+  .rating-header h2,
+  .profile-header h2 {
+    font-family: var(--sard-serif);
+    font-weight: 400;
+    letter-spacing: .01em;
+  }
+
+  .s-block__display-all {
+    font-family: var(--sard-sans);
+    font-size: .84rem;
+    letter-spacing: .04em;
+    color: var(--sard-accent-ink);
+    &:hover { color: var(--sard-ink); }
+  }
+
+  /* ── ٢) كل كتلة تتنفّس: تباعد سرد بدل تباعد الهيكل ── */
+  .s-block { padding-block: clamp(2rem, 4vw, 3.4rem); }
+
+  /* ── ٣) صفحة المنتج ── */
+  .product__description,
+  .s-tabs-header {
+    border-color: var(--sard-hairline);
+  }
+  .s-tabs-header button,
+  .s-tabs-header .tab-trigger {
+    font-family: var(--sard-sans);
+    letter-spacing: .03em;
+    border-radius: 999px 999px 0 0;
+
+    &.is-active,
+    &[aria-selected='true'] {
+      color: var(--sard-accent-ink);
+      border-bottom-color: var(--sard-gold);
+    }
+  }
+
+  .product__description {
+    font-family: var(--sard-sans);
+    line-height: 1.85;
+    p { margin-block: .8em; }
+  }
+
+  /* الوسوم: شرائح رفيعة لا مستطيلات ممتلئة */
+  .tag,
+  .s-tags a {
+    border: 1px solid var(--sard-hairline);
+    border-radius: 999px;
+    padding: .3em 1em;
+    background: transparent;
+    transition: border-color .3s, color .3s;
+    &:hover { border-color: var(--sard-gold); color: var(--sard-accent-ink); }
+  }
+
+  /* شريط الشراء اللاصق */
+  .sticky-product-bar {
+    background: color-mix(in srgb, var(--sard-page-bg) 92%, transparent);
+    backdrop-filter: blur(12px);
+    border-top: 1px solid var(--sard-hairline);
+    box-shadow: none;
+  }
+
+  /* ── ٤) التقييمات وآراء العملاء ── */
+  .rating-header,
+  .ratings-actions,
+  salla-comments,
+  .s-comments {
+    font-family: var(--sard-sans);
+  }
+  .rating-header { border-bottom: 1px solid var(--sard-hairline); padding-bottom: 1rem; }
+
+  salla-rating-stars,
+  .s-rating-stars-reviews { --star-color: var(--sard-gold); color: var(--sard-gold); }
+
+  .s-block--testimonials {
+    background: var(--sard-blush);
+
+    .testimonial-entry,
+    blockquote {
+      border: 1px solid var(--sard-hairline);
+      border-radius: 4px;
+      background: transparent;
+      box-shadow: none;
+      font-family: var(--sard-serif);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+  }
+
+  /* ── ٥) «قد يعجبك» وكل سلايدرات المنتجات ── */
+  salla-products-slider::part(title),
+  .best-products-slider .s-block__title h2 {
+    font-family: var(--sard-serif);
+    font-weight: 400;
+  }
+  salla-products-slider::part(card),
+  salla-products-list::part(card),
+  salla-product-card::part(card) {
+    border: 1px solid var(--sard-hairline);
+    border-radius: 4px;
+    box-shadow: none;
+  }
+
+  /* أزرار تنقّل السلايدر: دائرية رفيعة */
+  .swiper-button-next,
+  .swiper-button-prev,
+  .s-slider-nav button {
+    border: 1px solid var(--sard-hairline);
+    border-radius: 50%;
+    background: transparent;
+    color: var(--sard-page-fg);
+    transition: border-color .3s, color .3s;
+    &:hover { border-color: var(--sard-gold); color: var(--sard-accent-ink); }
+  }
+
+  /* ── ٦) الفلاتر وقائمة التصنيفات ── */
+  salla-filters,
+  .filters,
+  aside .filter-group {
+    font-family: var(--sard-sans);
+
+    h3, h4, .filter-title {
+      font-family: var(--sard-serif);
+      font-weight: 400;
+      border-bottom: 1px solid var(--sard-hairline);
+      padding-bottom: .5rem;
+    }
+  }
+
+  /* صناديق الاختيار بلون سرد لا بلون الهيكل */
+  input[type='checkbox'],
+  input[type='radio'] { accent-color: var(--sard-accent-ink); }
+
+  .slide--cat-entry {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    transition: border-color .35s var(--sard-ease);
+    h2 { font-family: var(--sard-sans); font-size: .9rem; }
+    &:hover { border-color: var(--sard-hairline); }
+  }
+
+  /* ── ٧) الترتيب والقوائم المنسدلة ── */
+  .dropdown__trigger,
+  salla-select::part(button) {
+    border: 1px solid var(--sard-hairline);
+    border-radius: 999px;
+    font-family: var(--sard-sans);
+    background: transparent;
+  }
+
+  /* ── ٨) صفحات الحساب ── */
+  .profile-header {
+    background: var(--sard-blush);
+    border: 1px solid var(--sard-hairline);
+    border-radius: 4px;
+    box-shadow: none;
+  }
+  .single-order-header-item,
+  .order-file,
+  .form--user-profile {
+    border-color: var(--sard-hairline);
+    box-shadow: none;
+  }
+
+  /* ── ٩) الماركات والمدونة ── */
+  .brand-item {
+    border: 1px solid var(--sard-hairline);
+    border-radius: 4px;
+    background: transparent;
+    transition: border-color .35s var(--sard-ease);
+    &:hover { border-color: var(--sard-gold); }
+  }
+  .brand-char { font-family: var(--sard-serif); color: var(--sard-accent-ink); }
+
+  .blog-single,
+  .blog-slider article {
+    font-family: var(--sard-sans);
+    h1, h2, h3 { font-family: var(--sard-serif); font-weight: 400; }
+  }
+
+  /* ── ١٠) لافتات وبطاقات عامة: حدٌّ رفيع بدل الظلّ ── */
+  .banner-entry,
+  .full-banner-entry,
+  .thankyou-block,
+  .bank-offer {
+    border-radius: 4px;
+    box-shadow: none;
+    border: 1px solid var(--sard-hairline);
+  }
+
+  /* ── ١١) لا محتوى: رسالة هادئة بلغة سرد ── */
+  .no-content-placeholder {
+    font-family: var(--sard-serif);
+    color: var(--sard-page-fg);
+    opacity: .7;
+  }
+}

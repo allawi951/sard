@@ -91,7 +91,11 @@ Twig.extendFunction('trans', (v) => Twig.filters.trans(v));
 Twig.extendFunction('link', (...a) => '#' + String(a[0] ?? ''));
 Twig.extendFunction('url', (...a) => '#' + String(a[0] ?? ''));
 Twig.extendFunction('route', (...a) => '#' + String(a[0] ?? ''));
-Twig.extendFunction('is_page', (slug) => slug === fixtures.page.slug);
+/* is_page يجب أن يتبع الصفحة الجاري تصييرها لا صفحة التجهيزة الثابتة.
+   بدونها كان صنف `sard-home` (الجلد الداكن) يُطبَّق على كل صفحة، فتُقاس
+   الصفحات الداخلية على خلفية ليست خلفيتها. */
+let CURRENT_SLUG = fixtures.page.slug;
+Twig.extendFunction('is_page', (slug) => slug === CURRENT_SLUG);
 
 /* ── ٤) البيانات الوهمية ── */
 const hex = (h, amount, up) => {
@@ -149,6 +153,7 @@ Twig.cache(false);
 let ok = 0; const failed = [];
 
 for (const [name, page] of targets) {
+  CURRENT_SLUG = page.slug;
   const file = join(WORK, `pages/${name}.twig`);
   const pageData = {
     ...data,

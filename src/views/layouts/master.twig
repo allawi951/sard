@@ -83,16 +83,6 @@
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
     
-    <style>
-        :root {
-            --font-main: '{{theme.font.name}}';
-            --color-primary: {{ theme.color.primary }};
-            --color-primary-dark: {{ theme.color.darker(0.15) }};
-            --color-primary-light: {{ theme.color.lighter(0.15) }};
-            --color-primary-reverse: {{ theme.color.reverse_text }};
-        }
-    </style>
-
     {# ── لوحة ألوان «سرد» ── #}
     {% set sard_palettes = {
       'indigo':   { 'ink': '#14132F', 'light': '#EFD6C9', 'gold': '#C9A15A' },
@@ -115,6 +105,32 @@
         --sard-muted: rgba(248, 240, 233, .58);
         --sard-line: rgba(248, 240, 233, .16);
         --sard-accent: var(--sard-gold);
+
+        /* ═══ ربط رموز الهيكل الموروث بلوحة سرد ═══
+           هذه هي الرافعة الحقيقية للهوية. مكوّنات سلة تُصيَّر في Shadow DOM
+           فلا تصلها محدّداتنا، لكنها **تقرأ هذه المتغيّرات** — وكذلك كل
+           أنماط الهيكل الموروث. ربطُها هنا يُبدّل هوية صفحة المنتج والفلاتر
+           والتقييمات و«قد يعجبك» وصفحات الحساب دفعةً واحدة، بلا إعادة كتابة
+           قالبٍ واحد.
+
+           الصيغة السابقة كانت تربطها بلون التاجر (theme.color.primary)،
+           فتبقى الصفحات الداخلية بهوية الهيكل مهما فعلنا في أنماطنا. */
+        --color-primary: {{ sard_pal.gold }};
+        --color-primary-d: {{ theme.color.darker(0.18, sard_pal.gold) }};
+        --color-primary-dark: {{ theme.color.darker(0.18, sard_pal.gold) }};
+        --color-primary-l: {{ theme.color.lighter(0.22, sard_pal.gold) }};
+        --color-primary-light: {{ theme.color.lighter(0.22, sard_pal.gold) }};
+        --color-primary-reverse: {{ sard_pal.ink }};
+
+        --color-text: #221F2E;
+        --main-text-color: #221F2E;
+        --main-text-color-dark: {{ sard_pal.ink }};
+        --color-grey: #56505F;
+        --color-light-grey: #8B8595;
+        --bg-gray: #F4EFE9;
+
+        --font-main: 'Tajawal', 'Jost', {{ theme.font.name ? "'" ~ theme.font.name ~ "'," : '' }} system-ui, sans-serif;
+        --font-sm: .875rem;
       }
     </style>
     <script data-cfasync="false">

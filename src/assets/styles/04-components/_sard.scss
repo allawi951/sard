@@ -343,6 +343,9 @@ html[dir='rtl'] .sard-coll__hint { letter-spacing: .04em; font-size: .9rem; text
     height: 100svh;
     overflow: hidden;
     padding-block: 0;
+    /* يسمح للمتصفح بالتمرير الرأسي ويترك الإيماءة الأفقية لنا:
+       جسر اللمس في sard.js يحوّلها إلى تمرير رأسي فيتحرّك المعرض. */
+    touch-action: pan-y;
   }
 }
 /* الشريط يرث اتجاه المتجر عمدًا: في العربية يبدأ أول منتج من اليمين
@@ -355,11 +358,24 @@ html[dir='rtl'] .sard-coll__hint { letter-spacing: .04em; font-size: .9rem; text
   will-change: transform;
 }
 
+/* البطاقة شبكة صريحة من صفّين: الصورة ثم النص. الأزرار تشغل **خانة الصورة
+   نفسها** فتطفو فوقها عند التحويم. الصيغة السابقة كانت تثبّتها بـ
+   `position:absolute; bottom` على البطاقة كلها — أي على أسفل البطاقة بما
+   فيها الاسم والسعر، فتراكبت معهما. لم يظهر ذلك على سطح المكتب لأنها مخفيّة
+   حتى التحويم، لكنها مرئية دائمًا على الجوال فبان التداخل. */
 .sard-card {
   flex: 0 0 clamp(280px, 30vw, 400px);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto;
   position: relative;
 }
 .sard-card__media {
+  grid-column: 1; grid-row: 1;
+  /* عنصرٌ ذو aspect-ratio داخل شبكة يتمدّد رأسيًّا افتراضيًّا، فيشتقّ عرضه من
+     ارتفاع الصف بدل العكس — فتنكمش الصورة. التثبيت هنا يعكس الاتجاه: العرض
+     يملأ العمود والارتفاع يتبع النسبة. */
+  width: 100%; align-self: start;
   position: relative; display: block;
   aspect-ratio: 4 / 5; border-radius: 3px; overflow: hidden;
   background: color-mix(in srgb, var(--sard-fg) 6%, transparent);
@@ -374,18 +390,18 @@ html[dir='rtl'] .sard-coll__hint { letter-spacing: .04em; font-size: .9rem; text
 }
 
 .sard-card__actions {
-  position: absolute; inset-inline: .9rem; bottom: .9rem;
+  grid-column: 1; grid-row: 1; align-self: end; z-index: 2; margin: .9rem;
   display: flex; gap: .5rem; align-items: stretch;
   opacity: 0; transform: translateY(14px);
   transition: opacity .5s var(--sard-ease), transform .5s var(--sard-ease);
-  > * { flex: 1; }
+  > * { flex: 1; min-width: 0; }
 }
 .sard-card:hover .sard-card__actions,
 .sard-card:focus-within .sard-card__actions { opacity: 1; transform: none; }
 .sard-card__actions .sard-btn { padding: .8em 1rem; font-size: .68rem; letter-spacing: .08em; }
 html[dir='rtl'] .sard-card__actions .sard-btn { font-size: .82rem; letter-spacing: 0; }
 
-.sard-card__body { padding-top: 1.1rem; display: flex; align-items: flex-start; gap: 1rem; }
+.sard-card__body { grid-column: 1; grid-row: 2; padding-top: 1.1rem; display: flex; align-items: flex-start; gap: 1rem; }
 .sard-card__name { font-family: var(--sard-serif); font-size: 1.5rem; font-weight: 400; line-height: 1.25; }
 /* الرابط يملأ السطر ويرتفع إلى 44px: هدف لمس مريح بدل سطر نص رفيع */
 .sard-card__name a { display: block; padding-block: .32em; }
@@ -550,8 +566,17 @@ html[dir='rtl'] .sard-foot__h { letter-spacing: .04em; font-size: .9rem; text-tr
   .sard-layers__frame { width: 180px; margin-inline: auto; }
   .sard-layers__step { min-height: 34svh; display: grid; align-content: center; padding-block: 1.5rem; }
   .sard-foot__grid { grid-template-columns: 1fr; text-align: center; }
-  .sard-card__actions { opacity: 1; transform: none; }
-  .sard-coll__pin { height: auto; padding-block: 2rem; overflow-x: auto; }
+  /* على اللمس لا يوجد تحويم، فالأزرار مرئية دائمًا — ولذلك تنزل إلى صفٍّ
+     مستقلٍّ تحت الاسم والسعر بدل أن تطفو فوق الصورة وتراكب النص. */
+  .sard-card { grid-template-rows: auto auto auto; flex-basis: min(78vw, 320px); }
+  .sard-card__body { grid-column: 1; grid-row: 2; }
+  .sard-card__actions {
+    grid-column: 1; grid-row: 3; align-self: stretch; z-index: auto;
+    margin: .9rem 0 0; opacity: 1; transform: none;
+  }
+  /* التثبيت مسموح على الجوال أيضًا (انظر جسر اللمس في sard.js)،
+     فلا يُلغى إلا حين لا يكون مُفعَّلًا فعلًا. */
+  .sard-coll__pin:not(.is-pinned) { height: auto; padding-block: 2rem; overflow-x: auto; }
   .sard-coll__track { padding-inline: 5vw; }
 }
 

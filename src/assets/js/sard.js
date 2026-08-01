@@ -127,6 +127,9 @@ function reveal() {
 }
 
 function boot() {
+  // إظهار/إخفاء شريط عنوان المتصفح على الجوال يغيّر ارتفاع النافذة، فيُعيد
+  // ScrollTrigger الحساب ويقفز القسمُ المثبَّت. هذا الخيار يتجاهل ذلك التغيّر.
+  ScrollTrigger.config({ ignoreMobileResize: true });
   smoothScroll();
   chrome();
   pointer();
@@ -342,8 +345,10 @@ function start() {
     const track = $('#sardCollTrack');
     if (!pin || !track || !track.children.length) return;
 
-    // على الشاشات الصغيرة نترك التمرير الأفقي الأصلي (CSS) — أخف وأصدق للمس
-    if (REDUCED || innerWidth < 900) return;
+    // التثبيت يعمل على الجوال أيضًا: المطلوب أن يُحرّك التمريرُ الرأسي المعرضَ
+    // أفقيًا ثم يُكمِل النزول بعد آخر منتج. الإيماءة الأفقية لا تضيع — جسر
+    // اللمس أدناه يترجمها إلى تمرير رأسي فتُعطي الأثر نفسه.
+    if (REDUCED) return;
 
     // نقيس الامتداد من التخطيط لا من scrollWidth: في RTL يفيض المحتوى يسارًا
     // فلا يرصده scrollWidth أصلًا. offsetWidth لا يتأثر بالتحويل الجاري.
@@ -384,6 +389,44 @@ function start() {
         scrollTrigger: { trigger: pin, start: 'top 70%' },
         immediateRender: false,
       });
+
+      /* جسر اللمس — السحب الأفقي = تقدّم في المعرض.
+         القسم أثناء التثبيت `overflow: hidden`، فلا تمرير أفقي أصليًّا فيه.
+         نلتقط الإيماءة الأفقية ونحوّلها إلى تمرير رأسي بالمقدار نفسه، فيُحرّك
+         مُشغِّلُ التمرير الشريطَ أفقيًا. النتيجة: السحب يمينًا/يسارًا والنزول
+         كلاهما يتنقّل بين المنتجات، وبعد آخر منتج يُستأنف النزول طبيعيًّا.
+         الإيماءة الرأسية تُترك للمتصفح كما هي (touch-action: pan-y). */
+      if (COARSE) {
+        let px = 0, py = 0, horizontal = null;
+
+        pin.addEventListener('touchstart', (e) => {
+          if (e.touches.length !== 1) return;
+          px = e.touches[0].clientX;
+          py = e.touches[0].clientY;
+          horizontal = null;               // نؤجّل الحكم حتى تتضح نية الإصبع
+        }, { passive: true });
+
+        pin.addEventListener('touchmove', (e) => {
+          if (e.touches.length !== 1) return;
+          const x = e.touches[0].clientX;
+          const y = e.touches[0].clientY;
+          const dx = px - x;
+          const dy = py - y;
+
+          // نحسم الاتجاه مرة واحدة لكل إيماءة حتى لا تتذبذب بين المحورين
+          if (horizontal === null) {
+            if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+            horizontal = Math.abs(dx) > Math.abs(dy);
+          }
+          if (!horizontal) return;         // نزول عادي — لا نتدخّل
+
+          e.preventDefault();
+          // Lenis لا ينعّم اللمس افتراضيًّا، فالتمرير الأصلي هو الطريق الصحيح.
+          // وفي العربية يتقدّم المعرض يمينًا (dir = 1) فتنعكس إشارة السحب.
+          scrollBy(0, dir === 1 ? -dx : dx);
+          px = x; py = y;
+        }, { passive: false });
+      }
     } catch (e) {
       // أي إخفاق يعيدنا للشريط الأفقي العادي بدل قسم مقصوص
       pin.classList.remove('is-pinned');

@@ -34,3 +34,5 @@ report.[0-9]*.[0-9]*.[0-9]*.[0-9]*.json
 
 # أصول تسويقية خارج حزمة الثيم (حدّ سلة 1MB)
 src/assets/preview/
+
+tools/fixtures.json.bak

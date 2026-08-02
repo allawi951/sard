@@ -82,9 +82,21 @@ Twig.extendFilter('cdn', (v) => v);
 Twig.extendFilter('number', (v) => String(v ?? ''));
 Twig.extendFilter('is_placeholder', () => false);
 Twig.extendFilter('money', (v) => `${Number(v).toLocaleString('ar-EG')} ر.س`);
+/* الترجمة: المعاينة كانت تطبع المفتاح خامًا حين لا تجده — مثل
+   `common.elements.tax_number` — فتبدو الصفحة معطوبة وهي سليمة على المنصّة.
+   السبب أن سلة تخدم الترجمة الأساسية وقت التشغيل، وملفّا الثيم لا يحويان إلا
+   مفاتيحه هو (١٣ مفتاحًا). البديل هنا نصّ مقروء **يُعلَن عدده** في آخر
+   التصيير، فلا يُخطئ أحدٌ فيحسبه ترجمة حقيقية.                              */
+const MISSING_KEYS = new Set();
+const humanize = (key) => String(key).split('.').pop().replace(/_/g, ' ')
+  .replace(/^\w/, (c) => c.toUpperCase());
+
 Twig.extendFilter('trans', (v) => {
   const dict = JSON.parse(readFileSync(join(ROOT, 'src/locales/ar.json'), 'utf8'));
-  return String(v).split('.').reduce((o, k) => (o || {})[k], dict) ?? v;
+  const hit = String(v).split('.').reduce((o, k) => (o || {})[k], dict);
+  if (hit != null) return hit;
+  MISSING_KEYS.add(String(v));
+  return humanize(v);
 });
 Twig.extendFunction('trans', (v) => Twig.filters.trans(v));
 // دوال سلة المتاحة في القوالب — نُبدلها بجذوع للمعاينة المحلية
@@ -209,4 +221,8 @@ if (failed.length) {
   for (const [n, m] of failed) console.log(`    · ${n} — ${m}`);
 }
 console.log('  ⚠ مكوّنات <salla-*> تظهر فارغة هنا — سكربتاتها من المنصة فقط.');
+if (MISSING_KEYS.size) {
+  console.log(`  ⚠ ${MISSING_KEYS.size} مفتاح ترجمة تخدمه سلة وقت التشغيل — عُرِض هنا نصًّا مقروءًا لا ترجمةً حقيقية.`);
+  console.log('    (الجرد الكامل: node tools/i18n-missing.mjs)');
+}
 process.exitCode = failed.length ? 1 : 0;

@@ -434,7 +434,7 @@
                     "label": "سطر التعريف",
                     "multilanguage": true,
                     "placeholder": "مثال: منذ ١٩٩٨ · الرياض",
-                    "value": null,
+                    "value": "أهلًا بك",
                     "required": false,
                     "minLength": 0,
                     "maxLength": 60
@@ -496,7 +496,7 @@
                     "label": "سطر فرعي",
                     "multilanguage": true,
                     "placeholder": "سطر فرعي قصير",
-                    "value": null,
+                    "value": "منتجات مختارة بعناية",
                     "required": false,
                     "minLength": 0,
                     "maxLength": 60
@@ -509,7 +509,7 @@
                     "label": "جملة الافتتاح",
                     "multilanguage": true,
                     "placeholder": "جملة الافتتاح",
-                    "value": null,
+                    "value": "كل قطعة تحمل حكاية",
                     "required": false,
                     "minLength": 0,
                     "maxLength": 140

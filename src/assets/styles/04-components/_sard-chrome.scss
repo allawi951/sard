@@ -32,11 +32,40 @@ body.theme-sard {
       transition: background-color .5s var(--sard-ease), border-color .5s var(--sard-ease);
     }
 
+    /* ── شعار المتجر ──
+       ثيمٌ يُباع لعدّة متاجر: الشعار متغيّرٌ لا نملكه — قد يكون داكنًا أو
+       فاتحًا أو ملوّنًا أو شفّافًا. نتبع سقوف ثيم رائد نفسها
+       (‎max-h-12 · max-w-[100px] xs:max-w-[170px]‎) لأنها مُختبَرة على آلاف
+       المتاجر، ونترك **المعالجة** للتاجر عبر إعداد ‎logo_treatment‎ أدناه. */
     .navbar-brand {
       display: flex; align-items: center;
       min-height: 56px;                 /* هدف لمس مريح على الجوال */
+      flex: 0 0 auto;                   /* لا يتمدّد ولا ينكمش على حساب جاره */
 
-      img { max-height: 54px; width: auto; object-fit: contain; }
+      /* ‎max-width‎ إلزاميّ: القالب الموروث يكتب ‎width="100%"‎ على الصورة،
+         فبلا سقفٍ تفيض الصورة العريضة خارج صندوق الرابط وتزحف على زرّ
+         القائمة المجاور — أحد وجهَي علّة «الأيقونة متداخلة مع الشعار». */
+      img {
+        max-height: 48px;
+        max-width: 100px;
+        width: auto;
+        object-fit: contain;
+      }
+
+      @media (min-width: 480px) {
+        img { max-width: 170px; }
+      }
+
+      /* بديل الشعار حين لا يرفع التاجر واحدًا: اسم المتجر بخطّ الثيم —
+         خيرٌ من صورةٍ مكسورة في ثيمٍ يُركَّب على متجر لا نعرفه. */
+      .sard-brand-name {
+        font-family: var(--sard-serif);
+        font-size: 1.35rem;
+        font-weight: 400;
+        letter-spacing: .01em;
+        color: var(--sard-cream);
+        white-space: nowrap;
+      }
     }
 
     /* روابط القائمة الرئيسية بنكهة سرد */
@@ -76,7 +105,13 @@ body.theme-sard {
     border-bottom-color: rgba(248, 240, 233, .12);
     backdrop-filter: blur(14px) saturate(1.25);
   }
-  &.sard-home .store-header .navbar-brand img { filter: brightness(0) invert(1); }
+  /* لا مرشِّح مفروضًا على شعار التاجر.
+     كانت هنا ‎filter: brightness(0) invert(1)‎ مفروضةً على الجميع بنيّة
+     «تبييض» شعارٍ داكن فوق الشريط الشفّاف — لكنها تسحق **كل** بكسل غير
+     شفّاف إلى أبيض صافٍ، فأي شعار له خلفية أو مساحات ممتلئة يصير مستطيلًا
+     أبيض فارغًا. هذا نصّ سبب الرفض «الشعار نفسه غير ظاهر» (لقطة المراجع ٣:
+     كتلة ‎#FFFFFF‎ صمّاء بمقاس ‎148×105‎ مكان الشعار). */
+  &.sard-home .store-header .navbar-brand img { filter: none; }
   &.sard-home .store-header custom-main-menu a,
   &.sard-home .store-header .mainMenu > li > a { color: rgba(248, 240, 233, .82); }
   &.sard-home .store-header [class^='sicon-'],
@@ -119,6 +154,47 @@ body.theme-sard {
     background: rgba(248, 240, 233, .06);
     border-radius: 4px;
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   معالجة شعار المتجر — إعداد التاجر ‎logo_treatment‎
+
+   المسألة: ثيم رائد يحلّ شعار «أي متجر» بأن يُبقي شريطه **فاتحًا**، فأي
+   شعار يقرأ عليه بلا معالجة. «سرد» شريطه داكن — وهذه مشكلةٌ لا يواجهها
+   رائد أصلًا، ولا يوجد لها حلٌّ آليّ صحيح دائمًا:
+
+     • شعار داكن على شفّاف  → «كما هو» يختفي
+     • شعار ملوّن أو مفصّل  → «التفتيح» يسحقه إلى صورةٍ ظليّة
+     • شعار أبيض على شفّاف  → «اللوحة الفاتحة» تبتلعه
+
+   لا يعرف الجوابَ إلا صاحبُ الشعار. فالخيار للتاجر، والافتراضي هو الآمن
+   للحالة الغالبة (شعار داكن/ملوّن مصمَّم على خلفية بيضاء).
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ٠) الافتراضي ‎auto‎ — يقيس ‎sard-logo.js‎ بكسلات الشعار ثم يستبدل هذا الصنف
+   بأحد الثلاثة أدناه. ريثما يقيس (أو إن أخفق القياس: نطاق بلا CORS، canvas
+   مُلوَّثة) يحمل مظهر اللوحة الفاتحة — الآمن للحالة الغالبة، فلا تقع لحظةٌ
+   يختفي فيها الشعار ولا شاشةٌ مكسورة إن لم يعمل الجافاسكربت أصلًا. */
+body.theme-sard.sard-logo-auto .store-header .navbar-brand img,
+/* ١) لوحة فاتحة خلف الشعار: تُظهر أي شعار مصمَّم على أبيض */
+body.theme-sard.sard-logo-plate .store-header .navbar-brand img {
+  background: var(--sard-cream);
+  padding: 5px 9px;
+  border-radius: 6px;
+  box-shadow: 0 2px 10px rgba(6, 6, 16, .28);
+}
+
+/* ٢) كما هو — لشعارٍ فاتح أو أبيض شفّاف يقرأ على الداكن أصلًا */
+body.theme-sard.sard-logo-as-is .store-header .navbar-brand img {
+  background: none;
+  filter: none;
+}
+
+/* ٣) تفتيح — لشعارٍ **أحاديّ اللون** داكن فقط؛ اختيارٌ صريح من التاجر
+   لا فرضٌ من الثيم، وهذا هو الفرق عن الصيغة المرفوضة. */
+body.theme-sard.sard-logo-lighten .store-header .navbar-brand img {
+  background: none;
+  filter: brightness(0) invert(1);
 }
 
 /* على الصفحة السردية تكون خلفية الجسم داكنة، فأي فراغ بين الأقسام

@@ -1,0 +1,189 @@
+/* ═══════════════════════════════════════════════════════════════
+   «سرد» — إقران الأسطح بالنصوص (سبب رفض سلة ٢٠٢٦-٠٨-٠٤)
+
+   الجذر الواحد لكل أسباب الرفض الخمسة: جلد سرد بدّل **رموز النص**
+   إلى لوحة فاتحة (‎--color-text: #F8F0E9‎) وبدّل **بعض الأسطح** إلى
+   داكنة (‎.bg-white → --sard-panel‎)، لكنّ مكوّنات سلة ورائد الموروثة
+   تحمل ألوانًا مثبّتة في CSS الخاص بها لا تصلها تلك الرموز. فوقع
+   الخلل من الطرفين:
+
+     • سطحٌ بقي أبيض + نصٌّ صار كريميًّا  → القائمة الجانبية، حقل الكمية
+     • سطحٌ صار داكنًا + نصٌّ بقي ‎#444‎   → قائمة الحساب، أيقونات المشاركة
+
+   القاعدة التي يفرضها هذا الملف: **لا سطح يُصبَغ وحده.** كل لوحة
+   موروثة نلمسها تأخذ خلفيةً ونصًّا وحشوة أيقونات معًا، بنسب تباين
+   مقيسة (كلها ≥ ٦٫٥:١ على ‎--sard-ink‎، والحدّ المطلوب ٤٫٥:١).
+
+   يُستورَد **آخر** ملف في app.scss ليعلو على الهيكل الموروث وعلى
+   ‎_sard-global‎ نفسه.
+   ═══════════════════════════════════════════════════════════════ */
+
+body.theme-sard {
+
+  /* ═══ ١) القائمة الجانبية للجوال (mmenu-light) ═══
+     كانت: ‎.mm-spn--light { background:#fff }‎ من رائد، وروابط التصنيفات
+     تحمل ‎.text-gray-500‎ التي أعاد ‎_sard-global‎ تعريفها إلى كريميّ
+     ‎rgba(248,240,233,.68)‎ — أي كريميّ على أبيض ≈ ‎1.1:1‎، فبدا الدرج
+     فارغًا تمامًا. (لقطة المراجع ١: ٦٥٪ من الصورة أبيض صافٍ بلا محتوى.)
+     الحل: الدرج يتبع جلد الثيم الداكن، فيصير النصّ الكريميّ ‎16:1‎. */
+
+  .mm-spn.mm-spn--light,
+  .mm-ocd__content {
+    background: var(--sard-ink);
+    color: var(--sard-cream);
+  }
+
+  .mm-ocd__backdrop { background: rgba(6, 6, 16, .62); }
+
+  .mm-spn {
+    /* الروابط والعناوين — نتجاوز ‎.text-gray-500‎ الموروثة صراحةً */
+    a,
+    li > span,
+    ul.main-menu li > a { color: var(--sard-cream); }
+
+    a:hover,
+    a:focus-visible { color: var(--sard-gold); }
+
+    /* الفواصل والسهام: ‎--infinte-color‎ الموروث مضبوط للأسطح الفاتحة */
+    li::after { border-color: rgba(248, 240, 233, .14); }
+    li::before { border-color: rgba(248, 240, 233, .72); }
+
+    /* شريط عنوان الدرج وزرّ الرجوع */
+    &.mm-spn--navbar::after { color: var(--sard-gold); }
+    &.mm-spn--navbar::before { border-color: var(--sard-gold); }
+
+    /* صور التصنيفات: الخلفية الرمادية الموروثة تصير لوحة رفيعة */
+    img { background: var(--sard-panel); }
+  }
+
+  .close-mobile-menu,
+  .btn--close.close-mobile-menu,
+  .btn--close-sm.close-mobile-menu {
+    color: var(--sard-cream);
+    background: color-mix(in srgb, var(--sard-cream) 10%, transparent);
+  }
+
+  /* ═══ ٢) قائمة حساب العميل (salla-user-menu) ═══
+     كانت: اللوحة ‎.s-user-menu-dropdown{bg-white}‎ صبغها ‎.bg-white‎ إلى
+     ‎--sard-panel‎ (كريميّ ٥٪ شفّاف = ‎#1F1E37‎ فوق الحبر)، بينما نصّ
+     العناصر مثبّت في مكوّن سلة: ‎.s-user-menu-dropdown-item a{text-[#444]}‎.
+     ‎#444‎ على ‎#1F1E37‎ = ‎1.66:1‎ — وهو ما وصفه المراجع بـ«الخط غير واضح»
+     (قِست من لقطته: خلفية ‎(31,30,55)‎ ونصّ ‎(68,68,68)‎).
+     الحل: سطح معتم + نصّ كريميّ ‎13.9:1‎. */
+
+  .s-user-menu-dropdown {
+    background: var(--sard-surface);
+    border-color: var(--sard-hairline);
+    box-shadow: 0 18px 48px rgba(6, 6, 16, .5);
+  }
+
+  .s-user-menu-dropdown-item a { color: var(--sard-cream); }
+
+  .s-user-menu-dropdown-item a:hover {
+    background: color-mix(in srgb, var(--sard-cream) 9%, transparent);
+    color: var(--sard-gold);
+  }
+
+  .s-user-menu-dropdown-item-prefix svg,
+  .s-user-menu-dropdown-item-suffix svg { fill: var(--sard-gold); }
+
+  .s-user-menu-dropdown-header {
+    border-color: var(--sard-hairline);
+    background: transparent;
+  }
+  .s-user-menu-dropdown-header-content p { color: var(--sard-cream); }
+  .s-user-menu-dropdown-header-content span { color: rgba(248, 240, 233, .68); }
+
+  /* «تسجيل الخروج» يبقى أحمر — ‎#FF443A‎ على الحبر ‎4.7:1‎ فوق الحدّ،
+     لكن نرفعه قليلًا ليتساوى مع بقية العناصر بصريًّا. */
+  .s-user-menu-dropdown-item-logout a { color: #FF7A72 !important; }
+  .s-user-menu-dropdown-item-logout a svg { fill: #FF7A72 !important; }
+
+  /* نفس العلّة في منسدلات الهيكل الموروث (‎.dropdown__menu{bg-white}‎) */
+  .dropdown__menu {
+    background: var(--sard-surface);
+    border-color: var(--sard-hairline);
+    color: var(--sard-cream);
+
+    a, .menu-item, li > span { color: var(--sard-cream); }
+    a:hover { color: var(--sard-gold); }
+  }
+
+  /* ═══ ٣) أيقونات المشاركة (salla-social-share) ═══
+     كانت: ‎.s-social-share-list{bg-white}‎ صار داكنًا، و‎svg‎ بلا ‎fill‎
+     فورث الأسود الافتراضي — أسود على ‎#1F1D38‎ ≈ ‎1.3:1‎
+     (قِست من لقطة المراجع ٤: أيقونات ‎(0,0,0)‎ على ‎(31,29,56)‎).
+     الحل: حشوة كريميّة + سطح معتم + منع القصّ عند حافّة الحاوية. */
+
+  .s-social-share-list {
+    background: var(--sard-surface);
+    border: 1px solid var(--sard-hairline);
+    box-shadow: 0 14px 40px rgba(6, 6, 16, .5);
+  }
+
+  .s-social-share-list a svg,
+  .s-social-share-btn span svg,
+  .s-social-share-icon svg { fill: var(--sard-cream); }
+
+  .s-social-share-list a:hover svg,
+  .s-social-share-btn:hover span svg { fill: var(--sard-gold); }
+
+  /* اللوحة تنسدل مطلقة الموضع، و‎overflow-x: clip‎ على الجسم يقصّها إن
+     تجاوزت حافّة حاويتها. نرفع طبقتها ونمنع أي أب من حبسها. */
+  .s-social-share-wrapper { position: relative; z-index: 5; }
+  .s-social-share-list { z-index: 40; }
+
+  /* ═══ ٤) حقول الإدخال — الكمية وكل حقول الثيم ═══
+     الجذر أعمق مما رصده المراجع: الثيم داكن لكنه لم يُعلن ‎color-scheme‎،
+     فبقيت عناصر النموذج على خلفية المتصفّح البيضاء الافتراضية بينما ورث
+     نصّها ‎--color-text: #F8F0E9‎ — كريميّ على أبيض ‎1.05:1‎.
+     المراجع رصدها في حقل الكمية («الكمية غير ظاهرة»، وقِست من لقطته:
+     صندوق ‎(255,255,255)‎ ورقمٌ ‎(247,240,234)‎)، لكنها تصيب **كل** حقل
+     في الثيم: البحث والدخول والعنوان والدفع. نصلحها من الجذر. */
+
+  input:not([type='checkbox']):not([type='radio']):not([type='range']),
+  textarea,
+  select,
+  .form-control,
+  .s-form-control {
+    background-color: var(--sard-surface);
+    color: var(--sard-cream);
+
+    &::placeholder { color: rgba(248, 240, 233, .5); }
+  }
+
+  /* حقل الكمية تحديدًا: الحاوية والزرّان معًا */
+  salla-quantity-input,
+  .s-quantity-input-container {
+    background: var(--sard-surface);
+    border-color: var(--sard-hairline);
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .s-quantity-input-input {
+    background: transparent;
+    color: var(--sard-cream);
+    border-color: var(--sard-hairline);
+  }
+
+  .s-quantity-input-button { fill: var(--sard-cream); }
+  .s-quantity-input-button:hover { fill: var(--sard-gold); }
+
+  /* ═══ ٥) لوحات عائمة أخرى ورثت ‎bg-white‎ ═══
+     نفس القاعدة وقائيًّا: كل لوحة عائمة تأخذ سطحًا معتمًا ونصًّا كريميًّا،
+     فلا تتكرّر العلّة في شاشة لم يفتحها المراجع. */
+
+  .s-search-suggestions,
+  .s-cart-summary-body,
+  .s-modal-body,
+  .s-modal-header,
+  .s-dropdown-menu,
+  .swal2-popup {
+    background: var(--sard-surface);
+    color: var(--sard-cream);
+  }
+
+  .swal2-title,
+  .swal2-html-container { color: var(--sard-cream); }
+}

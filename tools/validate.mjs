@@ -246,6 +246,36 @@ const imgCount = existsSync(join(ROOT, 'src/assets/images')) ? readdirSync(join(
 imgCount ? pass(`${imgCount} أصلًا في src/assets/images`) : warn('لا صور في src/assets/images');
 pass('كل خطوط SCSS موجودة');
 
+/* ── ٧) فخّ الخصائص المنطقية مع الاختصارات (يقلب الجهة في RTL) ──
+   ‎cssnano‎ يدمج ‎margin: X‎ مع ‎margin-inline-end: Y‎ في اختصارٍ **فيزيائي**
+   مفترضًا LTR، فيخرج البناء بـ ‎margin: X Y X X‎ — أي ‎margin-right‎ — وفي RTL
+   ينقلب الفاصل إلى الجهة الخطأ، وإن كان ‎X‎ سالبًا زحف العنصر فوق جاره.
+
+   هذه بالضبط علّة «الأيقونة متداخلة مع الشعار» في رفض سلة ٢٠٢٦-٠٨-٠٤:
+   ‎margin: -14px; margin-inline-end: calc(1rem - 14px)‎ بُنيت إلى
+   ‎margin: -14px calc(1rem - 14px) -14px -14px‎ فالتصق زرّ القائمة بالشعار.
+
+   العلّة صامتة تمامًا في المصدر — لا تظهر إلا في المخرج المبني — فتُحرَس هنا. */
+console.log('\n— فخّ RTL: اختصار + خاصيّة منطقية —');
+const LOGICAL_TRAP = [];
+for (const file of scss) {
+  const src = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+  for (const block of src.matchAll(/\{([^{}]*)\}/g)) {
+    const body = block[1];
+    for (const prop of ['margin', 'padding']) {
+      const short = new RegExp(`(?:^|[;\\s])${prop}\\s*:`).test(body);
+      const logical = new RegExp(`${prop}-(?:inline|block)(?:-(?:start|end))?\\s*:`).test(body);
+      if (short && logical) {
+        const line = src.slice(0, block.index).split('\n').length;
+        LOGICAL_TRAP.push(`${relative(ROOT, file)}:${line} — ‎${prop}‎ اختصارًا مع ‎${prop}-inline/block‎ في قاعدة واحدة`);
+      }
+    }
+  }
+}
+LOGICAL_TRAP.length
+  ? LOGICAL_TRAP.forEach((m) => fail(m))
+  : pass('لا خلط بين اختصارات margin/padding والخصائص المنطقية');
+
 /* ── الحصيلة ── */
 console.log(`\n${errors ? '✗' : '✓'} الحصيلة: ${errors} خطأ · ${warnings} تحذير`);
 process.exitCode = errors ? 1 : 0;

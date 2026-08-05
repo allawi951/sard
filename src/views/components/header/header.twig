@@ -51,7 +51,13 @@
                         <i class="sicon-menu text-primary text-2xl"></i>
                       </a>
                       <a data-testid="store-header-logo" class="navbar-brand" href="{{ store.url }}">
-                          <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo|cdn(175) }}" alt="{{ store.name }} logo">
+                          {# الهيكل الموروث يصيّر <img> بلا شرط، فمتجرٌ بلا شعار يعرض صورة
+                             مكسورة. الثيم يُركَّب على متاجر لا نعرفها، فالبديل اسم المتجر. #}
+                          {% if store.logo %}
+                            <img fetchpriority="high" width="100%" height="100%" loading="eager" src="{{ store.logo|cdn(175) }}" alt="{{ store.name }} logo">
+                          {% else %}
+                            <span class="sard-brand-name">{{ store.name }}</span>
+                          {% endif %}
                           {% if is_page('index') %}
                             <h1 class="sr-only">{{ store.name }}</h1>
                           {% else %}

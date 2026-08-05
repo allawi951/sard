@@ -236,6 +236,16 @@
             "value": true
         },
         {
+            "id": "enable_cart_preview",
+            "type": "boolean",
+            "format": "switch",
+            "label": "معاينة السلة عند الضغط على أيقونتها",
+            "description": "بدل الانتقال المباشر لصفحة السلة، يفتح درجًا جانبيًّا بمحتوى السلة وزرَّي «متابعة التسوّق» و«إتمام الطلب». أطفئه ليعود الانتقال المباشر.",
+            "labelHTML": null,
+            "icon": "sicon-shopping-bag",
+            "value": true
+        },
+        {
             "type": "boolean",
             "icon": "sicon-toggle-off",
             "label": "تفعيل إشعار الإضافة للسلة المحسن",

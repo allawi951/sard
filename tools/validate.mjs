@@ -276,6 +276,31 @@ LOGICAL_TRAP.length
   ? LOGICAL_TRAP.forEach((m) => fail(m))
   : pass('لا خلط بين اختصارات margin/padding والخصائص المنطقية');
 
+/* ── ٨) بناء تطوير مسرَّب إلى public/ ──
+   `salla theme preview` يشغّل `pnpm run watch` أي `webpack --mode development`،
+   فيكتب فوق كل ملفات public/ ببناءٍ **غير مُصغَّر**. ولو رُفع ذلك إلى GitHub
+   خدَمت سلة بناءَ تطوير: أضخم بمئات الكيلوبايتات، وقد تُلتقط الصفحة أثناء
+   إعادة البناء فتظهر **بلا أنماط إطلاقًا** (وقع هذا فعلًا: app.css صار 1.2MB
+   بدل 891KB، ولقطة المالك أظهرت الصفحة خامًا بروابط زرقاء).
+
+   القاعدة: لا تُرفَع public/ إلا من `--mode production`. */
+console.log('\n— بناء الإنتاج —');
+const cssPath = join(ROOT, 'public/app.css');
+if (existsSync(cssPath)) {
+  const css = readFileSync(cssPath, 'utf8');
+  const sample = css.slice(0, 20000);
+  const newlines = (sample.match(/\n/g) || []).length;
+  const doubleSpaces = (sample.match(/;\s{2,}/g) || []).length;
+  if (newlines > 60 || doubleSpaces > 40) {
+    fail(`public/app.css يبدو بناء تطوير غير مُصغَّر (${newlines} سطرًا في أول 20KB)`
+       + ' — شغّل: node node_modules/webpack/bin/webpack.js --mode production');
+  } else {
+    pass(`app.css مُصغَّر (${Math.round(css.length / 1024)}KB)`);
+  }
+} else {
+  warn('public/app.css غير موجود — لم يُبنَ الثيم بعد');
+}
+
 /* ── الحصيلة ── */
 console.log(`\n${errors ? '✗' : '✓'} الحصيلة: ${errors} خطأ · ${warnings} تحذير`);
 process.exitCode = errors ? 1 : 0;

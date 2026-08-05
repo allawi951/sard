@@ -58,8 +58,9 @@ function ensureModal() {
       <div class="sard-quick__info">
         <h3 class="sard-quick__name"></h3>
         <div class="sard-quick__price"></div>
+        <div class="sard-quick__desc" aria-live="polite"></div>
         <div class="sard-quick__slot"></div>
-        <a class="sard-quick__more" href="#"></a>
+        <a class="sard-quick__more btn btn-solid" href="#"></a>
       </div>
     </div>`;
   document.body.appendChild(modal);
@@ -103,6 +104,43 @@ function openQuick(data, labels) {
   requestAnimationFrame(() => m.classList.add('is-open'));
   document.documentElement.classList.add('sard-quick-open');
   m.querySelector('.sard-quick__close').focus();
+
+  loadDescription(data.url, m.querySelector('.sard-quick__desc'), labels);
+}
+
+/* ── وصف المنتج الحقيقي ──
+   البطاقة لا تحمل الوصف، وSDK سلة لا يُعلن دالةً لجلب تفاصيل منتج. لكن صفحة
+   المنتج مُصيَّرة على الخادم وعلى **نفس النطاق**، فجلبها وقراءة الوصف منها
+   عمليةٌ مشروعة بلا CORS ولا واجهة غير موثّقة — والنصّ يخرج مطابقًا لما في
+   صفحة المنتج حرفيًّا، وهو ما طلبه المالك.
+
+   يُجلب بعد الفتح لا قبله: النافذة تظهر فورًا بما لدينا، والوصف يلتحق. */
+const descCache = new Map();
+async function loadDescription(url, slot, labels) {
+  if (!slot) return;
+  if (!url || /^https?:\/\//i.test(url) && !url.startsWith(location.origin)) { slot.textContent = ''; return; }
+
+  if (descCache.has(url)) { slot.innerHTML = descCache.get(url); return; }
+  slot.textContent = labels.loading;
+
+  try {
+    const res = await fetch(url, { credentials: 'same-origin' });
+    if (!res.ok) throw new Error(String(res.status));
+    const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
+
+    const node = doc.querySelector('.sard-product__desc, .product__description, [class*="product-description"], #description');
+    let html = '';
+    if (node) {
+      /* نصّ فقط: حقن HTML من صفحة أخرى قد يجرّ سكربتات أو تخطيطًا يكسر
+         النافذة. الوصف نصّيّ في جوهره فلا نخسر شيئًا. */
+      const text = (node.textContent || '').replace(/\s+/g, ' ').trim();
+      if (text) html = text.length > 600 ? text.slice(0, 600).trim() + '…' : text;
+    }
+    descCache.set(url, html);
+    slot.innerHTML = html;
+  } catch {
+    slot.textContent = '';        // تعذّر الجلب: نُخفيه بلا رسالة خطأ للزائر
+  }
 }
 
 /* ── زرّ المعاينة على البطاقات ── */
@@ -138,7 +176,8 @@ function boot() {
   const labels = {
     quick: t('blocks.home.quick_view', 'معاينة سريعة'),
     add: t('pages.products.add_to_cart', 'إضافة للسلة'),
-    details: t('pages.products.details', 'التفاصيل الكاملة'),
+    details: t('pages.products.details', 'الانتقال لصفحة المنتج'),
+    loading: t('common.elements.loading', 'جارٍ التحميل…'),
   };
 
   const scan = () => document.querySelectorAll(SEL_CARDS).forEach((c) => decorate(c, labels.quick));

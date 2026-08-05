@@ -1,0 +1,164 @@
+/* ═══════════════════════════════════════════════════════════════
+   القائمة الجانبية لسطح المكتب + شارة السلة الفارغة
+   المنطق في src/assets/js/sard-nav.js
+   ═══════════════════════════════════════════════════════════════ */
+
+/* شارة السلة حين تكون فارغة: يصيّرها مكوّن سلة دائمًا حتى بصفر،
+   وبالأرقام الهندية يُرسم الصفر نقطةً فتبدو بقعة بلا معنى. */
+body.theme-sard .s-cart-summary-count.is-empty { display: none; }
+
+/* ── زرّ القائمة الجانبية (سطح المكتب) ── */
+body.theme-sard .sard-nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  padding: 0 10px;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  margin-inline-end: .9rem;
+  flex: 0 0 auto;
+
+  span {
+    display: block;
+    height: 1.5px;
+    width: 100%;
+    background: var(--sard-cream);
+    border-radius: 2px;
+    transition: transform .35s var(--sard-ease), opacity .25s, background-color .3s;
+  }
+  &:hover span { background: var(--sard-gold); }
+
+  &[aria-expanded='true'] {
+    span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+    span:nth-child(2) { opacity: 0; }
+    span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  }
+}
+
+/* ── الدرج ── */
+body.theme-sard .sard-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: 9990;
+
+  &__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(6, 6, 16, .62);
+    opacity: 0;
+    transition: opacity .3s ease;
+  }
+
+  &__panel {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: min(380px, 86vw);
+    background: var(--sard-ink);
+    border-inline-end: 1px solid var(--sard-hairline);
+    box-shadow: 0 0 60px rgba(6, 6, 16, .55);
+    display: flex;
+    flex-direction: column;
+    /* يدخل من جهة بداية السطر: يمينًا في RTL ويسارًا في LTR.
+       ‎transform‎ لا يعرف اتجاه اللغة — ‎translateX(-100%)‎ تعني «يسارًا» دائمًا.
+       فنقلب الإشارة بمتغيّر يضبطه اتجاه الصفحة (نفس درس التمرير الأفقي). */
+    transform: translateX(calc(-100% * var(--sard-dir, 1)));
+    transition: transform .34s var(--sard-ease);
+    overflow-y: auto;
+  }
+
+  &.is-open {
+    .sard-drawer__backdrop { opacity: 1; }
+    .sard-drawer__panel { transform: translateX(0); }
+  }
+
+  &__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.15rem 1.35rem;
+    border-bottom: 1px solid var(--sard-hairline);
+  }
+  &__title {
+    font-family: var(--sard-serif);
+    font-size: 1.15rem;
+    color: var(--sard-gold);
+    letter-spacing: .02em;
+  }
+  &__close {
+    background: none;
+    border: 0;
+    color: var(--sard-cream);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    min-width: 44px;
+    min-height: 44px;
+    &:hover { color: var(--sard-gold); }
+  }
+
+  &__nav { padding: .6rem 0 2rem; }
+  &__list, &__sub { list-style: none; margin: 0; padding: 0; }
+
+  &__row { display: flex; align-items: center; }
+
+  &__link {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    flex: 1;
+    padding-inline: 1.35rem;
+    color: var(--sard-cream);
+    font-family: var(--sard-sans);
+    font-size: .98rem;
+    transition: color .25s, background-color .25s;
+    &:hover { color: var(--sard-gold); background: color-mix(in srgb, var(--sard-cream) 6%, transparent); }
+  }
+
+  &__toggle {
+    position: relative;
+    width: 48px;
+    height: 48px;
+    background: none;
+    border: 0;
+    cursor: pointer;
+    flex: 0 0 auto;
+
+    span {
+      position: absolute;
+      inset-inline-start: 50%;
+      top: 50%;
+      width: 11px;
+      height: 1.5px;
+      margin-inline-start: -5.5px;
+      background: var(--sard-gold);
+      transition: transform .3s var(--sard-ease);
+    }
+    span:nth-child(2) { transform: rotate(90deg); }
+    &[aria-expanded='true'] span:nth-child(2) { transform: rotate(0deg); }
+  }
+
+  &__sub {
+    background: color-mix(in srgb, var(--sard-cream) 4%, transparent);
+    .sard-drawer__link {
+      padding-inline-start: 2.6rem;
+      font-size: .92rem;
+      color: rgba(248, 240, 233, .8);
+      min-height: 44px;
+    }
+  }
+
+  &__item + &__item { border-top: 1px solid rgba(248, 240, 233, .07); }
+}
+
+/* إشارة الاتجاه: 1 لليسار (LTR) و-1 لليمين (RTL) */
+html[dir='ltr'] { --sard-dir: 1; }
+html[dir='rtl'] { --sard-dir: -1; }
+
+/* الدرج مفتوح: نمنع تمرير الصفحة خلفه */
+html.sard-drawer-open, html.sard-drawer-open body { overflow: hidden; }

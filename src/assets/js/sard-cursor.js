@@ -100,7 +100,18 @@ const SHAPES = {
   },
 };
 
-const SHAPE_KEY = SHAPES[CFG.cursorShape] ? CFG.cursorShape : 'perfume';
+/* الإعداد قد يصل نصًّا ‎"perfume"‎ (سلوك سلة) أو مصفوفة كائنات الخيار المحدَّد
+   ‎[{value:"perfume",…}]‎ (ما يُخرِجه بعض المحاكيات وبعض إصدارات المحرّر).
+   قراءةُ الشكل الواحد فقط كانت تجعل أي اختيار غير الافتراضي يسقط صامتًا إلى
+   القارورة — وهو ما رصده المالك: «تغيير المؤشّر ما يأثّر». نقبل الشكلين. */
+function readShapeKey(raw) {
+  const v = Array.isArray(raw) ? (raw[0] && raw[0].value) : (raw && raw.value) || raw;
+  return typeof v === 'string' && SHAPES[v] ? v : 'perfume';
+}
+
+const SHAPE_KEY = CFG.cursorShape === 'none' || (Array.isArray(CFG.cursorShape) && CFG.cursorShape[0]?.value === 'none')
+  ? 'none'
+  : readShapeKey(CFG.cursorShape);
 const SHAPE = SHAPES[SHAPE_KEY];
 
 const LIGHT_ENOUGH_ALPHA = 40;   // عتبة «ليس شفّافًا» في قناع الجسيمات
@@ -121,26 +132,54 @@ function playSpray() {
     if (actx.state === 'suspended') actx.resume();
 
     const t0 = actx.currentTime;
-    const dur = 0.3;
-    const buf = actx.createBuffer(1, Math.ceil(actx.sampleRate * dur), actx.sampleRate);
-    const data = buf.getChannelData(0);
-    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+    const dur = 0.42;
+    const out = actx.createGain();
+    out.gain.value = 0.9;
+    out.connect(actx.destination);
 
-    const src = actx.createBufferSource(); src.buffer = buf;
+    /* ضوضاء مشتركة بين الطبقتين — أرخص من توليد مخزنين */
+    const noise = actx.createBuffer(1, Math.ceil(actx.sampleRate * dur), actx.sampleRate);
+    const nd = noise.getChannelData(0);
+    for (let i = 0; i < nd.length; i++) nd[i] = Math.random() * 2 - 1;
+
+    /* ── ١) نقرة الصمّام: طقّة قصيرة جدًّا تسبق الهواء ──
+       بدونها تبدأ الرشّة «ناعمة» فتُسمع كتنفّس لا كضغطٍ على مضخّة. */
+    const click = actx.createBufferSource(); click.buffer = noise;
+    const clickBand = actx.createBiquadFilter();
+    clickBand.type = 'bandpass'; clickBand.frequency.value = 2400; clickBand.Q.value = 1.4;
+    const clickGain = actx.createGain();
+    clickGain.gain.setValueAtTime(0.0001, t0);
+    clickGain.gain.exponentialRampToValueAtTime(0.16, t0 + 0.004);
+    clickGain.gain.exponentialRampToValueAtTime(0.0001, t0 + 0.045);
+    click.connect(clickBand); clickBand.connect(clickGain); clickGain.connect(out);
+
+    /* ── ٢) اندفاع الهواء: النطاق يهبط ثم يتّسع فيتحوّل الصفير إلى رذاذ ──
+       ‎Q‎ عالية أوّلًا (صفير مضغوط من فتحةٍ ضيّقة) ثم تنخفض (انتشار الرذاذ). */
+    const air = actx.createBufferSource(); air.buffer = noise;
     const band = actx.createBiquadFilter();
-    band.type = 'bandpass'; band.Q.value = 0.85;
-    band.frequency.setValueAtTime(5400, t0);
-    band.frequency.exponentialRampToValueAtTime(1500, t0 + dur);   // الهبوط يصنع «الرشّة»
-    const high = actx.createBiquadFilter();
-    high.type = 'highpass'; high.frequency.value = 700;            // يزيل الطنين الثقيل
+    band.type = 'bandpass';
+    band.frequency.setValueAtTime(7200, t0 + 0.005);
+    band.frequency.exponentialRampToValueAtTime(2600, t0 + 0.09);
+    band.frequency.exponentialRampToValueAtTime(900, t0 + dur);
+    band.Q.setValueAtTime(2.6, t0 + 0.005);
+    band.Q.exponentialRampToValueAtTime(0.5, t0 + 0.16);
 
-    const gain = actx.createGain();
-    gain.gain.setValueAtTime(0.0001, t0);
-    gain.gain.exponentialRampToValueAtTime(0.2, t0 + 0.012);       // هجوم شبه فوريّ
-    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+    /* قاطعٌ عالٍ يزيل الطنين، وقاطعٌ منخفض يقصّ الحدّة المزعجة في الأذن */
+    const hp = actx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 620;
+    const lp = actx.createBiquadFilter(); lp.type = 'lowpass';
+    lp.frequency.setValueAtTime(11000, t0);
+    lp.frequency.exponentialRampToValueAtTime(3200, t0 + dur);     // «ترطيب» الذيل
 
-    src.connect(band); band.connect(high); high.connect(gain); gain.connect(actx.destination);
-    src.start(t0); src.stop(t0 + dur);
+    const airGain = actx.createGain();
+    airGain.gain.setValueAtTime(0.0001, t0 + 0.004);
+    airGain.gain.exponentialRampToValueAtTime(0.26, t0 + 0.03);    // ذروة بعد الطقّة
+    airGain.gain.exponentialRampToValueAtTime(0.06, t0 + 0.17);    // هبوط سريع
+    airGain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);   // ذيلٌ يتلاشى
+
+    air.connect(band); band.connect(hp); hp.connect(lp); lp.connect(airGain); airGain.connect(out);
+
+    click.start(t0); click.stop(t0 + 0.06);
+    air.start(t0 + 0.004); air.stop(t0 + dur);
   } catch { /* الصوت زينة: أي إخفاق يُتجاهَل بلا أثر على المؤشّر */ }
 }
 
@@ -273,4 +312,4 @@ function init() {
 
    ولا مؤشّر مخصّص على اللمس (لا فأرة أصلًا)، ولا مع تفضيل تقليل الحركة،
    ولا إن أطفأه التاجر، ولا إن اختار «بلا مؤشّر مخصّص». */
-if (!COARSE && !REDUCED && CFG.cursor !== false && CFG.cursorShape !== 'none') init();
+if (!COARSE && !REDUCED && CFG.cursor !== false && SHAPE_KEY !== 'none' && SHAPE) init();

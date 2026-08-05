@@ -91,12 +91,20 @@ body.theme-sard {
   &[dir='rtl'] .store-header custom-main-menu a:hover::after,
   &[dir='rtl'] .store-header .mainMenu > li > a:hover::after { transform-origin: right; }
 
-  /* أيقونات الشريط: مقاس ثابت حتى لا تتضخّم لو تأخّر خط الأيقونات */
+  /* أيقونات الشريط: مقاس ثابت حتى لا تتضخّم لو تأخّر خط الأيقونات.
+
+     ⚠️ كان هنا ‎display: inline-block‎ فكسر توسيط أيقونة السلة: أيقونة السلة
+     هي نفسها الدائرة (‎.header-btn__icon‎ = ‎w-10 h-10 rounded-full flex
+     items-center justify-center‎)، وتخصيصنا أعلى فألغى ‎flex‎ ومعه التوسيط،
+     فانزاح الرمز عن مركز الدائرة — وهو ما رصده المالك.
+     ‎inline-flex‎ مع التوسيط يحفظ المقاس الثابت والتوسيط معًا. */
   .store-header [class^='sicon-'],
   .store-header [class*=' sicon-'] {
     font-size: 1.35rem;
     line-height: 1;
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
 
   /* الشريط فوق الواجهة السردية: شفاف يتصلّب مع التمرير */

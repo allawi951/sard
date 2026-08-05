@@ -118,7 +118,13 @@ const hex = (h, amount, up) => {
 
 const settings = Object.fromEntries((JSON.parse(readFileSync(join(ROOT, 'twilight.json'), 'utf8')).settings || [])
   .filter((s) => s.id && s.type !== 'static')
-  .map((s) => [s.id, s.value ?? s.selected ?? null]));
+  /* ⚠️ إعدادات `items/dropdown-list` لا تحمل `value` بل `selected` وهي **مصفوفة
+     كائنات**. إعادتها كما هي كانت تجعل المحاكي يُخرِج
+         cursorShape: [{"label":"…","value":"perfume","key":"…"}]
+     بينما سلة تُرجع القيمة النصّية `"perfume"` وحدها. فكان المحاكي يُخفي
+     أعطال المفاتيح المبنيّة على هذه الإعدادات (لوحة الألوان، شكل المؤشّر)
+     بدل أن يكشفها. نُطابق سلوك سلة: القيمة النصّية للخيار المحدَّد. */
+  .map((s) => [s.id, s.value ?? s.selected?.[0]?.value ?? null]));
 
 const data = {
   ...fixtures,

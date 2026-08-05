@@ -129,6 +129,46 @@
             "selected": true
         },
         {
+            "id": "desktop_side_menu",
+            "type": "boolean",
+            "format": "switch",
+            "label": "قائمة جانبية على سطح المكتب",
+            "description": "تُظهر زرّ الخطوط الثلاثة على شاشات سطح المكتب، ويفتح درجًا جانبيًّا بكل أقسام المتجر. على الجوال يبقى زرّ القائمة الأصلي كما هو.",
+            "labelHTML": null,
+            "icon": "sicon-menu",
+            "value": true
+        },
+        {
+            "id": "desktop_menu_source",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "محتوى القائمة الجانبية",
+            "description": "يحدّد ما يظهر داخل الدرج الجانبي: كل الأقسام مع فروعها، أو الأقسام الرئيسية فقط.",
+            "labelHTML": null,
+            "icon": "sicon-list",
+            "selected": [
+                {
+                    "label": "كل الأقسام مع الأقسام الفرعية (الافتراضي)",
+                    "value": "all",
+                    "key": "a7d3e5c1-2b84-4f16-9c30-5e8b1d7a9401"
+                }
+            ],
+            "options": [
+                {
+                    "label": "كل الأقسام مع الأقسام الفرعية (الافتراضي)",
+                    "value": "all",
+                    "key": "a7d3e5c1-2b84-4f16-9c30-5e8b1d7a9401"
+                },
+                {
+                    "label": "الأقسام الرئيسية فقط بلا فروع",
+                    "value": "top",
+                    "key": "a7d3e5c1-2b84-4f16-9c30-5e8b1d7a9402"
+                }
+            ],
+            "source": "Manual",
+            "required": true
+        },
+        {
             "type": "static",
             "id": "static-line3",
             "format": "line"

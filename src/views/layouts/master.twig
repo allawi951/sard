@@ -140,6 +140,8 @@
         logoDraw:     {{ theme.settings.get('enable_logo_draw', true) | json_encode }},
         water:        {{ theme.settings.get('enable_water_canvas', true) | json_encode }},
         cursor:       {{ theme.settings.get('enable_custom_cursor', true) | json_encode }},
+        cursorShape:  {{ theme.settings.get('cursor_shape', 'perfume') | json_encode }},
+        cursorSound:  {{ theme.settings.get('cursor_sound', true) | json_encode }},
         stickyHeader: {{ theme.settings.get('header_is_sticky', true) | json_encode }}
       };
     </script>

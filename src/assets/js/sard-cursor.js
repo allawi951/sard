@@ -1,89 +1,169 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   sard-cursor — مؤشّر «سرد»: قارورة عطر تتبع الفأرة، ورشّة تنبثق عند النقر.
+   sard-cursor — مؤشّر «سرد»: شكلٌ يختاره التاجر يتبع الفأرة، وأثرٌ عند النقر.
 
-   لماذا بلا GSAP: هذا الملف يُحمَّل في مدخل ‎app‎ (كل الصفحات لا الرئيسية
-   وحدها)، وجرّ GSAP إليه يضيف ‎131KB‎ إلى كل صفحة من أجل حلقة ‎rAF‎ واحدة.
-   الحركة كلها هنا استيفاءٌ خطّي بسيط وفيزياء جسيمات على canvas — لا تحتاج
-   مكتبة، ووزنها بضعة كيلوبايتات.
+   لماذا سجلّ أشكال لا شكل واحد: «سرد» ثيمٌ يُباع لمتاجر مختلفة. قارورة العطر
+   تليق بمتجر عطور ولا تليق بمتجر ملابس أو مطبخ. فالشكل إعدادٌ للتاجر
+   (‎cursor_shape‎)، والإضافة لاحقًا لا تحتاج إلا مدخلًا جديدًا في ‎SHAPES‎.
 
-   البنية: عنصران مثبّتان بلا تفاعل (‎pointer-events: none‎):
-     • ‎<canvas class="sard-mist">‎ للرذاذ — canvas أرخص من DOM لمئات الجسيمات
-     • ‎<div class="sard-flacon">‎ يحمل SVG القارورة
+   كل شكل يُعرِّف:
+     svg    — الرسم (بلون ‎currentColor‎ فيتبع لوحة الثيم)
+     anchor — نقطة الارتساء بالبكسل داخل مربّع العرض؛ هي ما يقع تحت المؤشّر
+     fx     — أثر النقر: 'mist' رذاذ جسيمات، أو null
+     sound  — صوت النقر: 'spray'، أو null
 
-   نقطة الارتساء هي **فوهة الرذّاذة** لا مركز القارورة، فتخرج الرشّة من حيث
-   يشير المستخدم تمامًا — وهو ما يجعل الأثر مقنعًا بدل أن يبدو منفصلًا.
+   الصوت مُصنَّع بـ Web Audio لا ملفًّا: لا أصل ثنائيًّا يُحمَّل، ولا طلب شبكة،
+   ويعمل بلا إنترنت. ويُنشَأ سياق الصوت عند أول نقرة (إيماءة مستخدم) احترامًا
+   لسياسة التشغيل التلقائي في المتصفّحات.
+
+   لماذا بلا GSAP: هذا الملف في مدخل ‎app‎ (كل الصفحات)، وجرّ GSAP إليه يضيف
+   ‎131KB‎ لكل صفحة من أجل حلقة ‎rAF‎ واحدة.
    ═══════════════════════════════════════════════════════════════════════════ */
 
 const CFG = window.SARD_CFG || {};
-
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const COARSE = matchMedia('(hover: none), (pointer: coarse)').matches;
 
-/* فوهة الرذّاذة عند ‎(4,4)‎ من مربّع العرض، ونُزيح الغلاف بها فيصير الارتساء
-   على الفوهة نفسها. القارورة تتدلّى أسفل يمين المؤشّر فلا تحجب ما تحته. */
-const NOZZLE_X = 4;
-const NOZZLE_Y = 4;
+/* ── سجلّ الأشكال ──
+   الرسم كلّه خطوطٌ بلون واحد لتبقى العائلة متّسقة مهما اختار التاجر. */
+const SHAPES = {
+  /* قارورة عطر مضلّعة — كتفان مشطوفان وقاعدة مشطوفة وخطّا أوجه */
+  perfume: {
+    w: 42, h: 58, anchor: { x: 4, y: 5 }, fx: 'mist', sound: 'spray',
+    svg: `
+      <defs><linearGradient id="sardGlass" x1="10" y1="16" x2="34" y2="52" gradientUnits="userSpaceOnUse">
+        <stop offset="0" stop-color="#F8F0E9" stop-opacity=".20"/>
+        <stop offset=".5" stop-color="#C9A15A" stop-opacity=".10"/>
+        <stop offset="1" stop-color="#C9A15A" stop-opacity=".30"/></linearGradient></defs>
+      <path d="M4.6 5h8.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      <circle cx="4.5" cy="5" r="1.6" fill="currentColor"/>
+      <path d="M14.5 1.6h11.2l1.5 2v3.2l-1.5 2H14.5l-1.4-2V3.6z" fill="currentColor" opacity=".9"/>
+      <path d="M17.4 8.8h6.8v4.6h-6.8z" fill="currentColor" opacity=".5"/>
+      <path d="M15.8 13.4h10v2.2h-10z" fill="currentColor" opacity=".75"/>
+      <path d="M15.6 15.6h10.8l6.4 5.4 1.2 4.6v20.6l-1.2 4.6-3.6 5.2H13.4l-3.6-5.2-1.2-4.6V25.6l1.2-4.6z"
+            fill="url(#sardGlass)" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+      <path d="M9 34h24.8v11.8l-1.1 4.4-3.4 4.9H13.5l-3.4-4.9L9 45.8z" fill="currentColor" opacity=".3"/>
+      <path d="M14 21.6v29M28.4 21.6v29" stroke="currentColor" stroke-width=".85" opacity=".45"/>
+      <path d="M11.6 26.5v18" stroke="#F8F0E9" stroke-width="1.5" stroke-linecap="round" opacity=".45"/>`,
+  },
 
-/* قارورة **مضلَّعة** مقطوعة الأوجه (facetted flacon) — لا أسطوانة ملساء.
-   الشكل ثماني الأضلاع: كتفان مشطوفان وقاعدة مشطوفة، وخطّان رأسيّان يفصلان
-   الوجه الأمامي عن الجانبين فيقرأ الزجاج مصقولًا لا مسطّحًا. الوميض على
-   الحافّة اليسرى والظلّ على اليمنى يمنحان العمق بلا تدرّجات ثقيلة. */
-const FLACON = `
-<svg width="42" height="58" viewBox="0 0 42 58" fill="none" aria-hidden="true">
-  <defs>
-    <linearGradient id="sardGlass" x1="10" y1="16" x2="34" y2="52" gradientUnits="userSpaceOnUse">
-      <stop offset="0" stop-color="#F8F0E9" stop-opacity=".20"/>
-      <stop offset=".5" stop-color="#C9A15A" stop-opacity=".10"/>
-      <stop offset="1" stop-color="#C9A15A" stop-opacity=".30"/>
-    </linearGradient>
-  </defs>
+  /* جزمة نسائية بكعب رفيع — ساقٌ رأسية ومشطٌ يمتدّ يسارًا وكعبٌ مدبّب.
+     الارتساء عند طرف المشط. التفاصيل (خطّ النعل، الكعب المدبّب، طيّة
+     الساق) هي ما يجعلها تُقرأ جزمةً لا شكلًا مجرّدًا. */
+  'boot-women': {
+    w: 44, h: 56, anchor: { x: 4.5, y: 37.6 }, fx: null, sound: null,
+    svg: `
+      <path d="M4.5 37.6c0-2 1.9-2.7 4.1-3.4l9-3c2.6-.9 4-2.4 4.2-5.2l.6-18.6c.1-2.1 1.5-3.5 3.6-3.5h6.4c2.1 0 3.5 1.4 3.5 3.5v30.2z"
+            fill="rgba(201,161,90,.14)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      <path d="M4.5 37.6h31.4" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" opacity=".6"/>
+      <path d="M35.4 37.6l-1.2 11.8c-.1 1-.9 1.7-1.8 1.5-.8-.1-1.3-.9-1.2-1.8l1.2-11.5z"
+            fill="currentColor" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M22.6 10.4h13.3" stroke="currentColor" stroke-width="1.3" opacity=".55"/>
+      <path d="M22.4 16.6h13.5" stroke="currentColor" stroke-width="1.1" opacity=".35"/>`,
+  },
 
-  <!-- الفوهة: طرفها الأيسر هو نقطة المؤشّر تمامًا -->
-  <path d="M4.6 5h8.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
-  <circle cx="4.5" cy="5" r="1.6" fill="currentColor"/>
+  /* حذاء رجالي كلاسيكي — نعلٌ منفصل وكعبٌ خلفيّ ورباطان.
+     الارتساء عند طرف المشط. */
+  'shoe-men': {
+    w: 52, h: 36, anchor: { x: 3.5, y: 26.4 }, fx: null, sound: null,
+    svg: `
+      <path d="M3.5 26.4c0-2.4 2-3.6 4.4-4.3l9.6-2.9c2.4-.7 3.9-1.9 5-4l3.6-6.9c1-1.9 2.4-2.9 4.6-2.9h3.5c2.2 0 3.6 1.4 3.9 3.6l.7 5.2c.3 2.3 1.5 3.7 3.7 4.5l4.3 1.6c2.3.9 3.7 2.4 3.7 4.7v1.4z"
+            fill="rgba(201,161,90,.14)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      <path d="M3.2 26.4h47c1 0 1.6.7 1.6 1.7v1.5c0 1.4-1 2.4-2.4 2.4H5.2c-1.4 0-2.3-1-2.3-2.4v-1.5c0-1 .5-1.7 2.3-1.7z"
+            fill="currentColor" opacity=".35" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/>
+      <path d="M44.6 31.9v2.4c0 .9-.6 1.5-1.5 1.5h-4.4c-.9 0-1.5-.6-1.5-1.5v-2.4"
+            fill="currentColor" opacity=".4" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/>
+      <path d="M21.6 16.6l7.4 2.6M24.2 11.8l7.6 2.7" stroke="currentColor" stroke-width="1.3" stroke-linecap="round" opacity=".65"/>
+      <path d="M17.4 19.2c-1.4-2.4-1.6-4.6-.6-7" stroke="currentColor" stroke-width="1.2" opacity=".45" fill="none"/>`,
+  },
 
-  <!-- المضخّة: مضلّعة أيضًا، بحافّة علوية مشطوفة -->
-  <path d="M14.5 1.6h11.2l1.5 2v3.2l-1.5 2H14.5l-1.4-2V3.6z"
-        fill="currentColor" opacity=".9"/>
-  <!-- العنق -->
-  <path d="M17.4 8.8h6.8v4.6h-6.8z" fill="currentColor" opacity=".5"/>
-  <!-- طوق العنق -->
-  <path d="M15.8 13.4h10v2.2h-10z" fill="currentColor" opacity=".75"/>
+  /* علّاقة ملابس — الارتساء عند أعلى الخطّاف */
+  hanger: {
+    w: 52, h: 40, anchor: { x: 26, y: 3 }, fx: null, sound: null,
+    svg: `
+      <path d="M26 10.5c0-2.4 1.7-4 3.9-4 2.1 0 3.6 1.5 3.6 3.4 0 2-1.4 3.2-3.3 3.7-2.6.7-4.2 2-4.2 4.4"
+            stroke="currentColor" stroke-width="1.7" fill="none" stroke-linecap="round"/>
+      <path d="M26 18.4 4.6 32.2c-1.6 1-1 3.4.9 3.4h41c1.9 0 2.5-2.4.9-3.4z"
+            fill="rgba(201,161,90,.12)" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/>
+      <path d="M8 35.6h36" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".5"/>`,
+  },
 
-  <!-- الجسم المضلَّع: كتفان مشطوفان + قاعدة مشطوفة -->
-  <path d="M15.6 15.6h10.8l6.4 5.4 1.2 4.6v20.6l-1.2 4.6-3.6 5.2H13.4l-3.6-5.2-1.2-4.6V25.6l1.2-4.6z"
-        fill="url(#sardGlass)" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+  /* ملعقة — الارتساء عند طرف الكفّة */
+  spoon: {
+    w: 26, h: 56, anchor: { x: 13, y: 2.5 }, fx: null, sound: null,
+    svg: `
+      <ellipse cx="13" cy="12.5" rx="9.2" ry="10.6"
+               fill="rgba(201,161,90,.14)" stroke="currentColor" stroke-width="1.7"/>
+      <ellipse cx="13" cy="12.5" rx="5.4" ry="6.6" fill="none" stroke="currentColor" stroke-width="1" opacity=".45"/>
+      <path d="M13 23.2v27.4c0 1.9-.9 3-2.4 3s-2.3-1.1-2.3-3l.2-24.6"
+            fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+      <path d="M13 23.2c1.9 1.4 3 3.4 3 6" stroke="currentColor" stroke-width="1.2" opacity=".45" fill="none"/>`,
+  },
+};
 
-  <!-- مستوى العطر: يتبع شطف القاعدة -->
-  <path d="M9 34h24.8v11.8l-1.1 4.4-3.4 4.9H13.5l-3.4-4.9L9 45.8z"
-        fill="currentColor" opacity=".3"/>
+const SHAPE_KEY = SHAPES[CFG.cursorShape] ? CFG.cursorShape : 'perfume';
+const SHAPE = SHAPES[SHAPE_KEY];
 
-  <!-- خطّا الأوجه: يفصلان الوجه الأمامي عن الجانبين -->
-  <path d="M14 21.6v29M28.4 21.6v29" stroke="currentColor" stroke-width=".85" opacity=".45"/>
+const LIGHT_ENOUGH_ALPHA = 40;   // عتبة «ليس شفّافًا» في قناع الجسيمات
+const MAX_PARTICLES = 420;
+const GOLD = [201, 161, 90];
+const CREAM = [248, 240, 233];
 
-  <!-- وميض على الحافّة اليسرى -->
-  <path d="M11.6 26.5v18" stroke="#F8F0E9" stroke-width="1.5" stroke-linecap="round" opacity=".45"/>
-</svg>`;
+/* ── الصوت ──
+   ضوضاء بيضاء عبر مرشّح نطاقيّ يهبط ترددُه سريعًا = «بسسّ» الرشّاش.
+   سياق واحد يُنشَأ عند أول نقرة ويُعاد استخدامه. */
+let actx = null;
+function playSpray() {
+  if (CFG.cursorSound === false || !SHAPE.sound) return;
+  try {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC) return;
+    actx = actx || new AC();
+    if (actx.state === 'suspended') actx.resume();
+
+    const t0 = actx.currentTime;
+    const dur = 0.3;
+    const buf = actx.createBuffer(1, Math.ceil(actx.sampleRate * dur), actx.sampleRate);
+    const data = buf.getChannelData(0);
+    for (let i = 0; i < data.length; i++) data[i] = Math.random() * 2 - 1;
+
+    const src = actx.createBufferSource(); src.buffer = buf;
+    const band = actx.createBiquadFilter();
+    band.type = 'bandpass'; band.Q.value = 0.85;
+    band.frequency.setValueAtTime(5400, t0);
+    band.frequency.exponentialRampToValueAtTime(1500, t0 + dur);   // الهبوط يصنع «الرشّة»
+    const high = actx.createBiquadFilter();
+    high.type = 'highpass'; high.frequency.value = 700;            // يزيل الطنين الثقيل
+
+    const gain = actx.createGain();
+    gain.gain.setValueAtTime(0.0001, t0);
+    gain.gain.exponentialRampToValueAtTime(0.2, t0 + 0.012);       // هجوم شبه فوريّ
+    gain.gain.exponentialRampToValueAtTime(0.0001, t0 + dur);
+
+    src.connect(band); band.connect(high); high.connect(gain); gain.connect(actx.destination);
+    src.start(t0); src.stop(t0 + dur);
+  } catch { /* الصوت زينة: أي إخفاق يُتجاهَل بلا أثر على المؤشّر */ }
+}
 
 function init() {
   const root = document.documentElement;
 
-  const flacon = document.createElement('div');
-  flacon.className = 'sard-flacon';
-  flacon.innerHTML = FLACON;
-  flacon.style.setProperty('--nozzle-x', `${-NOZZLE_X}px`);
-  flacon.style.setProperty('--nozzle-y', `${-NOZZLE_Y}px`);
+  const shape = document.createElement('div');
+  shape.className = `sard-cursor is-${SHAPE_KEY}`;
+  shape.innerHTML = `<svg width="${SHAPE.w}" height="${SHAPE.h}" viewBox="0 0 ${SHAPE.w} ${SHAPE.h}"
+                          fill="none" aria-hidden="true">${SHAPE.svg}</svg>`;
+  shape.style.setProperty('--anchor-x', `${-SHAPE.anchor.x}px`);
+  shape.style.setProperty('--anchor-y', `${-SHAPE.anchor.y}px`);
 
-  const canvas = document.createElement('canvas');
-  canvas.className = 'sard-mist';
-  const ctx = canvas.getContext('2d');
+  const canvas = SHAPE.fx === 'mist' ? document.createElement('canvas') : null;
+  let ctx = null;
+  if (canvas) { canvas.className = 'sard-cursor-fx'; ctx = canvas.getContext('2d'); }
 
-  document.body.append(canvas, flacon);
-  root.classList.add('sard-has-flacon');
+  document.body.append(...(canvas ? [canvas, shape] : [shape]));
+  root.classList.add('sard-has-cursor');
 
-  /* ── المقاس: نرسم بدقّة الشاشة الحقيقية وإلا بدا الرذاذ مهترئًا ── */
   let dpr = 1;
   const resize = () => {
+    if (!canvas) return;
     dpr = Math.min(devicePixelRatio || 1, 2);
     canvas.width = innerWidth * dpr;
     canvas.height = innerHeight * dpr;
@@ -92,137 +172,105 @@ function init() {
   resize();
   addEventListener('resize', resize, { passive: true });
 
-  /* ── حالة المؤشّر ── */
   const target = { x: innerWidth / 2, y: innerHeight / 2 };
   const at = { x: target.x, y: target.y };
+  const vel = { x: 0, y: 0 };
   let tilt = 0, squeeze = 0, awake = false, overText = false;
 
   addEventListener('mousemove', (e) => {
-    target.x = e.clientX;
-    target.y = e.clientY;
-    if (!awake) { awake = true; at.x = target.x; at.y = target.y; flacon.classList.add('is-on'); }
+    target.x = e.clientX; target.y = e.clientY;
+    if (!awake) { awake = true; at.x = target.x; at.y = target.y; shape.classList.add('is-on'); }
   }, { passive: true });
+  addEventListener('mouseleave', () => shape.classList.remove('is-on'), { passive: true });
+  addEventListener('mouseenter', () => awake && shape.classList.add('is-on'), { passive: true });
 
-  addEventListener('mouseleave', () => flacon.classList.remove('is-on'), { passive: true });
-  addEventListener('mouseenter', () => awake && flacon.classList.add('is-on'), { passive: true });
-
-  /* فوق الحقول النصّية نُعيد مؤشّر النظام: القارورة تحجب مَوضع الكتابة
-     ولا تدلّ على نقطة الإدراج. */
   const TEXTY = 'input:not([type=checkbox]):not([type=radio]):not([type=submit]),textarea,[contenteditable]';
   const HOT = 'a,button,[role=button],salla-add-product-button,.sard-card,summary,label,select';
 
   addEventListener('mouseover', (e) => {
     const t = e.target;
     overText = !!(t.closest && t.closest(TEXTY));
-    root.classList.toggle('sard-flacon-off', overText);
-    flacon.classList.toggle('is-hot', !overText && !!(t.closest && t.closest(HOT)));
+    root.classList.toggle('sard-cursor-off', overText);
+    shape.classList.toggle('is-hot', !overText && !!(t.closest && t.closest(HOT)));
   }, { passive: true });
 
   /* ── الرذاذ ── */
   const mist = [];
-  const MAX = 420;
-  const GOLD = [201, 161, 90];
-  const CREAM = [248, 240, 233];
-
-  function spray(x, y, dirX, dirY) {
-    /* اتجاه الرشّة: أعلى-يسار افتراضًا (حيث تشير الفوهة)، ويميل قليلًا مع
-       اتجاه حركة اليد فيبدو الرذاذ متأثّرًا بالاندفاع لا منفصلًا عنه. */
-    const base = Math.atan2(-0.55 + dirY * 0.05, -0.85 + dirX * 0.05);
-    const burst = 46;
-    for (let i = 0; i < burst && mist.length < MAX; i++) {
-      const a = base + (Math.random() - 0.5) * 0.75;          // مخروط الرشّ
+  function burst(x, y) {
+    const base = Math.atan2(-0.55 + vel.y * 0.05, -0.85 + vel.x * 0.05);
+    for (let i = 0; i < 46 && mist.length < MAX_PARTICLES; i++) {
+      const a = base + (Math.random() - 0.5) * 0.75;
       const sp = 1.4 + Math.random() * 5.4;
-      /* الغالب ذهبيّ والقليل كريميّ: خلطةٌ متساوية تُنتج رمادًا باهتًا مع
-         الدمج الجمعيّ (lighter) فيبدو دخانًا لا عطرًا. */
-      const warm = Math.random() < 0.72;
       mist.push({
-        x, y,
-        vx: Math.cos(a) * sp,
-        vy: Math.sin(a) * sp,
-        r: 0.6 + Math.random() * 2.1,       // قطراتٌ دقيقة: الكبيرة تبدو بقعًا
-        life: 0,
-        max: 40 + Math.random() * 44,
-        c: warm ? GOLD : CREAM,
+        x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp,
+        r: 0.6 + Math.random() * 2.1, life: 0, max: 40 + Math.random() * 44,
+        c: Math.random() < 0.72 ? GOLD : CREAM,
       });
     }
-    // نبضة الضغط على المضخّة
-    squeeze = 1;
-    flacon.classList.add('is-spraying');
-    setTimeout(() => flacon.classList.remove('is-spraying'), 260);
   }
 
   addEventListener('mousedown', (e) => {
     if (overText || e.button !== 0) return;
-    spray(e.clientX, e.clientY, vel.x, vel.y);
+    squeeze = 1;
+    shape.classList.add('is-pressing');
+    setTimeout(() => shape.classList.remove('is-pressing'), 260);
+    if (SHAPE.fx === 'mist') burst(e.clientX, e.clientY);
+    playSpray();
   }, { passive: true });
 
-  /* ── الحلقة ── */
-  const vel = { x: 0, y: 0 };
   let raf = 0;
-
   function frame() {
-    // القارورة تتبع بتأخّر لطيف، وتميل بمقدار سرعتها الأفقية
-    const dx = target.x - at.x;
-    const dy = target.y - at.y;
-    at.x += dx * 0.22;
-    at.y += dy * 0.22;
+    const dx = target.x - at.x, dy = target.y - at.y;
+    at.x += dx * 0.22; at.y += dy * 0.22;
     vel.x = dx; vel.y = dy;
 
     const want = Math.max(-16, Math.min(16, dx * 0.55));
     tilt += (want - tilt) * 0.12;
     squeeze += (0 - squeeze) * 0.14;
 
-    flacon.style.transform =
+    shape.style.transform =
       `translate3d(${at.x}px, ${at.y}px, 0) rotate(${tilt.toFixed(2)}deg) scale(${(1 - squeeze * 0.12).toFixed(3)})`;
 
-    // الرذاذ
-    ctx.clearRect(0, 0, innerWidth, innerHeight);
-    if (mist.length) {
-      ctx.globalCompositeOperation = 'lighter';
-      for (let i = mist.length - 1; i >= 0; i--) {
-        const p = mist[i];
-        p.life++;
-        if (p.life >= p.max) { mist.splice(i, 1); continue; }
+    if (ctx) {
+      ctx.clearRect(0, 0, innerWidth, innerHeight);
+      if (mist.length) {
+        ctx.globalCompositeOperation = 'lighter';
+        for (let i = mist.length - 1; i >= 0; i--) {
+          const p = mist[i];
+          if (++p.life >= p.max) { mist.splice(i, 1); continue; }
+          p.vx *= 0.955; p.vy *= 0.955;
+          p.vy += p.life < 14 ? -0.030 : 0.024;   // يرتفع لحظةً ثم يستقرّ
+          p.vx += (Math.random() - 0.5) * 0.14;
+          p.vy += (Math.random() - 0.5) * 0.14;
+          p.x += p.vx; p.y += p.vy;
 
-        p.vx *= 0.955;                       // مقاومة الهواء: الرذاذ يتباطأ سريعًا
-        p.vy *= 0.955;
-        /* يرتفع الرذاذ لحظةً ثم يهبط — العطر المرشوش يتصاعد قبل أن يستقرّ،
-           والهبوط الفوريّ يجعله يبدو ماءً لا بخارًا. */
-        p.vy += p.life < 14 ? -0.030 : 0.024;
-        p.vx += (Math.random() - 0.5) * 0.14; // اضطراب: بلا هذا تبدو الرشّة آليّة
-        p.vy += (Math.random() - 0.5) * 0.14;
-        p.x += p.vx;
-        p.y += p.vy;
-
-        const t = p.life / p.max;
-        const alpha = (1 - t) * (1 - t) * 0.58;
-        const rad = p.r * (1 + t * 2.2);      // القطرة تتمدّد وتتلاشى كالبخار
-        const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
-        g.addColorStop(0, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},${alpha})`);
-        g.addColorStop(1, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);
-        ctx.fillStyle = g;
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, rad, 0, Math.PI * 2);
-        ctx.fill();
+          const t = p.life / p.max;
+          const alpha = (1 - t) * (1 - t) * 0.58;
+          const rad = p.r * (1 + t * 2.2);
+          const g = ctx.createRadialGradient(p.x, p.y, 0, p.x, p.y, rad);
+          g.addColorStop(0, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},${alpha})`);
+          g.addColorStop(1, `rgba(${p.c[0]},${p.c[1]},${p.c[2]},0)`);
+          ctx.fillStyle = g;
+          ctx.beginPath(); ctx.arc(p.x, p.y, rad, 0, Math.PI * 2); ctx.fill();
+        }
+        ctx.globalCompositeOperation = 'source-over';
       }
-      ctx.globalCompositeOperation = 'source-over';
     }
     raf = requestAnimationFrame(frame);
   }
   raf = requestAnimationFrame(frame);
 
-  // لا نُشغّل الحلقة والتبويب مخفيّ
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) { cancelAnimationFrame(raf); raf = 0; }
     else if (!raf) raf = requestAnimationFrame(frame);
   });
 }
 
-/* ⚠️ النداء **آخر** الملف عمدًا: `FLACON` و`NOZZLE_*` ثوابت `const`، ومناداة
+/* ⚠️ النداء **آخر** الملف عمدًا: `SHAPES` وأخواتها ثوابت `const`، ومناداة
    `init()` قبل سطور تعريفها تقع في المنطقة الميتة الزمنية (TDZ) فترمي
    ReferenceError ويسقط المؤشّر كلّه صامتًا. تصريح الدالة يُرفع، أمّا `const`
    فلا. (وقعتُ فيها فعلًا، ولم تظهر إلا في اختبار المتصفّح.)
 
    ولا مؤشّر مخصّص على اللمس (لا فأرة أصلًا)، ولا مع تفضيل تقليل الحركة،
-   ولا إن أطفأه التاجر من إعدادات الثيم. */
-if (!COARSE && !REDUCED && CFG.cursor !== false) init();
+   ولا إن أطفأه التاجر، ولا إن اختار «بلا مؤشّر مخصّص». */
+if (!COARSE && !REDUCED && CFG.cursor !== false && CFG.cursorShape !== 'none') init();

@@ -109,6 +109,26 @@ body.theme-sard {
      زرّ الإغلاق داخل الدرج يؤدّي الغرض، فنُخفي اليتيم نهائيًّا. */
   custom-main-menu > .btn--close-sm.close-mobile-menu { display: none !important; }
 
+  /* ── زرّ إغلاق الدرج: لا يظهر إلا والدرج مفتوح ──
+     الزرّ الثاني ‎<button class="btn--close close-mobile-menu sicon-cancel lg:hidden">‎
+     يعيش **داخل** ‎#mobile-menu‎. والقالب الموروث يُبقي ‎#mobile-menu‎ في الشريط
+     على سطح المكتب (فهو حاوية قائمة سطح المكتب أيضًا)، ورائد يُظهر الزرّ بـ
+     ‎@media (min-width:480px){ .btn--close{display:block} }‎ — وهي تغلب
+     ‎.lg\:hidden‎ لتساوي التخصيص وتأخّر الترتيب.
+
+     النتيجة: ✕ حمراء (لون رائد ‎#ef4444‎) عالقة في الشريط على سطح المكتب،
+     وتختفي على الجوال لأن العرض دون ‎480px‎ — وهو بالضبط ما رصده المالك.
+
+     الزرّ لا معنى له إلا والدرج مفتوح، فنربطه بحالة الفتح لا بعرض الشاشة. */
+  .btn--close.close-mobile-menu { display: none; }
+}
+
+@media (min-width: 480px) {
+  body.theme-sard.mm-ocd-opened .btn--close.close-mobile-menu { display: block; }
+}
+
+body.theme-sard {
+
   /* ── نافذة تسجيل الدخول ──
      ‎salla-login-modal‎ تعرض **إطارًا (iframe)** من نطاق حسابات سلة، ومحتواه
      أبيض ولا تصله أنماطنا إطلاقًا (cross-origin). فإبقاء الإطار المحيط داكنًا

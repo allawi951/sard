@@ -168,13 +168,16 @@ async function drawLogo(img) {
     p.style.strokeDashoffset = `${len}`;
   });
 
-  // الأطول أولًا (مرتّبة أصلًا) فيبدأ الرسم بالهيكل ثم التفاصيل.
-  // المدّة والتدرّج مضبوطان ليكتمل الرسم مع رسم علامة سرد فوقه (~١٫٦ث).
+  /* الأطول أولًا (مرتّبة أصلًا) فيبدأ الرسم بالهيكل ثم التفاصيل.
+
+     الإيقاع أبطأ من السابق عمدًا: شعار المتجر كان ينتهي قبل علامة «سرد»
+     فوقه فيبدو مقتضبًا بجانبها. المدّة ‎1.35s‎ مع تدرّجٍ أوسع تجعل الرسمين
+     يكتملان معًا (~٢ث) فيُقرأ الشعار حرفًا حرفًا لا دفعةً واحدة. */
   const tl = gsap.timeline().to(strokes, {
     strokeDashoffset: 0,
-    duration: 0.85,
+    duration: 1.35,
     ease: 'power1.inOut',
-    stagger: { each: Math.min(0.04, 0.3 / strokes.length), from: 'start' },
+    stagger: { each: Math.min(0.06, 0.5 / strokes.length), from: 'start' },
   });
 
   if (tint) {

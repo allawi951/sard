@@ -1,29 +1,29 @@
 /* ═══════════════════════════════════════════════════════════════
-   مؤشّر «سرد» — قارورة عطر ورذاذ عند النقر
-   المنطق في src/assets/js/sard-cursor.js
+   مؤشّر «سرد» — شكلٌ يختاره التاجر وأثرٌ عند النقر
+   السجلّ والمنطق في src/assets/js/sard-cursor.js
    ═══════════════════════════════════════════════════════════════ */
 
 /* نُخفي مؤشّر النظام فقط بعد أن يُركِّب الجافاسكربت البديل — وإلا بقي
    المستخدم بلا مؤشّر إطلاقًا لو فشل التحميل أو حجبه مانع إعلانات. */
-html.sard-has-flacon,
-html.sard-has-flacon body,
-html.sard-has-flacon a,
-html.sard-has-flacon button,
-html.sard-has-flacon [role='button'],
-html.sard-has-flacon summary,
-html.sard-has-flacon label,
-html.sard-has-flacon .sard-card { cursor: none; }
+html.sard-has-cursor,
+html.sard-has-cursor body,
+html.sard-has-cursor a,
+html.sard-has-cursor button,
+html.sard-has-cursor [role='button'],
+html.sard-has-cursor summary,
+html.sard-has-cursor label,
+html.sard-has-cursor .sard-card { cursor: none; }
 
-/* فوق الحقول النصّية يعود مؤشّر النظام: القارورة تحجب مَوضع الإدراج
-   ولا تدلّ عليه، وهذا ضررٌ في الاستخدام لا زينة. */
-html.sard-has-flacon.sard-flacon-off,
-html.sard-has-flacon.sard-flacon-off body,
-html.sard-has-flacon input,
-html.sard-has-flacon textarea,
-html.sard-has-flacon [contenteditable] { cursor: auto; }
-html.sard-flacon-off .sard-flacon { opacity: 0 !important; }
+/* فوق الحقول النصّية يعود مؤشّر النظام: الشكل يحجب مَوضع الإدراج
+   ولا يدلّ عليه، وهذا ضررٌ في الاستخدام لا زينة. */
+html.sard-has-cursor.sard-cursor-off,
+html.sard-has-cursor.sard-cursor-off body,
+html.sard-has-cursor input,
+html.sard-has-cursor textarea,
+html.sard-has-cursor [contenteditable] { cursor: auto; }
+html.sard-cursor-off .sard-cursor { opacity: 0 !important; }
 
-.sard-mist {
+.sard-cursor-fx {
   position: fixed;
   inset: 0;
   width: 100%;
@@ -32,7 +32,7 @@ html.sard-flacon-off .sard-flacon { opacity: 0 !important; }
   z-index: 9997;
 }
 
-.sard-flacon {
+.sard-cursor {
   position: fixed;
   top: 0;
   left: 0;
@@ -49,27 +49,28 @@ html.sard-flacon-off .sard-flacon { opacity: 0 !important; }
 
   svg {
     position: absolute;
-    /* الإزاحة تجعل **فوهة الرذّاذة** فوق نقطة المؤشّر تمامًا */
-    left: var(--nozzle-x, -4px);
-    top: var(--nozzle-y, -4px);
+    /* الإزاحة تضع **نقطة ارتساء الشكل** فوق نقطة المؤشّر تمامًا:
+       فوهة الرذّاذة، أو مقدّمة الحذاء، أو أعلى الخطّاف، أو طرف الملعقة. */
+    left: var(--anchor-x, -4px);
+    top: var(--anchor-y, -4px);
     display: block;
     filter: drop-shadow(0 4px 10px rgba(6, 6, 16, .45));
     transition: filter .3s var(--sard-ease, ease);
   }
 
-  /* فوق عنصر تفاعلي: هالة ذهبية خفيفة تقول «هنا يمكن الرشّ» */
+  /* فوق عنصر تفاعلي: هالة ذهبية خفيفة تقول «هنا يمكن الضغط» */
   &.is-hot svg {
     filter: drop-shadow(0 0 9px rgba(201, 161, 90, .75))
             drop-shadow(0 4px 10px rgba(6, 6, 16, .45));
   }
 
-  /* لحظة الضغط على المضخّة */
-  &.is-spraying svg { filter: drop-shadow(0 0 16px rgba(201, 161, 90, .95)); }
+  /* لحظة الضغط */
+  &.is-pressing svg { filter: drop-shadow(0 0 16px rgba(201, 161, 90, .95)); }
 }
 
 /* على اللمس أو مع تقليل الحركة لا يُركَّب المؤشّر أصلًا — وهذه حارسة ثانية
    لو تغيّر التفضيل بعد التحميل. */
 @media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
-  .sard-flacon, .sard-mist { display: none; }
-  html.sard-has-flacon, html.sard-has-flacon * { cursor: auto; }
+  .sard-cursor, .sard-cursor-fx { display: none; }
+  html.sard-has-cursor, html.sard-has-cursor * { cursor: auto; }
 }

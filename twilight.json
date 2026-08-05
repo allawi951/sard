@@ -320,6 +320,66 @@
             "selected": true
         },
         {
+            "id": "cursor_shape",
+            "type": "items",
+            "format": "dropdown-list",
+            "label": "شكل مؤشّر الفأرة",
+            "description": "يظهر على أجهزة سطح المكتب فقط. اختر ما يناسب متجرك: قارورة عطر لمتاجر العطور، أو حذاء/علّاقة لمتاجر الأزياء، أو ملعقة لمتاجر المطبخ. لا يظهر على الجوال ولا مع تفضيل «تقليل الحركة».",
+            "labelHTML": null,
+            "icon": "sicon-mouse-buttons",
+            "selected": [
+                {
+                    "label": "قارورة عطر — مع رذاذ وصوت رشّة (الافتراضي)",
+                    "value": "perfume",
+                    "key": "f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0201"
+                }
+            ],
+            "options": [
+                {
+                    "label": "قارورة عطر — مع رذاذ وصوت رشّة (الافتراضي)",
+                    "value": "perfume",
+                    "key": "f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0201"
+                },
+                {
+                    "label": "جزمة نسائية",
+                    "value": "boot-women",
+                    "key": "f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0202"
+                },
+                {
+                    "label": "حذاء رجالي",
+                    "value": "shoe-men",
+                    "key": "f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0203"
+                },
+                {
+                    "label": "علّاقة ملابس",
+                    "value": "hanger",
+                    "key": "f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0204"
+                },
+                {
+                    "label": "ملعقة",
+                    "value": "spoon",
+                    "key": "f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0205"
+                },
+                {
+                    "label": "بلا شكل — مؤشّر النظام",
+                    "value": "none",
+                    "key": "f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0206"
+                }
+            ],
+            "source": "Manual",
+            "required": true
+        },
+        {
+            "id": "cursor_sound",
+            "type": "boolean",
+            "format": "switch",
+            "label": "صوت الرشّة عند النقر",
+            "description": "يعمل مع شكل قارورة العطر فقط حاليًا. الصوت مُصنَّع داخل المتصفّح فلا يُحمَّل أي ملف.",
+            "labelHTML": null,
+            "icon": "sicon-audio-wave",
+            "value": true
+        },
+        {
             "id": "enable_grain",
             "type": "boolean",
             "format": "switch",

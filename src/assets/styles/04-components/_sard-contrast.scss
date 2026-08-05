@@ -56,12 +56,36 @@ body.theme-sard {
     img { background: var(--sard-panel); }
   }
 
-  .close-mobile-menu,
-  .btn--close.close-mobile-menu,
-  .btn--close-sm.close-mobile-menu {
+  /* زرّ الإغلاق **داخل** الدرج وحده يأخذ اللون — لا كل ‎.close-mobile-menu‎ */
+  .mm-ocd__content .close-mobile-menu,
+  .mm-ocd__content .btn--close.close-mobile-menu {
     color: var(--sard-cream);
     background: color-mix(in srgb, var(--sard-cream) 10%, transparent);
   }
+
+  /* ── زرّ الإغلاق اليتيم في الشريط ──
+     ‎custom-main-menu.render()‎ يصيّر زرَّي إغلاق: واحدًا **داخل** ‎#mobile-menu‎
+     وآخر **شقيقًا** له خارجه. وحين ينقل mmenu الدرج إلى ‎<body>‎ يبقى الشقيق
+     وحده في الشريط، فيظهر مربّعًا فيه ✕ ملاصقًا للشعار والسلة — وهو ما رصده
+     المالك. وأسوأ من ظهوره أنه يشغل ‎51×51‎ من التخطيط حتى وهو شفّاف.
+
+     ولا يختفي من تلقائه: ‎.menu-opened‎ يضيفه app.js عند الفتح ولا يزيله إلا
+     نقرٌ على ‎.close-mobile-menu‎ — أمّا إغلاق الدرج بالنقر على الخلفية
+     (سلوك mmenu الافتراضي) فيُبقيه عالقًا على ‎<body>‎ إلى ما لا نهاية.
+
+     زرّ الإغلاق داخل الدرج يؤدّي الغرض، فنُخفي اليتيم نهائيًّا. */
+  custom-main-menu > .btn--close-sm.close-mobile-menu { display: none !important; }
+
+  /* ── نافذة تسجيل الدخول ──
+     ‎salla-login-modal‎ تعرض **إطارًا (iframe)** من نطاق حسابات سلة، ومحتواه
+     أبيض ولا تصله أنماطنا إطلاقًا (cross-origin). فإبقاء الإطار المحيط داكنًا
+     يجعل المحتوى يبدو مستطيلًا أبيض مكسورًا داخل نافذة داكنة. نُطابق المحيط
+     مع ما لا نملك تغييره بدل أن نتصارع معه. */
+  salla-login-modal .s-modal-body {
+    background: #FFFFFF;
+    color: #1F2937;
+  }
+  salla-login-modal .s-modal-close { background: transparent; }
 
   /* ═══ ٢) قائمة حساب العميل (salla-user-menu) ═══
      كانت: اللوحة ‎.s-user-menu-dropdown{bg-white}‎ صبغها ‎.bg-white‎ إلى

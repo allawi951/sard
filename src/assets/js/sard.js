@@ -60,34 +60,12 @@ function chrome() {
   }
 }
 
-/* ── ٣) المؤشر المخصّص والأزرار المغناطيسية ── */
+/* ── ٣) الأزرار المغناطيسية ──
+   المؤشر المخصّص انتقل إلى `src/assets/js/sard-cursor.js`: صار قارورة عطر
+   ورذاذًا عند النقر، ووُضع في مدخل `app` ليعمل في **كل** الصفحات — هذا الملف
+   يُحمَّل مع مدخل `home` وحده، فكان المؤشر يختفي خارج الرئيسية. */
 function pointer() {
-  if (COARSE || REDUCED || CFG.cursor === false) return;
-
-  const ring = $('#sardCursor');
-  const dot = $('#sardCursorDot');
-  if (!ring || !dot) return;
-
-  const pos = { x: innerWidth / 2, y: innerHeight / 2 };
-  const ringPos = { ...pos };
-
-  addEventListener('mousemove', (e) => {
-    pos.x = e.clientX;
-    pos.y = e.clientY;
-    ring.classList.add('is-on');
-    dot.classList.add('is-on');
-    gsap.set(dot, { x: pos.x, y: pos.y });
-  }, { passive: true });
-
-  gsap.ticker.add(() => {
-    ringPos.x += (pos.x - ringPos.x) * .16;
-    ringPos.y += (pos.y - ringPos.y) * .16;
-    gsap.set(ring, { x: ringPos.x, y: ringPos.y });
-  });
-
-  document.addEventListener('mouseover', (e) => {
-    ring.classList.toggle('is-big', !!e.target.closest('a, button, .sard-card, input, salla-add-product-button'));
-  });
+  if (COARSE || REDUCED) return;
 
   $$('[data-magnetic]').forEach((el) => {
     el.addEventListener('mousemove', (e) => {

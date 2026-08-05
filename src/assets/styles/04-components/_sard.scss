@@ -145,28 +145,6 @@ html[dir='rtl'] .sard-btn { letter-spacing: .02em; text-transform: none; font-si
 }
 
 /* ═══════════ المؤشر المخصّص ═══════════ */
-.sard-cursor {
-  position: fixed; top: 0; left: 0;
-  width: 26px; height: 26px; margin: -13px 0 0 -13px;
-  border: 1px solid var(--sard-gold); border-radius: 50%;
-  pointer-events: none; z-index: 9998; opacity: 0;
-  mix-blend-mode: difference;
-  transition: width .35s var(--sard-ease), height .35s var(--sard-ease),
-              margin .35s var(--sard-ease), background-color .35s var(--sard-ease), opacity .3s;
-  &.is-on { opacity: 1; }
-  &.is-big { width: 62px; height: 62px; margin: -31px 0 0 -31px; background: rgba(201, 161, 90, .18); }
-}
-.sard-cursor-dot {
-  position: fixed; top: 0; left: 0;
-  width: 5px; height: 5px; margin: -2.5px 0 0 -2.5px;
-  background: var(--sard-gold); border-radius: 50%;
-  pointer-events: none; z-index: 9998; opacity: 0;
-  &.is-on { opacity: 1; }
-}
-@media (hover: none), (pointer: coarse) {
-  .sard-cursor, .sard-cursor-dot { display: none; }
-}
-
 /* ═══════════ شريط التقدّم ═══════════ */
 .sard-progress {
   position: fixed; inset-block-start: 0; inset-inline-start: 0; z-index: 101;

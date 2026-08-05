@@ -24,23 +24,45 @@ const COARSE = matchMedia('(hover: none), (pointer: coarse)').matches;
 const NOZZLE_X = 4;
 const NOZZLE_Y = 4;
 
+/* قارورة **مضلَّعة** مقطوعة الأوجه (facetted flacon) — لا أسطوانة ملساء.
+   الشكل ثماني الأضلاع: كتفان مشطوفان وقاعدة مشطوفة، وخطّان رأسيّان يفصلان
+   الوجه الأمامي عن الجانبين فيقرأ الزجاج مصقولًا لا مسطّحًا. الوميض على
+   الحافّة اليسرى والظلّ على اليمنى يمنحان العمق بلا تدرّجات ثقيلة. */
 const FLACON = `
-<svg width="40" height="54" viewBox="0 0 40 54" fill="none" aria-hidden="true">
-  <!-- الفوهة: طرفها هو نقطة المؤشّر -->
-  <path d="M4.5 4.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
-  <circle cx="4.4" cy="4.5" r="1.5" fill="currentColor"/>
-  <!-- المضخّة والغطاء -->
-  <rect x="12" y="1.5" width="13" height="6.5" rx="2" fill="currentColor" opacity=".85"/>
+<svg width="42" height="58" viewBox="0 0 42 58" fill="none" aria-hidden="true">
+  <defs>
+    <linearGradient id="sardGlass" x1="10" y1="16" x2="34" y2="52" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#F8F0E9" stop-opacity=".20"/>
+      <stop offset=".5" stop-color="#C9A15A" stop-opacity=".10"/>
+      <stop offset="1" stop-color="#C9A15A" stop-opacity=".30"/>
+    </linearGradient>
+  </defs>
+
+  <!-- الفوهة: طرفها الأيسر هو نقطة المؤشّر تمامًا -->
+  <path d="M4.6 5h8.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/>
+  <circle cx="4.5" cy="5" r="1.6" fill="currentColor"/>
+
+  <!-- المضخّة: مضلّعة أيضًا، بحافّة علوية مشطوفة -->
+  <path d="M14.5 1.6h11.2l1.5 2v3.2l-1.5 2H14.5l-1.4-2V3.6z"
+        fill="currentColor" opacity=".9"/>
   <!-- العنق -->
-  <rect x="15.5" y="8" width="6" height="5" fill="currentColor" opacity=".55"/>
-  <!-- جسم القارورة -->
-  <path d="M12.5 13h12a7 7 0 0 1 7 7v25a6 6 0 0 1-6 6h-14a6 6 0 0 1-6-6V20a7 7 0 0 1 7-7z"
-        stroke="currentColor" stroke-width="1.5" fill="rgba(201,161,90,.10)"/>
-  <!-- مستوى العطر -->
-  <path d="M5.7 31h29.6v14a6 6 0 0 1-6 6h-17a6 6 0 0 1-6-6V31z"
-        fill="currentColor" opacity=".26"/>
-  <!-- وميض زجاجي -->
-  <path d="M11 22v18" stroke="#F8F0E9" stroke-width="1.2" stroke-linecap="round" opacity=".35"/>
+  <path d="M17.4 8.8h6.8v4.6h-6.8z" fill="currentColor" opacity=".5"/>
+  <!-- طوق العنق -->
+  <path d="M15.8 13.4h10v2.2h-10z" fill="currentColor" opacity=".75"/>
+
+  <!-- الجسم المضلَّع: كتفان مشطوفان + قاعدة مشطوفة -->
+  <path d="M15.6 15.6h10.8l6.4 5.4 1.2 4.6v20.6l-1.2 4.6-3.6 5.2H13.4l-3.6-5.2-1.2-4.6V25.6l1.2-4.6z"
+        fill="url(#sardGlass)" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- مستوى العطر: يتبع شطف القاعدة -->
+  <path d="M9 34h24.8v11.8l-1.1 4.4-3.4 4.9H13.5l-3.4-4.9L9 45.8z"
+        fill="currentColor" opacity=".3"/>
+
+  <!-- خطّا الأوجه: يفصلان الوجه الأمامي عن الجانبين -->
+  <path d="M14 21.6v29M28.4 21.6v29" stroke="currentColor" stroke-width=".85" opacity=".45"/>
+
+  <!-- وميض على الحافّة اليسرى -->
+  <path d="M11.6 26.5v18" stroke="#F8F0E9" stroke-width="1.5" stroke-linecap="round" opacity=".45"/>
 </svg>`;
 
 function init() {

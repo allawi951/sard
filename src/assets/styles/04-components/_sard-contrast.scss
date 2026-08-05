@@ -20,6 +20,39 @@
 
 body.theme-sard {
 
+  /* ═══ ٠) استعادة أدوات الإخفاء الموروثة — الجذر الحقيقي لعلّة «التصنيفات» ═══
+
+     قاعدة هدف اللمس في ‎_sard-global‎ تضبط ‎display: inline-flex‎ على كل رابط
+     أو زرّ يحوي أيقونة:
+         ‎body.theme-sard a:has(> i[class*='sicon-'])‎      ← تخصيص (0,2,2)
+     وزرّ القائمة الموروث ‎<a class="lg:hidden mburger"><i class="sicon-menu">‎
+     يطابقها، فتغلب أداة تيلويند ‎.lg\:hidden‎ (تخصيص 0,1,0) و**تُظهر زرّ
+     القائمة على سطح المكتب** وهو مصمَّم للجوال وحده.
+
+     وما يترتّب على ذلك هو بالضبط سبب رفض سلة «التصنيفات لا تظهر في القائمة
+     الجانبية»: مُبدِّل mmenu مشروط بـ‎(max-width: 1024px)‎، فعلى سطح المكتب
+     يُعيد القائمة إلى الشريط ويترك الدرج **فارغًا** — ثم يفتح النقرُ على الزرّ
+     الظاهر خطأً دُرجًا لا شيء فيه. (قِسته: عند ‎1440px‎ الزرّ ‎display: flex‎
+     و‎liInDrawer = 0‎ بينما القائمة عادت إلى ‎custom-main-menu‎.)
+
+     ولهذا لم يُجدِ تغميق الدرج وحده: كان يجعل الفراغ داكنًا لا مملوءًا.
+
+     الإصلاح بتخصيص أعلى (0,3,2) لا بـ‎!important‎، ومقصورٌ على العناصر التي
+     تطابق قاعدة هدف اللمس فلا يمسّ غيرها. وعلى الجوال تبقى القاعدة عاملة
+     فيحتفظ الزرّ بهدف لمسه ‎44×44‎. */
+
+  a.hidden:has(> i[class*='sicon-']),
+  button.hidden:has(> i[class*='sicon-']),
+  a.hidden:has(> svg:only-child),
+  button.hidden:has(> svg:only-child) { display: none; }
+
+  @media (min-width: 1024px) {
+    a.lg\:hidden:has(> i[class*='sicon-']),
+    button.lg\:hidden:has(> i[class*='sicon-']),
+    a.lg\:hidden:has(> svg:only-child),
+    button.lg\:hidden:has(> svg:only-child) { display: none; }
+  }
+
   /* ═══ ١) القائمة الجانبية للجوال (mmenu-light) ═══
      كانت: ‎.mm-spn--light { background:#fff }‎ من رائد، وروابط التصنيفات
      تحمل ‎.text-gray-500‎ التي أعاد ‎_sard-global‎ تعريفها إلى كريميّ
@@ -131,6 +164,18 @@ body.theme-sard {
 
     a, .menu-item, li > span { color: var(--sard-cream); }
     a:hover { color: var(--sard-gold); }
+  }
+
+  /* ── شارة عدد السلة ──
+     ‎.s-cart-summary-count‎ في مكوّن سلة: دائرة ‎bg-red-400‎ بنصّ أبيض. وحين
+     يكون العدّاد صفرًا وأرقام المتجر هندية يُرسم «٠» — وهو **نقطة** — فتبدو
+     الشارة بقعةً حمراء بلا معنى فوق أيقونة السلة.
+     نُبقي الوظيفة ونُلبسها الهوية: ذهبيّ على حبر، أوضح وأهدأ من الأحمر. */
+  .s-cart-summary-count {
+    background: var(--sard-gold);
+    color: var(--sard-ink);
+    font-weight: 600;
+    box-shadow: 0 0 0 2px var(--sard-page-bg);
   }
 
   /* ═══ ٣) أيقونات المشاركة (salla-social-share) ═══

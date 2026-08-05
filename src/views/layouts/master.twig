@@ -144,6 +144,7 @@
         cursorSound:  {{ theme.settings.get('cursor_sound', true) | json_encode }},
         desktopMenu:  {{ theme.settings.get('desktop_side_menu', true) | json_encode }},
         desktopMenuSource: {{ theme.settings.get('desktop_menu_source', 'all') | json_encode }},
+        quickView:    {{ theme.settings.get('enable_quick_view', true) | json_encode }},
         stickyHeader: {{ theme.settings.get('header_is_sticky', true) | json_encode }}
       };
     </script>

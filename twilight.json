@@ -226,6 +226,16 @@
             "selected": true
         },
         {
+            "id": "enable_quick_view",
+            "type": "boolean",
+            "format": "switch",
+            "label": "المعاينة السريعة للمنتج",
+            "description": "زرّ صغير على بطاقة المنتج يفتح نافذة بالصورة والاسم والسعر والخيارات وزرّ الإضافة للسلة، بلا مغادرة الصفحة.",
+            "labelHTML": null,
+            "icon": "sicon-eye",
+            "value": true
+        },
+        {
             "type": "boolean",
             "icon": "sicon-toggle-off",
             "label": "تفعيل إشعار الإضافة للسلة المحسن",

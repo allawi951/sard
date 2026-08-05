@@ -53,6 +53,22 @@ body.theme-sard {
     button.lg\:hidden:has(> svg:only-child) { display: none; }
   }
 
+  /* ── هدف لمس اسم المنتج في بطاقة «سرد» ──
+     القاعدة العامة في ‎_sard-global‎:
+         ‎h2 a, h3 a, h4 a { display:inline-block; min-height:24px }‎  ← (0,1,2)
+     تغلب ‎.sard-card__name a‎ (0,1,1) وتأتي بعدها في ترتيب الاستيراد، فينزل
+     ارتفاع الرابط إلى ‎36px‎ على الجوال (قِسته في تدقيق الاستجابة: ستّة روابط
+     ‎33×36‎ إلى ‎138×36‎). و‎24px‎ تكفي WCAG 2.2 AA لكنها دون ما يطلبه فحص
+     Lighthouse لأهداف اللمس، ومراجعة سلة تشترط وصولية عالية.
+
+     الحلّ هنا لا هناك: هذا الملف آخر المستوردات وتخصيصه (0,2,2) أعلى.
+     و‎flex‎ يجعل الرابط يملأ عرض السطر فعلًا لا عرض نصّه. */
+  .sard-card__name a {
+    display: flex;
+    align-items: center;
+    min-height: 44px;
+  }
+
   /* ═══ ١) القائمة الجانبية للجوال (mmenu-light) ═══
      كانت: ‎.mm-spn--light { background:#fff }‎ من رائد، وروابط التصنيفات
      تحمل ‎.text-gray-500‎ التي أعاد ‎_sard-global‎ تعريفها إلى كريميّ

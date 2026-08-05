@@ -55,6 +55,11 @@ const CASES = [
   ['شكل "none"',                    { cursor: true,    cursorShape: 'none' },        'none'],
   ['شكل "none" كمصفوفة',            { cursor: true,    cursorShape: [{ value: 'none' }] }, 'none'],
   ['شكل مجهول يسقط للقارورة',       { cursor: true,    cursorShape: 'banana' },      'perfume'],
+  ['شكل كـuuid (احتمال سلة)',      { cursor: true, cursorShape: 'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0204' }, 'hanger'],
+  ['كائن فيه key فقط',              { cursor: true, cursorShape: { key: 'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0205' } }, 'spoon'],
+  ['مصفوفة فيها label عربي فقط',    { cursor: true, cursorShape: [{ label: 'علّاقة ملابس' }] }, 'hanger'],
+  ['نصّ عربي بدل القيمة',           { cursor: true, cursorShape: 'ملعقة' }, 'spoon'],
+  ['uuid لـnone',                   { cursor: true, cursorShape: 'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0206' }, 'none'],
 ];
 
 const browser = await chromium.launch();

@@ -124,7 +124,17 @@ function decorate(card, label) {
 function boot() {
   if (!isOn(CFG.quickView, true)) return;
 
-  const t = (k, fb) => (window.salla?.lang?.get ? salla.lang.get(k) : null) || fb;
+  /* ⚠️ `salla.lang.get(key)` يُعيد **المفتاح نفسه** حين لا توجد ترجمة، لا null.
+     فكتابة `salla.lang.get(k) || fallback` لا تسقط أبدًا إلى البديل، فيظهر
+     للزائر نصٌّ خام مثل `pages.products.add_to_cart` — وهو ما رصده المالك في
+     نافذة المعاينة. نعتبر أي ناتجٍ يساوي المفتاح أو يحوي نقطةً بلا مسافة
+     ترجمةً مفقودة. */
+  const t = (key, fallback) => {
+    let v = null;
+    try { v = window.salla?.lang?.get ? salla.lang.get(key) : null; } catch { v = null; }
+    if (!v || v === key || (/\./.test(v) && !/\s/.test(v))) return fallback;
+    return v;
+  };
   const labels = {
     quick: t('blocks.home.quick_view', 'معاينة سريعة'),
     add: t('pages.products.add_to_cart', 'إضافة للسلة'),

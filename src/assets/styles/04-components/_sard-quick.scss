@@ -58,6 +58,17 @@ body.theme-sard .sard-quick {
   justify-content: center;
   padding: 1.25rem;
 
+  /* 🔴 إلزاميّ: `display: flex` أعلاه تخصيصها (0,2,1) يغلب `[hidden]{display:none}`
+     في ورقة المتصفّح الافتراضية (0,1,0). فبدون هذا السطر تبقى النافذة **طبقةً
+     شفّافة تغطّي الشاشة كاملة** بعد الإغلاق وتبتلع كل نقرة — تتجمّد الصفحة
+     فلا يُضغط شيء بينما يظلّ التمرير عاملًا. وهو بالضبط ما رصده المالك.
+     الدرس: أي عنصر تُخفيه بـ`hidden` ثم تضبط له `display` في CSS يحتاج هذا. */
+  &[hidden] { display: none; }
+
+  /* حارسة ثانية: ما لم تكن مفتوحة فلا تلتقط أحداث المؤشّر إطلاقًا */
+  &:not(.is-open) { pointer-events: none; }
+  &.is-open { pointer-events: auto; }
+
   &__backdrop {
     position: absolute;
     inset: 0;

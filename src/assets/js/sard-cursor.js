@@ -100,14 +100,69 @@ const SHAPES = {
   },
 };
 
-/* الشكل يُقرأ عبر `choice` فيقبل النصّ والمصفوفة والكائن معًا — راجع
-   sard-cfg.js لسبب هذا التساهل. */
-const SHAPE_KEY = (() => {
-  const k = choice(CFG.cursorShape, 'perfume');
-  if (k === 'none') return 'none';
-  return SHAPES[k] ? k : 'perfume';
-})();
+/* ── حلّ الشكل من الإعداد ──
+   الإعداد المنسدل في سلة يحمل ثلاثة حقول لكل خيار: `value` و`key` (uuid)
+   و`label`. ولا ضمان أيُّها يصل إلى `theme.settings.get()`: قد يصل النصّ
+   ‎"hanger"‎، وقد يصل الـuuid، وقد يصل النصّ العربي، وقد يصل الكائن كاملًا أو
+   داخل مصفوفة. وقراءة صيغة واحدة تجعل كل اختيارٍ غير الافتراضي يسقط صامتًا
+   إلى القارورة — وهو ما رصده المالك: «مهما غيّرته وحفظت يبقى موجودًا».
+
+   فنقبل الأربعة. الـuuid هنا مطابقٌ حرفيًّا لما في twilight.json، وأي تعديل
+   هناك يجب أن ينعكس هنا. */
+const UUID_TO_SHAPE = {
+  'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0201': 'perfume',
+  'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0202': 'boot-women',
+  'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0203': 'shoe-men',
+  'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0204': 'hanger',
+  'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0205': 'spoon',
+  'f2c8b1a4-7e39-4d62-8b15-3a9c6e4d0206': 'none',
+};
+const LABEL_HINTS = [
+  [/قارورة|عطر|perfume/i, 'perfume'],
+  [/جزمة|نسائ|boot/i, 'boot-women'],
+  [/حذاء|رجال|shoe/i, 'shoe-men'],
+  [/علّاقة|علاقة|ملابس|hanger/i, 'hanger'],
+  [/ملعقة|معلقة|spoon/i, 'spoon'],
+  [/بلا شكل|بدون|none/i, 'none'],
+];
+
+function resolveShape(raw) {
+  // ١) الصيغ القياسية: نصّ أو كائن أو مصفوفة كائنات
+  const v = choice(raw, null);
+  if (v && (SHAPES[v] || v === 'none')) return v;
+  if (v && UUID_TO_SHAPE[v]) return UUID_TO_SHAPE[v];
+
+  // ٢) الكائن كاملًا: قد يحمل key أو label دون value مفيد
+  const obj = Array.isArray(raw) ? raw[0] : raw;
+  if (obj && typeof obj === 'object') {
+    if (obj.key && UUID_TO_SHAPE[obj.key]) return UUID_TO_SHAPE[obj.key];
+    if (typeof obj.label === 'string') {
+      const hit = LABEL_HINTS.find(([re]) => re.test(obj.label));
+      if (hit) return hit[1];
+    }
+  }
+
+  // ٣) نصٌّ عربيّ وصل بدل القيمة
+  if (typeof v === 'string') {
+    const hit = LABEL_HINTS.find(([re]) => re.test(v));
+    if (hit) return hit[1];
+  }
+  return 'perfume';
+}
+
+const SHAPE_KEY = resolveShape(CFG.cursorShape);
 const SHAPE = SHAPES[SHAPE_KEY];
+
+/* مِجسّ تشخيصيّ: اكتب `SARD_DEBUG` في كونسول المتصفّح لترى ما وصل فعلًا من
+   سلة وكيف فُسِّر. يوفّر جولةَ تخمينٍ كاملة عند أي خلاف بين الإعداد والنتيجة. */
+window.SARD_DEBUG = {
+  raw: CFG.cursorShape,
+  rawType: Array.isArray(CFG.cursorShape) ? 'array' : typeof CFG.cursorShape,
+  resolvedShape: SHAPE_KEY,
+  cursorEnabled: isOn(CFG.cursor, true),
+  soundEnabled: isOn(CFG.cursorSound, true),
+  allSettings: CFG,
+};
 
 const LIGHT_ENOUGH_ALPHA = 40;   // عتبة «ليس شفّافًا» في قناع الجسيمات
 const MAX_PARTICLES = 420;

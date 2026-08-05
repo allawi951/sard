@@ -560,7 +560,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "hero-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-hero.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>زخرفة تُرسم خطًّا خطًّا، ثم يظهر شعار متجرك (أو اسمه حرفًا حرفًا) فوق خلفية متموّجة.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-hero.jpg?v=3'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>زخرفة تُرسم خطًّا خطًّا، ثم يظهر شعار متجرك (أو اسمه حرفًا حرفًا) فوق خلفية متموّجة.</div>"
                 },
                 {
                     "id": "background",
@@ -676,7 +676,7 @@
                     "maxLength": 30
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-hero.jpg?v=2"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-hero.jpg?v=3"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c02",
@@ -692,7 +692,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "pyramid-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-layers.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>قسم يثبت أثناء التمرير: كل تمريرة تكشف طبقة بصورتها ونصّها. يصلح لمكوّنات منتج، أو مراحل صناعة، أو قيم العلامة.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-layers.jpg?v=3'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>قسم يثبت أثناء التمرير: كل تمريرة تكشف طبقة بصورتها ونصّها. يصلح لمكوّنات منتج، أو مراحل صناعة، أو قيم العلامة.</div>"
                 },
                 {
                     "id": "title",
@@ -794,7 +794,7 @@
                     ]
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-layers.jpg?v=2"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-layers.jpg?v=3"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c03",
@@ -810,7 +810,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "coll-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-collection.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>التمرير العمودي يتحوّل إلى حركة أفقية على المنتجات المختارة — <strong>ويحترم اتجاه اللغة</strong>: يبدأ من اليمين في العربية ومن اليسار في الإنجليزية. أزرار الإضافة للسلة رسمية من سلة.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-collection.jpg?v=3'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6'>التمرير العمودي يتحوّل إلى حركة أفقية على المنتجات المختارة — <strong>ويحترم اتجاه اللغة</strong>: يبدأ من اليمين في العربية ومن اليسار في الإنجليزية. أزرار الإضافة للسلة رسمية من سلة.</div>"
                 },
                 {
                     "id": "eyebrow",
@@ -863,7 +863,7 @@
                     "description": "اتركه فارغًا ليعرض الثيم الأكثر مبيعًا من متجرك تلقائيًا. اختر منتجات لتفعيل المعرض الأفقي السردي."
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-collection.jpg?v=2"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-collection.jpg?v=3"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c04",
@@ -879,7 +879,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "story-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-story.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>فصول متتابعة: كل فصل صورة تُكشف بقناع ونص يظهر بجانبها.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-story.jpg?v=3'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>فصول متتابعة: كل فصل صورة تُكشف بقناع ونص يظهر بجانبها.</div>"
                 },
                 {
                     "id": "eyebrow",
@@ -956,7 +956,7 @@
                     ]
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-story.jpg?v=2"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-story.jpg?v=3"
         },
         {
             "key": "9f1e4b70-2c1a-4c66-9a4e-1b5f0d3a7c05",
@@ -972,7 +972,7 @@
                     "type": "static",
                     "format": "description",
                     "id": "visit-desc",
-                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-visit.jpg?v=2'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>قسم ختامي بخلفية وبارالاكس وأزرار تنجذب للمؤشر.</div>"
+                    "value": "<div><img class='w-full' src='https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-visit.jpg?v=3'></div><div style='background:#f5f5f5;border-radius:8px;padding:12px 16px;font-size:14px;line-height:1.6;margin-top:10px'>قسم ختامي بخلفية وبارالاكس وأزرار تنجذب للمؤشر.</div>"
                 },
                 {
                     "id": "background",
@@ -1086,7 +1086,7 @@
                     ]
                 }
             ],
-            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-visit.jpg?v=2"
+            "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-visit.jpg?v=3"
         },
         {
             "key": "186b3f4f-25cf-4d3c-abca-cef7eed6f0ab",

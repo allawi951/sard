@@ -9,7 +9,7 @@ import { traceLogo, loadForTrace, inkStats } from './sard-trace';
 
 gsap.registerPlugin(ScrollTrigger);
 
-const CFG = window.SARD_CFG || {};
+import { CFG, isOn } from './sard-cfg';
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const COARSE = matchMedia('(hover: none), (pointer: coarse)').matches;
 
@@ -22,7 +22,7 @@ const $$ = (s, r = document) => [...r.querySelectorAll(s)];
 
 /* ── ١) التمرير الناعم ── */
 function smoothScroll() {
-  if (REDUCED || CFG.smoothScroll === false) return;
+  if (REDUCED || !isOn(CFG.smoothScroll, true)) return;
 
   const lenis = new Lenis({ duration: 1.15, smoothWheel: true, touchMultiplier: 1.6 });
   lenis.on('scroll', ScrollTrigger.update);
@@ -44,7 +44,7 @@ function smoothScroll() {
 /* ── ٢) الشريط العلوي وشريط التقدّم ── */
 function chrome() {
   const nav = $('#sardNav');
-  if (nav && CFG.stickyHeader !== false) {
+  if (nav && isOn(CFG.stickyHeader, true)) {
     ScrollTrigger.create({
       start: 'top -60',
       onUpdate: (self) => nav.classList.toggle('is-stuck', self.scroll() > 60),
@@ -199,12 +199,12 @@ async function drawLogo(img) {
 
 function start() {
   const { gsap, ScrollTrigger, REDUCED } = window.SARD;
-  const CFG = window.SARD_CFG || {};
+  // CFG و isOn مستوردان أعلى الملف — لا استيراد داخل دالة
 
   /* ── ١) ماء الواجهة (canvas) ── */
   (function water() {
     const c = $('#sardWater');
-    if (!c || REDUCED || CFG.water === false) return;
+    if (!c || REDUCED || !isOn(CFG.water, true)) return;
 
     const ctx = c.getContext('2d');
     let w, h, raf, running = true;
@@ -263,7 +263,7 @@ function start() {
     // الزخرفة وشعار المتجر يجتمعان الآن: الزخرفة تُرسم أولًا، ثم يُرسم الشعار
     // تحتها. (الصيغة الأقدم كانت تجعلهما متعارضين، ثم كانت تبدأ بـ
     // `if (!mark) return` فتموت الدالة كلّها متى رفع التاجر شعارًا.)
-    const still = REDUCED || CFG.logoDraw === false;
+    const still = REDUCED || !isOn(CFG.logoDraw, true);
     gsap.from('#sardHeroEyebrow', { opacity: 0, y: 14, duration: 1, ease: 'power2.out' });
 
     const paths = mark ? $$('.sard-draw', mark) : [];

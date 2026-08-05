@@ -19,7 +19,7 @@
    ‎131KB‎ لكل صفحة من أجل حلقة ‎rAF‎ واحدة.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const CFG = window.SARD_CFG || {};
+import { CFG, isOn, choice } from './sard-cfg';
 const REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const COARSE = matchMedia('(hover: none), (pointer: coarse)').matches;
 
@@ -100,18 +100,13 @@ const SHAPES = {
   },
 };
 
-/* الإعداد قد يصل نصًّا ‎"perfume"‎ (سلوك سلة) أو مصفوفة كائنات الخيار المحدَّد
-   ‎[{value:"perfume",…}]‎ (ما يُخرِجه بعض المحاكيات وبعض إصدارات المحرّر).
-   قراءةُ الشكل الواحد فقط كانت تجعل أي اختيار غير الافتراضي يسقط صامتًا إلى
-   القارورة — وهو ما رصده المالك: «تغيير المؤشّر ما يأثّر». نقبل الشكلين. */
-function readShapeKey(raw) {
-  const v = Array.isArray(raw) ? (raw[0] && raw[0].value) : (raw && raw.value) || raw;
-  return typeof v === 'string' && SHAPES[v] ? v : 'perfume';
-}
-
-const SHAPE_KEY = CFG.cursorShape === 'none' || (Array.isArray(CFG.cursorShape) && CFG.cursorShape[0]?.value === 'none')
-  ? 'none'
-  : readShapeKey(CFG.cursorShape);
+/* الشكل يُقرأ عبر `choice` فيقبل النصّ والمصفوفة والكائن معًا — راجع
+   sard-cfg.js لسبب هذا التساهل. */
+const SHAPE_KEY = (() => {
+  const k = choice(CFG.cursorShape, 'perfume');
+  if (k === 'none') return 'none';
+  return SHAPES[k] ? k : 'perfume';
+})();
 const SHAPE = SHAPES[SHAPE_KEY];
 
 const LIGHT_ENOUGH_ALPHA = 40;   // عتبة «ليس شفّافًا» في قناع الجسيمات
@@ -124,7 +119,7 @@ const CREAM = [248, 240, 233];
    سياق واحد يُنشَأ عند أول نقرة ويُعاد استخدامه. */
 let actx = null;
 function playSpray() {
-  if (CFG.cursorSound === false || !SHAPE.sound) return;
+  if (!isOn(CFG.cursorSound, true) || !SHAPE.sound) return;
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
@@ -312,4 +307,4 @@ function init() {
 
    ولا مؤشّر مخصّص على اللمس (لا فأرة أصلًا)، ولا مع تفضيل تقليل الحركة،
    ولا إن أطفأه التاجر، ولا إن اختار «بلا مؤشّر مخصّص». */
-if (!COARSE && !REDUCED && CFG.cursor !== false && SHAPE_KEY !== 'none' && SHAPE) init();
+if (!COARSE && !REDUCED && isOn(CFG.cursor, true) && SHAPE_KEY !== 'none' && SHAPE) init();

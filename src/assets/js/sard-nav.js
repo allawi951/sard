@@ -12,15 +12,9 @@
    فلا نخترع بيانات ولا نستنسخ ترميزًا محشوًّا بأصناف استجابة متعارضة.
    ═══════════════════════════════════════════════════════════════════════════ */
 
-const CFG = window.SARD_CFG || {};
+import { CFG, isOn, choice } from './sard-cfg';
 
-/* الإعداد قد يصل نصًّا (سلوك سلة) أو مصفوفة كائن الخيار المحدَّد (بعض المحاكيات) */
-function readChoice(raw, fallback) {
-  const v = Array.isArray(raw) ? (raw[0] && raw[0].value) : (raw && raw.value) || raw;
-  return typeof v === 'string' ? v : fallback;
-}
-
-const SOURCE = readChoice(CFG.desktopMenuSource, 'all');
+const SOURCE = choice(CFG.desktopMenuSource, 'all');
 const DESKTOP_MIN = 1024;
 
 /* ── ١) شارة السلة الفارغة ──
@@ -73,7 +67,7 @@ function buildList(menus, depth = 0) {
 }
 
 async function desktopDrawer() {
-  if (CFG.desktopMenu === false) return;
+  if (!isOn(CFG.desktopMenu, true)) return;
   if (!window.salla || !salla.api?.component?.getMenus) return;
 
   let menus = [];

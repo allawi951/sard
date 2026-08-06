@@ -276,6 +276,30 @@ LOGICAL_TRAP.length
   ? LOGICAL_TRAP.forEach((m) => fail(m))
   : pass('لا خلط بين اختصارات margin/padding والخصائص المنطقية');
 
+/* ── ٧-ب) `json_encode` بلا `raw` داخل <script> ──
+   تويج يُهرِّب المخرجات إلى HTML افتراضيًّا. فداخل <script> يصير
+       {{ 'perfume'|json_encode }}   →   &quot;perfume&quot;
+   وهو خطأ صياغة يُسقط **الكتلة كلها**، فلا يُنشَأ الكائن أصلًا وتسقط كل
+   الإعدادات إلى قيمها الافتراضية — بلا رسالة مفهومة إلا سطرٌ في الكونسول:
+       Uncaught SyntaxError: Unexpected token '&'
+
+   هذه العلّة وحدها كلّفت جولات ظُنّ فيها العطل في المؤشّر لا في القالب.
+   القاعدة: كل `json_encode` داخل `<script>` يتبعه `|raw`. */
+console.log('\n— json_encode داخل <script> —');
+const scriptTrap = [];
+for (const file of twigs) {
+  const src = readFileSync(file, 'utf8');
+  for (const block of src.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script>/gi)) {
+    for (const hit of block[1].matchAll(/\{\{[^}]*\|\s*json_encode\s*\}\}/g)) {
+      const line = src.slice(0, block.index + hit.index).split('\n').length;
+      scriptTrap.push(`${relative(ROOT, file)}:${line} — ${hit[0].trim().slice(0, 70)}`);
+    }
+  }
+}
+scriptTrap.length
+  ? scriptTrap.forEach((m) => fail(`${m}  ← ينقصه |raw`))
+  : pass('كل json_encode داخل <script> متبوع بـ|raw');
+
 /* ── ٨) بناء تطوير مسرَّب إلى public/ ──
    `salla theme preview` يشغّل `pnpm run watch` أي `webpack --mode development`،
    فيكتب فوق كل ملفات public/ ببناءٍ **غير مُصغَّر**. ولو رُفع ذلك إلى GitHub

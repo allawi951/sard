@@ -107,10 +107,26 @@ body.theme-sard {
     justify-content: center;
   }
 
-  /* الشريط فوق الواجهة السردية: شفاف يتصلّب مع التمرير */
+  /* الشريط فوق الواجهة السردية: شفاف يتصلّب مع التمرير.
+
+     ⚠️ ‎backdrop-filter‎ على **‎.inner‎** لا على ‎.main-nav-container‎.
+     السبب: أي عنصر يحمل ‎backdrop-filter‎ (أو ‎filter‎ أو ‎transform‎) يصير
+     **حاويةً لعناصر ‎position: fixed‎** بداخله. وتثبيت رائد للشريط يعمل
+     بجعل ‎.inner‎ نفسه ‎position: fixed; top: 0‎ — فحين كان المرشِّح على
+     الحاوية صار ‎.inner‎ يُثبَّت نسبةً إليها لا إلى الشاشة، فيهرب مع التمرير.
+
+     قِسته: على الرئيسية كان ‎top = -552px‎ رغم ‎position: fixed‎، وعلى
+     الصفحات الداخلية (بلا مرشِّح) ‎top = 0‎ ويعمل. ولهذا كان التثبيت يفشل
+     على الرئيسية وحدها رغم تفعيل الإعداد.
+
+     ووضعُه على ‎.inner‎ سليم: المرشِّح يؤثّر في **أحفاد** العنصر لا في
+     تموضعه هو، و‎.inner‎ ليس فيه شيء مثبَّت. */
   &.sard-home .store-header .main-nav-container {
-    background: color-mix(in srgb, var(--sard-ink) 88%, transparent) !important;
+    background: transparent !important;
     border-bottom-color: rgba(248, 240, 233, .12);
+  }
+  &.sard-home .store-header .main-nav-container > .inner {
+    background: color-mix(in srgb, var(--sard-ink) 88%, transparent);
     backdrop-filter: blur(14px) saturate(1.25);
   }
   /* لا مرشِّح مفروضًا على شعار التاجر.

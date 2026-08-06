@@ -58,7 +58,7 @@ function ensureModal() {
       <div class="sard-quick__info">
         <h3 class="sard-quick__name"></h3>
         <div class="sard-quick__price"></div>
-        <div class="sard-quick__desc" aria-live="polite"></div>
+        <div class="sard-quick__desc product__description" aria-live="polite"></div>
         <div class="sard-quick__slot"></div>
         <a class="sard-quick__more btn btn-solid" href="#"></a>
       </div>
@@ -115,6 +115,48 @@ function openQuick(data, labels) {
    صفحة المنتج حرفيًّا، وهو ما طلبه المالك.
 
    يُجلب بعد الفتح لا قبله: النافذة تظهر فورًا بما لدينا، والوصف يلتحق. */
+/* ── تعقيم ترميز الوصف ──
+   نُبقي الترميز (فقرات، عناوين، قوائم، تشديد) كي يخرج الوصف بنفس تنسيق صفحة
+   المنتج وترتيبه — وهو ما طلبه المالك. لكن حقن HTML من صفحة أخرى بلا تعقيم
+   يفتح ثغرة: وصف المنتج يكتبه **التاجر**، والثيم يُركَّب على متاجر لا نتحكّم
+   بمحتواها. فنسمح بقائمة وسوم محدّدة ونُسقط كل ما عداها.
+
+   لا نستعمل مكتبة تعقيم: الوصف بنيةٌ بسيطة، والقائمة البيضاء أقصر وأأمن من
+   محاولة حصر ما يُمنَع. */
+const ALLOWED_TAGS = new Set(['P', 'BR', 'SPAN', 'DIV', 'STRONG', 'B', 'EM', 'I', 'U',
+  'UL', 'OL', 'LI', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'A', 'BLOCKQUOTE',
+  'TABLE', 'THEAD', 'TBODY', 'TR', 'TD', 'TH', 'HR', 'SMALL', 'SUB', 'SUP', 'FIGURE', 'IMG']);
+
+function sanitize(node) {
+  const root = node.cloneNode(true);
+
+  for (const el of [...root.querySelectorAll('*')]) {
+    if (!ALLOWED_TAGS.has(el.tagName)) {
+      /* نُبقي محتواه النصّيّ ولا نحذفه كاملًا: قد يكون <font> أو وسمًا
+         قديمًا يلفّ نصًّا حقيقيًّا، وحذفه يبتر الوصف. */
+      el.replaceWith(...el.childNodes);
+      continue;
+    }
+    for (const attr of [...el.attributes]) {
+      const n = attr.name.toLowerCase();
+      const v = (attr.value || '').trim();
+      const isUrlAttr = n === 'href' || n === 'src';
+      const badUrl = isUrlAttr && /^(javascript|data|vbscript):/i.test(v);
+      // نسمح بالروابط والصور والوجهة فقط؛ وكل on* أو style يسقط
+      if (n.startsWith('on') || n === 'style' || badUrl
+          || !['href', 'src', 'alt', 'title', 'target', 'rel', 'dir', 'colspan', 'rowspan'].includes(n)) {
+        el.removeAttribute(attr.name);
+      }
+    }
+    if (el.tagName === 'A') {
+      el.setAttribute('rel', 'noopener nofollow');
+      el.setAttribute('target', '_blank');
+    }
+    if (el.tagName === 'IMG') el.setAttribute('loading', 'lazy');
+  }
+  return root.innerHTML.trim();
+}
+
 const descCache = new Map();
 async function loadDescription(url, slot, labels) {
   if (!slot) return;
@@ -129,13 +171,7 @@ async function loadDescription(url, slot, labels) {
     const doc = new DOMParser().parseFromString(await res.text(), 'text/html');
 
     const node = doc.querySelector('.sard-product__desc, .product__description, [class*="product-description"], #description');
-    let html = '';
-    if (node) {
-      /* نصّ فقط: حقن HTML من صفحة أخرى قد يجرّ سكربتات أو تخطيطًا يكسر
-         النافذة. الوصف نصّيّ في جوهره فلا نخسر شيئًا. */
-      const text = (node.textContent || '').replace(/\s+/g, ' ').trim();
-      if (text) html = text.length > 600 ? text.slice(0, 600).trim() + '…' : text;
-    }
+    const html = node ? sanitize(node) : '';
     descCache.set(url, html);
     slot.innerHTML = html;
   } catch {

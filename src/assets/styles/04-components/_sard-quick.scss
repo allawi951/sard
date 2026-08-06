@@ -159,16 +159,56 @@ body.theme-sard .sard-quick {
 
 html.sard-quick-open, html.sard-quick-open body { overflow: hidden; }
 
-/* وصف المنتج داخل النافذة — يُجلب من صفحة المنتج نفسها */
+/* ── وصف المنتج داخل النافذة ──
+   الحاوية تحمل صنف `product__description` نفسه الذي تستعمله صفحة المنتج،
+   فترث قواعده كلها (القوائم، الروابط، الحشو) بلا تكرار — وأي تعديل مستقبليّ
+   على تنسيق الوصف يسري على المكانين معًا.
+   هنا نضيف ما يخصّ النافذة وحدها: حدّ الارتفاع، والألوان على الجلد الداكن. */
 body.theme-sard .sard-quick__desc {
   font-size: .95rem;
-  line-height: 1.85;
-  color: rgba(248, 240, 233, .8);
-  max-height: 9.5rem;
+  line-height: 1.75;                 /* = leading-7 في صفحة المنتج */
+  color: rgba(248, 240, 233, .82);
+  max-height: 11rem;
   overflow-y: auto;
-  padding-inline-end: .4rem;
+  padding-inline-end: .5rem;
 
   &:empty { display: none; }
+
+  /* العناوين داخل الوصف بخطّ الثيم لا بمقاسات المتصفّح الافتراضية */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--sard-serif);
+    font-weight: 400;
+    color: var(--sard-cream);
+    font-size: 1.05rem;
+    line-height: 1.6;
+    margin: .7rem 0 .35rem;
+  }
+
+  p { margin: 0 0 .6rem; }
+  p:last-child, ul:last-child, ol:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 .6rem; }
+  li { margin-bottom: .25rem; }
+
+  strong, b { color: var(--sard-cream); font-weight: 600; }
+
+  /* رابط أزرق (text-blue-700 من صفحة المنتج) لا يُقرأ على الحبر الداكن */
+  a { color: var(--sard-gold); text-decoration: underline; }
+  a:hover { color: var(--sard-gold-soft, var(--sard-gold)); }
+
+  img { max-width: 100%; height: auto; border-radius: 4px; margin: .4rem 0; }
+
+  table { width: 100%; font-size: .88rem; }
+  td, th { padding: .3rem .5rem; border: 1px solid var(--sard-hairline); }
+
+  hr { border: 0; border-top: 1px solid var(--sard-hairline); margin: .8rem 0; }
+
+  /* شريط تمرير رفيع لا يزاحم النصّ */
+  &::-webkit-scrollbar { width: 5px; }
+  &::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--sard-cream) 22%, transparent);
+    border-radius: 4px;
+  }
 }
 
 /* زرّ الانتقال لصفحة المنتج: زرٌّ صريح لا رابطًا خافتًا */

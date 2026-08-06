@@ -167,6 +167,19 @@ window.SARD_DEBUG = {
      TDZ هذا الملف — أي قيمة من `const`/`let` لاحق تُقرأ بقارئ.) */
   get mutedByVisitor() { return muted; },
   allSettings: CFG,
+
+  /* جدول كل ميزة: القيمة كما وصلت من سلة، ثم كيف فُسِّرت.
+     يجعل تشخيص «الميزة اختفت» فوريًّا بدل جولة أسئلة: لو ظهر
+     `raw: ""` فالتاجر أطفأها، ولو `undefined` فالإعداد لم يصل. */
+  features: {
+    quickView:    { raw: CFG.quickView,    on: isOn(CFG.quickView, true) },
+    cartPreview:  { raw: CFG.cartPreview,  on: isOn(CFG.cartPreview, true) },
+    desktopMenu:  { raw: CFG.desktopMenu,  on: isOn(CFG.desktopMenu, true) },
+    cursor:       { raw: CFG.cursor,       on: isOn(CFG.cursor, true) },
+    cursorSound:  { raw: CFG.cursorSound,  on: isOn(CFG.cursorSound, true) },
+    smoothScroll: { raw: CFG.smoothScroll, on: isOn(CFG.smoothScroll, true) },
+    logoDraw:     { raw: CFG.logoDraw,     on: isOn(CFG.logoDraw, true) },
+  },
 };
 
 const LIGHT_ENOUGH_ALPHA = 40;   // عتبة «ليس شفّافًا» في قناع الجسيمات

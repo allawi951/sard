@@ -161,6 +161,11 @@ window.SARD_DEBUG = {
   resolvedShape: SHAPE_KEY,
   cursorEnabled: isOn(CFG.cursor, true),
   soundEnabled: isOn(CFG.cursorSound, true),
+  /* قارئ كسول لا قيمة مباشرة: `muted` يُصرَّح بـ`let` **بعد** هذا الكائن،
+     وقراءته هنا مباشرةً تقع في المنطقة الميتة الزمنية فترمي
+     ReferenceError ويسقط المؤشّر كلّه صامتًا. (ثالث مرّة يلدغ فيها
+     TDZ هذا الملف — أي قيمة من `const`/`let` لاحق تُقرأ بقارئ.) */
+  get mutedByVisitor() { return muted; },
   allSettings: CFG,
 };
 
@@ -172,9 +177,46 @@ const CREAM = [248, 240, 233];
 /* ── الصوت ──
    ضوضاء بيضاء عبر مرشّح نطاقيّ يهبط ترددُه سريعًا = «بسسّ» الرشّاش.
    سياق واحد يُنشَأ عند أول نقرة ويُعاد استخدامه. */
+/* ── كتم الصوت من الزائر نفسه ──
+   إعداد التاجر يقرّر **هل تُتاح** الرشّة الصوتية، وهذا مفتاح الزائر يقرّر
+   **هل يسمعها هو**. صوتٌ لا يملك الزائر إسكاته مصدر إزعاج، ومتصفّحات كثيرة
+   تُعاقب المواقع عليه. الاختيار يُحفَظ في localStorage فيبقى بين الزيارات. */
+const MUTE_KEY = 'sard:cursor-muted';
+let muted = false;
+try { muted = localStorage.getItem(MUTE_KEY) === '1'; } catch { muted = false; }
+
+function setMuted(v, btn) {
+  muted = !!v;
+  try { localStorage.setItem(MUTE_KEY, muted ? '1' : '0'); } catch { /* وضع خاص */ }
+  if (btn) {
+    btn.classList.toggle('is-muted', muted);
+    btn.setAttribute('aria-pressed', String(muted));
+    btn.setAttribute('aria-label', muted ? 'تشغيل صوت الرشّة' : 'كتم صوت الرشّة');
+    btn.title = muted ? 'تشغيل صوت الرشّة' : 'كتم صوت الرشّة';
+  }
+}
+
+function mountMuteButton() {
+  if (!SHAPE.sound || !isOn(CFG.cursorSound, true)) return;   // لا زرّ بلا صوت
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'sard-mute';
+  btn.innerHTML =
+    '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">' +
+      '<path class="sard-mute__spk" d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/>' +
+      '<path class="sard-mute__wave" d="M16.5 8.5a5 5 0 0 1 0 7M19 6a8.5 8.5 0 0 1 0 12"' +
+        ' fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>' +
+      '<path class="sard-mute__slash" d="M4 20L20 4" fill="none" stroke="currentColor"' +
+        ' stroke-width="1.8" stroke-linecap="round"/>' +
+    '</svg>';
+  btn.addEventListener('click', () => setMuted(!muted, btn));
+  document.body.appendChild(btn);
+  setMuted(muted, btn);
+}
+
 let actx = null;
 function playSpray() {
-  if (!isOn(CFG.cursorSound, true) || !SHAPE.sound) return;
+  if (muted || !isOn(CFG.cursorSound, true) || !SHAPE.sound) return;
   try {
     const AC = window.AudioContext || window.webkitAudioContext;
     if (!AC) return;
@@ -248,6 +290,7 @@ function init() {
   if (canvas) { canvas.className = 'sard-cursor-fx'; ctx = canvas.getContext('2d'); }
 
   document.body.append(...(canvas ? [canvas, shape] : [shape]));
+  mountMuteButton();
   root.classList.add('sard-has-cursor');
 
   let dpr = 1;

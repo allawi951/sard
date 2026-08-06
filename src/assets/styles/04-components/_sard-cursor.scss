@@ -74,3 +74,40 @@ html.sard-cursor-off .sard-cursor { opacity: 0 !important; }
   .sard-cursor, .sard-cursor-fx { display: none; }
   html.sard-has-cursor, html.sard-has-cursor * { cursor: auto; }
 }
+
+/* ── زرّ كتم صوت الرشّة (للزائر) ──
+   يظهر فقط حين يكون للشكل صوتٌ ولم يُطفئه التاجر. صغيرٌ وهادئ في الزاوية،
+   ولا يستعمل `cursor: none` كي يُرى المؤشّر النظاميّ فوقه لو تعطّل المخصّص. */
+body.theme-sard .sard-mute {
+  position: fixed;
+  inset-block-end: 1.1rem;
+  inset-inline-start: 1.1rem;
+  z-index: 9994;
+  width: 40px;
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--sard-hairline);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--sard-ink) 82%, transparent);
+  backdrop-filter: blur(6px);
+  color: rgba(248, 240, 233, .78);
+  cursor: pointer;
+  opacity: .55;
+  transition: opacity .28s var(--sard-ease), color .28s, border-color .28s;
+
+  &:hover, &:focus-visible { opacity: 1; color: var(--sard-gold); border-color: var(--sard-gold); }
+
+  /* الشرطة المائلة تظهر عند الكتم فقط، والموجات تختفي */
+  .sard-mute__slash { opacity: 0; transition: opacity .2s; }
+  .sard-mute__wave { opacity: 1; transition: opacity .2s; }
+  &.is-muted {
+    .sard-mute__slash { opacity: 1; }
+    .sard-mute__wave { opacity: 0; }
+  }
+}
+
+@media (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  body.theme-sard .sard-mute { display: none; }
+}

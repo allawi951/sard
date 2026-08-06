@@ -76,10 +76,14 @@
         window.notify_when_available_in_card = "{{ theme.settings.get('notify_when_available_in_card', true) }}"
     </script>
     
+    {% set sard_build = '276bcae0c5' %}
     {% hook 'head:start' %}
     {% hook head %}
     {% block styles %}{% endblock %}
-    <link rel="stylesheet" href="{{ 'app.css' | asset }}">
+    {# بصمة المحتوى تكسر تخبئة المتصفّح وشبكة سلة: مخرجات webpack بأسماء
+       ثابتة، فبلا هذه اللاحقة يبقى الزائر على بناءٍ قديم بلا حدّ.
+       تُحدَّث آليًّا بـ node tools/stamp-build.mjs بعد كل بناء إنتاج. #}
+    <link rel="stylesheet" href="{{ 'app.css' | asset }}?b={{ sard_build|default('0') }}">
     <link rel="stylesheet" href="{{ theme.font.path|cdn }}"/>
     <link rel="stylesheet" href="{{ 'fonts/sallaicons.css'|cdn }}"/>
     
@@ -178,7 +182,7 @@
 {% if theme.settings.get('enable_add_product_toast', true) %}
     <salla-add-product-toast data-testid="store-add-product-toast"></salla-add-product-toast>
 {% endif %}
-<script defer crossorigin="anonymous" src="{{ 'app.js' | asset }}"></script>
+<script defer crossorigin="anonymous" src="{{ 'app.js' | asset }}?b={{ sard_build|default('0') }}"></script>
 
 {# Twilight Components #}
 <salla-offer-modal data-testid="store-offer-modal"></salla-offer-modal>

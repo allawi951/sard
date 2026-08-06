@@ -12,7 +12,7 @@
 #}
 {% set wordmark = component.wordmark|default('') ?: store.name %}
 
-<section class="sard-hero" data-testid="store-home-hero" id="sard-hero-{{ position }}">
+<section class="sard-hero" data-sard-size="{{ component.size|default('normal') }}" data-testid="store-home-hero" id="sard-hero-{{ position }}">
 
   {% if component.background %}
     <div class="sard-hero__bg">

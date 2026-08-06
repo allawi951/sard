@@ -10,7 +10,7 @@
 | component.layers[].image| ?string  |                                               |
 | position                | int      |                                               |
 #}
-<section class="sard-layers" data-testid="store-home-scent-pyramid" id="sard-layers-{{ position }}">
+<section class="sard-layers" data-sard-size="{{ component.size|default('normal') }}" data-testid="store-home-scent-pyramid" id="sard-layers-{{ position }}">
   <div class="sard-layers__pin" id="sardLayersPin">
     <div class="container sard-layers__grid">
 

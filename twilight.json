@@ -684,6 +684,46 @@
                     "value": "انزل للاستكشاف",
                     "required": false,
                     "maxLength": 30
+                },
+                {
+                    "id": "size",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "حجم القسم",
+                    "description": "يتحكّم في ارتفاع القسم والمساحات حوله. اختر ما يناسب طول محتواك — «ملء الشاشة» يجعل القسم بارتفاع الشاشة كاملة.",
+                    "labelHTML": null,
+                    "icon": "sicon-expand",
+                    "selected": [
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-her02"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "صغير — قسم مضغوط",
+                            "value": "compact",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-her01"
+                        },
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-her02"
+                        },
+                        {
+                            "label": "كبير — قسم فسيح",
+                            "value": "spacious",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-her03"
+                        },
+                        {
+                            "label": "ملء الشاشة",
+                            "value": "full",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-her04"
+                        }
+                    ],
+                    "source": "Manual",
+                    "required": true
                 }
             ],
             "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-hero.jpg?v=3"
@@ -802,6 +842,46 @@
                             }
                         }
                     ]
+                },
+                {
+                    "id": "size",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "حجم القسم",
+                    "description": "يتحكّم في ارتفاع القسم والمساحات حوله. اختر ما يناسب طول محتواك — «ملء الشاشة» يجعل القسم بارتفاع الشاشة كاملة.",
+                    "labelHTML": null,
+                    "icon": "sicon-expand",
+                    "selected": [
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-lay02"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "صغير — قسم مضغوط",
+                            "value": "compact",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-lay01"
+                        },
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-lay02"
+                        },
+                        {
+                            "label": "كبير — قسم فسيح",
+                            "value": "spacious",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-lay03"
+                        },
+                        {
+                            "label": "ملء الشاشة",
+                            "value": "full",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-lay04"
+                        }
+                    ],
+                    "source": "Manual",
+                    "required": true
                 }
             ],
             "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-layers.jpg?v=3"
@@ -871,6 +951,46 @@
                     "options": [],
                     "value": [],
                     "description": "اتركه فارغًا ليعرض الثيم الأكثر مبيعًا من متجرك تلقائيًا. اختر منتجات لتفعيل المعرض الأفقي السردي."
+                },
+                {
+                    "id": "size",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "حجم القسم",
+                    "description": "يتحكّم في ارتفاع القسم والمساحات حوله. اختر ما يناسب طول محتواك — «ملء الشاشة» يجعل القسم بارتفاع الشاشة كاملة.",
+                    "labelHTML": null,
+                    "icon": "sicon-expand",
+                    "selected": [
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-col02"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "صغير — قسم مضغوط",
+                            "value": "compact",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-col01"
+                        },
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-col02"
+                        },
+                        {
+                            "label": "كبير — قسم فسيح",
+                            "value": "spacious",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-col03"
+                        },
+                        {
+                            "label": "ملء الشاشة",
+                            "value": "full",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-col04"
+                        }
+                    ],
+                    "source": "Manual",
+                    "required": true
                 }
             ],
             "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-collection.jpg?v=3"
@@ -964,6 +1084,46 @@
                             "maxLength": 320
                         }
                     ]
+                },
+                {
+                    "id": "size",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "حجم القسم",
+                    "description": "يتحكّم في ارتفاع القسم والمساحات حوله. اختر ما يناسب طول محتواك — «ملء الشاشة» يجعل القسم بارتفاع الشاشة كاملة.",
+                    "labelHTML": null,
+                    "icon": "sicon-expand",
+                    "selected": [
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-sto02"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "صغير — قسم مضغوط",
+                            "value": "compact",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-sto01"
+                        },
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-sto02"
+                        },
+                        {
+                            "label": "كبير — قسم فسيح",
+                            "value": "spacious",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-sto03"
+                        },
+                        {
+                            "label": "ملء الشاشة",
+                            "value": "full",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-sto04"
+                        }
+                    ],
+                    "source": "Manual",
+                    "required": true
                 }
             ],
             "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-story.jpg?v=3"
@@ -1094,6 +1254,46 @@
                             "value": "custom"
                         }
                     ]
+                },
+                {
+                    "id": "size",
+                    "type": "items",
+                    "format": "dropdown-list",
+                    "label": "حجم القسم",
+                    "description": "يتحكّم في ارتفاع القسم والمساحات حوله. اختر ما يناسب طول محتواك — «ملء الشاشة» يجعل القسم بارتفاع الشاشة كاملة.",
+                    "labelHTML": null,
+                    "icon": "sicon-expand",
+                    "selected": [
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-vis02"
+                        }
+                    ],
+                    "options": [
+                        {
+                            "label": "صغير — قسم مضغوط",
+                            "value": "compact",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-vis01"
+                        },
+                        {
+                            "label": "متوسّط (الافتراضي)",
+                            "value": "normal",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-vis02"
+                        },
+                        {
+                            "label": "كبير — قسم فسيح",
+                            "value": "spacious",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-vis03"
+                        },
+                        {
+                            "label": "ملء الشاشة",
+                            "value": "full",
+                            "key": "b8e4d2a7-3f61-4c09-a5d8-vis04"
+                        }
+                    ],
+                    "source": "Manual",
+                    "required": true
                 }
             ],
             "image": "https://raw.githubusercontent.com/allawi951/sard/master/src/assets/images/preview/desktop-visit.jpg?v=3"

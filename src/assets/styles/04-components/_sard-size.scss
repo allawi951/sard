@@ -1,0 +1,71 @@
+/* ═══════════════════════════════════════════════════════════════
+   حجم كل قسم من إعداداته — حقل «حجم القسم» في كل مكوّن «سرد»
+
+   لماذا معامل قياس واحد لا أربع نسخ من كل قاعدة: الأقسام تختلف في بنيتها
+   (بعضها ‎min-height‎ وبعضها ‎padding-block‎ بـ‎clamp‎)، فلو كتبنا لكل حجم
+   قواعده كاملة صارت أربع نسخ تتباعد مع أول تعديل. بدلًا من ذلك يُعرَّف
+   ‎--sard-scale‎ مرّة، وتُضرَب فيه الإيقاعات الرأسية وحدها.
+
+   ⚠️ المطابقة بـ‎*=‎ لا ‎=‎ عمدًا: قيمة الحقل المنسدل قد تصل نصًّا خالصًا
+   (‎compact‎) وقد تصل داخل تمثيلٍ أوسع حسب ما تُرسله سلة. المطابقة الجزئية
+   تعمل في الحالتين، والقيم الأربع متمايزة فلا تتداخل. وهذا هو الدرس نفسه
+   الذي كلّفنا جولات في إعداد شكل المؤشّر.
+   ═══════════════════════════════════════════════════════════════ */
+
+body.theme-sard {
+
+  [data-sard-size]                 { --sard-scale: 1; }
+  [data-sard-size*='compact']      { --sard-scale: .6; }
+  [data-sard-size*='normal']       { --sard-scale: 1; }
+  [data-sard-size*='spacious']     { --sard-scale: 1.45; }
+  /* «ملء الشاشة» يقيس كالفسيح، ويضيف ارتفاعًا أدنى بالشاشة أدناه */
+  [data-sard-size*='full']         { --sard-scale: 1.3; }
+
+  /* ── الواجهة ── */
+  .sard-hero[data-sard-size] {
+    min-height: calc(86svh * var(--sard-scale));
+  }
+  .sard-hero[data-sard-size] .sard-hero__in {
+    padding-block: calc(3rem * var(--sard-scale)) calc(5rem * var(--sard-scale));
+  }
+  .sard-hero[data-sard-size*='full'] { min-height: 100svh; }
+
+  /* ── الطبقات (قسم مثبَّت) ──
+     ‎min-height‎ هنا يحكم مسافة التثبيت، فتقليصه يُسرّع تتابع الخطوات. */
+  .sard-layers[data-sard-size] .sard-layers__pin {
+    min-height: calc(100svh * var(--sard-scale));
+    padding-block: calc(6rem * var(--sard-scale));
+  }
+  .sard-layers[data-sard-size*='full'] .sard-layers__pin { min-height: 100svh; }
+
+  /* ── المجموعة ── */
+  .sard-coll[data-sard-size] .sard-coll__head {
+    padding-block: calc(clamp(4rem, 9vw, 8rem) * var(--sard-scale)) calc(2.5rem * var(--sard-scale));
+  }
+  .sard-coll[data-sard-size*='full'] { min-height: 100svh; }
+
+  /* ── الحكاية ── */
+  .sard-story[data-sard-size] {
+    padding-block: calc(clamp(4rem, 8vw, 7rem) * var(--sard-scale));
+  }
+  .sard-story[data-sard-size*='full'] { min-height: 100svh; }
+
+  /* ── الزيارة ── */
+  .sard-visit[data-sard-size] {
+    padding-block: calc(clamp(5rem, 10vw, 10rem) * var(--sard-scale));
+  }
+  .sard-visit[data-sard-size*='full'] { min-height: 100svh; }
+
+  /* على الجوال نحدّ من التطرّف: «فسيح» على شاشة صغيرة يعني تمريرًا بلا
+     محتوى، و«مضغوط» يخنق النصّ العربيّ ذا الأسطر المتباعدة. */
+  @media (max-width: 640px) {
+    [data-sard-size*='spacious'] { --sard-scale: 1.15; }
+    [data-sard-size*='compact']  { --sard-scale: .75; }
+    [data-sard-size*='full']     { --sard-scale: 1.05; }
+  }
+
+  /* مع تفضيل تقليل الحركة لا معنى لأقسام بارتفاع شاشة كاملة تُمرَّر طويلًا */
+  @media (prefers-reduced-motion: reduce) {
+    [data-sard-size*='full'] { --sard-scale: 1; }
+  }
+}

@@ -16,7 +16,7 @@
 {% set coll_hint  = component.hint|default('')  ?: trans('pages.products.collection_hint') %}
 {% set coll_count = component.products|default([])|length %}
 
-<section class="sard-coll"
+<section class="sard-coll" data-sard-size="{{ component.size|default('normal') }}"
          data-testid="store-home-collection"
          data-sard-products="{{ coll_count }}"
          id="sard-coll-{{ position }}">

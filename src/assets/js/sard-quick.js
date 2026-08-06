@@ -125,7 +125,38 @@ function openQuick(data, labels) {
    محاولة حصر ما يُمنَع. */
 const ALLOWED_TAGS = new Set(['P', 'BR', 'SPAN', 'DIV', 'STRONG', 'B', 'EM', 'I', 'U',
   'UL', 'OL', 'LI', 'H1', 'H2', 'H3', 'H4', 'H5', 'H6', 'A', 'BLOCKQUOTE',
-  'TABLE', 'THEAD', 'TBODY', 'TR', 'TD', 'TH', 'HR', 'SMALL', 'SUB', 'SUP', 'FIGURE', 'IMG']);
+  'TABLE', 'THEAD', 'TBODY', 'TR', 'TD', 'TH', 'HR', 'SMALL', 'SUB', 'SUP', 'FIGURE', 'IMG',
+  'FONT']);   // FONT: محرّرات قديمة تستعمله للّون، وإسقاطه يُفقد ألوان التاجر
+
+/* ── ألوان التاجر داخل الوصف ──
+   إسقاط `style` كاملًا كان يمحو الألوان التي يضبطها التاجر (عناوين ذهبية
+   مثلًا) فيخرج الوصف بلونٍ واحد لا يشبه صفحة المنتج — وهو ما رصده المالك.
+   لكن السماح بـ`style` كما هو خطر: يقبل `url()` و`position` وما يكسر النافذة.
+
+   فنسمح بخصائص **العرض النصّيّ** وحدها، ونرفض أي قيمة فيها استدعاء خارجي.
+   وهذه الخصائص تغلب أنماطنا تلقائيًّا (النمط المضمَّن أعلى تخصيصًا)، فيظهر
+   لون التاجر حيث ضبطه ويبقى لون الثيم حيث لم يضبط. */
+const SAFE_CSS_PROPS = new Set([
+  'color', 'background-color', 'font-weight', 'font-style',
+  'text-align', 'text-decoration', 'direction', 'font-size',
+]);
+
+function safeStyle(raw) {
+  return String(raw || '')
+    .split(';')
+    .map((decl) => {
+      const i = decl.indexOf(':');
+      if (i < 0) return null;
+      const prop = decl.slice(0, i).trim().toLowerCase();
+      const val = decl.slice(i + 1).trim();
+      if (!SAFE_CSS_PROPS.has(prop) || !val) return null;
+      // لا استدعاء خارجي ولا تعبير ولا وسوم مهرَّبة داخل القيمة
+      if (/url\s*\(|expression|javascript:|@import|[<>]/i.test(val)) return null;
+      return `${prop}:${val}`;
+    })
+    .filter(Boolean)
+    .join(';');
+}
 
 function sanitize(node) {
   const root = node.cloneNode(true);
@@ -140,11 +171,19 @@ function sanitize(node) {
     for (const attr of [...el.attributes]) {
       const n = attr.name.toLowerCase();
       const v = (attr.value || '').trim();
+
+      if (n === 'style') {                       // يُنقّى لا يُحذف — ألوان التاجر
+        const clean = safeStyle(v);
+        if (clean) el.setAttribute('style', clean);
+        else el.removeAttribute('style');
+        continue;
+      }
+
       const isUrlAttr = n === 'href' || n === 'src';
       const badUrl = isUrlAttr && /^(javascript|data|vbscript):/i.test(v);
-      // نسمح بالروابط والصور والوجهة فقط؛ وكل on* أو style يسقط
-      if (n.startsWith('on') || n === 'style' || badUrl
-          || !['href', 'src', 'alt', 'title', 'target', 'rel', 'dir', 'colspan', 'rowspan'].includes(n)) {
+      if (n.startsWith('on') || badUrl
+          || !['href', 'src', 'alt', 'title', 'target', 'rel', 'dir',
+               'colspan', 'rowspan', 'color', 'align'].includes(n)) {
         el.removeAttribute(attr.name);
       }
     }

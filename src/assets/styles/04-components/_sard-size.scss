@@ -56,6 +56,74 @@ body.theme-sard {
   }
   .sard-visit[data-sard-size*='full'] { min-height: 100svh; }
 
+  /* ═══════════════════════════════════════════════════════════════
+     «ملء الشاشة» — تغطية حقيقية للبُعدين مع محتوى يتناسب مع أي شاشة
+
+     المشكلة التي يحلّها: كل خطوط «سرد» مقيسة بـ‎vw‎ **وحده**
+     (‎clamp(2.6rem, 11vw, 8rem)‎ مثلًا). فعلى شاشة **عريضة وقصيرة** — لابتوب
+     ‎1440×700‎ أو جوال أفقيّ — يصير ‎11vw ≈ 158px‎ بينما الارتفاع ‎700px‎ فقط،
+     فيتضخّم النصّ ويفيض القسم. وعلى شاشة ضيّقة طويلة يصغر بلا داعٍ.
+     العرض وحده لا يكفي مقياسًا.
+
+     الحلّ: داخل هذا الوضع تُقاس الأحجام بـ‎vmin‎ (أصغر البُعدين) فتتبع
+     الشاشة كاملةً، ويُقاس الحشو الرأسي بـ‎vh‎ فينكمش على الشاشات القصيرة
+     بدل أن يزيح المحتوى خارجها.
+     ═══════════════════════════════════════════════════════════════ */
+  [data-sard-size*='full'] {
+    /* ارتفاع الشاشة: ‎vh‎ أساسٌ لكل المتصفّحات، ثم ‎svh‎ لمن يدعمها.
+       ‎svh‎ هي **الأصغر الآمن** على الجوال: لا تقفز مع ظهور أشرطة المتصفّح
+       واختفائها، ولا تقصّ المحتوى — بخلاف ‎dvh‎ التي تُحدث ارتجافًا أثناء
+       التمرير، و‎vh‎ التي تُخفي جزءًا خلف الشريط السفليّ في سفاري. */
+    min-height: 100vh;
+    min-height: 100svh;
+
+    /* عرض كامل بلا تمرير أفقي: نتجنّب ‎100vw‎ لأنها تتجاهل عرض شريط التمرير
+       فتُحدث فيضانًا أفقيًّا (درسٌ مسجّل في هذا المشروع). */
+    width: 100%;
+    max-width: 100%;
+    overflow-x: clip;
+
+    display: grid;
+    align-content: center;
+
+    padding-block: clamp(1rem, 5vh, 4.5rem);
+    padding-inline: clamp(1rem, 4vmin, 4rem);
+
+    /* الحاوية الداخلية تتّسع بلا أن تلتصق بالحواف */
+    .container { max-width: min(100%, 1360px); width: 100%; }
+
+    /* ── الخطوط تُقاس بالبُعدين ──
+       الحدّ الأدنى أصغر من الأصل والأعلى أقلّ منه قليلًا: القسم هنا يجب أن
+       يُقرأ دفعةً واحدة داخل الشاشة لا أن يملأها بحرفين. */
+    .sard-display      { font-size: clamp(1.65rem, 5.6vmin, 4.2rem); }
+    .sard-display--sm  { font-size: clamp(1.35rem, 3.9vmin, 2.7rem); }
+    .sard-lede         { font-size: clamp(.92rem, 1.9vmin, 1.1rem); }
+    .sard-hero__word   { font-size: clamp(2rem, 9.4vmin, 7rem); }
+    .sard-hero__line   { font-size: clamp(1rem, 2.5vmin, 1.5rem); margin-top: clamp(.8rem, 2.4vh, 2rem); }
+    .sard-story__text h3,
+    .sard-layers__step h3 { font-size: clamp(1.35rem, 4vmin, 2.8rem); }
+
+    /* الصور داخل قسمٍ بارتفاع الشاشة لا تتجاوزه */
+    img, picture, video { max-height: 62svh; object-fit: contain; }
+  }
+
+  /* القسم المثبَّت يبقى بارتفاع الشاشة تمامًا في هذا الوضع */
+  .sard-layers[data-sard-size*='full'] .sard-layers__pin {
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-block: clamp(1rem, 5vh, 4rem);
+  }
+
+  /* على الشاشات القصيرة جدًّا (جوال أفقيّ، لابتوب صغير) نُلغي الحدّ الأدنى
+     للارتفاع: فرضُ شاشة كاملة هناك يخنق المحتوى أو يقصّه. */
+  @media (max-height: 520px) {
+    [data-sard-size*='full'] {
+      min-height: 0;
+      padding-block: clamp(1.5rem, 6vh, 3rem);
+    }
+    .sard-layers[data-sard-size*='full'] .sard-layers__pin { min-height: 0; }
+  }
+
   /* على الجوال نحدّ من التطرّف: «فسيح» على شاشة صغيرة يعني تمريرًا بلا
      محتوى، و«مضغوط» يخنق النصّ العربيّ ذا الأسطر المتباعدة. */
   @media (max-width: 640px) {
